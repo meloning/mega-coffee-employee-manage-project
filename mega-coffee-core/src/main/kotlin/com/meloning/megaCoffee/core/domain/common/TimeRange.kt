@@ -7,6 +7,6 @@ data class TimeRange(
     var endTime: LocalTime
 ) {
     init {
-        require(startTime < endTime) { "종료 시간은 시작 시간보다 커야한다." }
+        require(startTime < endTime) { "종료 시간은 시작 시간보다 커야합니다." }
     }
 }
