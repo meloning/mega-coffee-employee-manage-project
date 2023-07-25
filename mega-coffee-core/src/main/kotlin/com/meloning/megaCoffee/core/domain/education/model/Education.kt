@@ -12,4 +12,17 @@ data class Education(
     // 교육장소들
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Education
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: javaClass.hashCode()
+    }
+}

@@ -15,4 +15,18 @@ data class Store(
     // 교육 프로그램 정보들
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
-)
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Store
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: javaClass.hashCode()
+    }
+}
