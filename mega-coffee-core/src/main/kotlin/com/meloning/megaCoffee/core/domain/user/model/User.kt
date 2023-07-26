@@ -13,10 +13,24 @@ data class User(
     var employeeType: EmployeeType,
     var phoneNumber: PhoneNumber,
     var workTimeType: WorkTimeType,
-    // 근무 매장
+    var storeId: Long,
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
+
+    fun update(
+        homeAddress: Address,
+        employeeType: EmployeeType,
+        phoneNumber: PhoneNumber,
+        workTimeType: WorkTimeType,
+        storeId: Long
+    ) {
+        this.homeAddress = homeAddress
+        this.employeeType = employeeType
+        this.phoneNumber = phoneNumber
+        this.workTimeType = workTimeType
+        this.storeId = storeId
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -26,7 +26,7 @@ import javax.persistence.Table
 @DynamicUpdate
 class UserEntity : BaseTimeEntity {
 
-    constructor(id: Long?, email: String, name: NameVO, address: AddressVO, employeeType: EmployeeType, phoneNumber: PhoneNumberVO, workTimeType: WorkTimeType) : super() {
+    constructor(id: Long?, email: String, name: NameVO, address: AddressVO, employeeType: EmployeeType, phoneNumber: PhoneNumberVO, workTimeType: WorkTimeType, storeId: Long) : super() {
         this.id = id
         this.email = email
         this.name = name
@@ -34,6 +34,7 @@ class UserEntity : BaseTimeEntity {
         this.employeeType = employeeType
         this.phoneNumber = phoneNumber
         this.workTimeType = workTimeType
+        this.storeId = storeId
     }
 
     @Id
@@ -62,7 +63,8 @@ class UserEntity : BaseTimeEntity {
     var workTimeType: WorkTimeType
         protected set
 
-    // 근무 매장
+    var storeId: Long
+        protected set
 
     fun toModel(): User = User(
         id = id,
@@ -72,6 +74,7 @@ class UserEntity : BaseTimeEntity {
         employeeType = employeeType,
         phoneNumber = phoneNumber.toModel(),
         workTimeType = workTimeType,
+        storeId = storeId,
         createdAt = createdAt,
         updatedAt = updatedAt
     )
@@ -86,7 +89,8 @@ class UserEntity : BaseTimeEntity {
                 address = AddressVO.from(homeAddress),
                 employeeType = employeeType,
                 phoneNumber = PhoneNumberVO.from(phoneNumber),
-                workTimeType = workTimeType
+                workTimeType = workTimeType,
+                storeId = storeId
             )
         }
     }

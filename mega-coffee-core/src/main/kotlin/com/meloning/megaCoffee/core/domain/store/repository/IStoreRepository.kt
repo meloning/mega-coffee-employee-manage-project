@@ -14,3 +14,6 @@ interface IStoreRepository {
 
     fun deleteById(id: Long)
 }
+
+fun IStoreRepository.findByIdOrThrow(id: Long): Store =
+    this.findById(id) ?: throw RuntimeException("매장이 존재하지 않습니다.")

@@ -14,3 +14,6 @@ interface IEducationRepository {
 
     fun deleteById(id: Long)
 }
+
+fun IEducationRepository.findByIdOrThrow(id: Long): Education =
+    this.findById(id) ?: throw RuntimeException("교육프로그램이 존재하지 않습니다.")
