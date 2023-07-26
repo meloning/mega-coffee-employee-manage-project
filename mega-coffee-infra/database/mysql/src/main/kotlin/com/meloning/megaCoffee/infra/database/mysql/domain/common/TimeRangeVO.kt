@@ -3,7 +3,9 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.common
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import java.time.LocalTime
 import javax.persistence.Column
+import javax.persistence.Embeddable
 
+@Embeddable
 data class TimeRangeVO(
     @Column(nullable = false, columnDefinition = "TIME")
     var startTime: LocalTime,
