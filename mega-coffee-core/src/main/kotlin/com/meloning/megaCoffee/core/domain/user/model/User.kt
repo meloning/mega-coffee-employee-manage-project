@@ -15,6 +15,7 @@ data class User(
     var phoneNumber: PhoneNumber,
     var workTimeType: WorkTimeType,
     var storeId: Long,
+    var deleted: Boolean = false,
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {

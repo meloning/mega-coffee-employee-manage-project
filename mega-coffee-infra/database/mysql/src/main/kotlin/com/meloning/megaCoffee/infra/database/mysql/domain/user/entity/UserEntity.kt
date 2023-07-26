@@ -7,8 +7,10 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.common.AddressVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.BaseTimeEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.PhoneNumberVO
+import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import org.hibernate.annotations.SQLDelete
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.Column
 import javax.persistence.Embedded
@@ -24,9 +26,10 @@ import javax.persistence.Table
 @Table(name = "user")
 @DynamicInsert
 @DynamicUpdate
+@SQLDelete(sql = "update user set is_deleted = true where id = ?")
 class UserEntity : BaseTimeEntity {
 
-    constructor(id: Long?, email: String, name: NameVO, address: AddressVO, employeeType: EmployeeType, phoneNumber: PhoneNumberVO, workTimeType: WorkTimeType, storeId: Long) : super() {
+    constructor(id: Long?, email: String, name: NameVO, address: AddressVO, employeeType: EmployeeType, phoneNumber: PhoneNumberVO, workTimeType: WorkTimeType, storeId: Long, deleted: Boolean) : super() {
         this.id = id
         this.email = email
         this.name = name
@@ -35,6 +38,7 @@ class UserEntity : BaseTimeEntity {
         this.phoneNumber = phoneNumber
         this.workTimeType = workTimeType
         this.storeId = storeId
+        this.deleted = deleted
     }
 
     @Id
@@ -66,6 +70,11 @@ class UserEntity : BaseTimeEntity {
     var storeId: Long
         protected set
 
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault(value = "0")
+    var deleted: Boolean = false
+        protected set
+
     fun toModel(): User = User(
         id = id,
         email = email,
@@ -75,6 +84,7 @@ class UserEntity : BaseTimeEntity {
         phoneNumber = phoneNumber.toModel(),
         workTimeType = workTimeType,
         storeId = storeId,
+        deleted = deleted,
         createdAt = createdAt,
         updatedAt = updatedAt
     )
@@ -90,7 +100,8 @@ class UserEntity : BaseTimeEntity {
                 employeeType = employeeType,
                 phoneNumber = PhoneNumberVO.from(phoneNumber),
                 workTimeType = workTimeType,
-                storeId = storeId
+                storeId = storeId,
+                deleted = deleted
             )
         }
     }

@@ -1,0 +1,79 @@
+#공통
+spring:
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_batch_fetch_size: ${chunkSize:100}
+        jdbc:
+          batch_size: ${chunkSize:100}
+        order_inserts: true
+        order_updates: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: db-local
+  datasource:
+    url: jdbc:h2:mem:employee_manage;NON_KEYWORDS=from,to,user;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        highlight_sql: true
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: always
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: db-dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/employee_manage
+    username: root
+    password: wnstn0601
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    data-source-properties:
+      rewriteBatchedStatements: true
+      serverTimezone: UTC
+      useSSL: false
+      useUnicode: true
+      characterEncoding: utf8
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        highlight_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
