@@ -1,5 +1,6 @@
 package com.meloning.megaCoffee.core.domain.user.model
 
+import com.meloning.megaCoffee.common.constant.Constant
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.PhoneNumber
@@ -17,6 +18,8 @@ data class User(
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
+    constructor(id: Long?, name: Name, employeeType: EmployeeType, workTimeType: WorkTimeType, storeId: Long) :
+        this(id, Constant.EMPTY, name, Address.DUMMY, employeeType, PhoneNumber.DUMMY, workTimeType, storeId)
 
     fun update(
         homeAddress: Address,

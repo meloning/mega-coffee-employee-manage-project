@@ -9,6 +9,7 @@ import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
+import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,7 +22,8 @@ class UserService(
 
     // 이름, 역할, 근무시간대, 근무 장소
     @Transactional(readOnly = true)
-    fun list(command: ScrollUserCommand, page: Int, size: Int): List<User> {
+    fun list(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
+        return userRepository.findAll(command, page, size)
     }
 
     @Transactional(readOnly = true)
@@ -29,8 +31,8 @@ class UserService(
         // 근무 매장, 교육 프로그램, 교육 장소정보들
         val user = userRepository.findByIdOrThrow(id)
 
-        val store = storeRepository.findByIdOrThrow(user.storeId)
-        // 내가 들어야할 교육 프로그램들과 교육 장소
+        storeRepository.findByIdOrThrow(user.storeId)
+        // TODO: 내가 들어야할 교육 프로그램들과 교육 장소
     }
 
     fun create(command: CreateUserCommand): Pair<User, Store> {
@@ -46,7 +48,7 @@ class UserService(
     fun update(id: Long, command: UpdateUserCommand) {
         val user = userRepository.findByIdOrThrow(id)
 
-        val store = storeRepository.findByIdOrThrow(id)
+        storeRepository.findByIdOrThrow(id)
 
         with(command) {
             user.update(address, employeeType, phoneNumber, workTimeType, storeId)

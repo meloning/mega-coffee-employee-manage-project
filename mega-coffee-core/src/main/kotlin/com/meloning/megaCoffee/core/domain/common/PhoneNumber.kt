@@ -11,5 +11,8 @@ data class PhoneNumber(
     companion object {
         @JvmField
         val pattern = Regex("^[0-9]{11}\$")
+
+        @JvmField
+        val DUMMY = PhoneNumber("01012341234")
     }
 }

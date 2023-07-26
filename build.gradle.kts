@@ -43,6 +43,16 @@ allprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
     }
+
+    tasks.formatKotlinMain {
+        exclude {
+            it.file.path.contains("generated/")
+        }
+    }
+
+    tasks.lintKotlinMain {
+        exclude { it.file.path.contains("generated/")}
+    }
 }
 
 val kopringProjects = listOf(

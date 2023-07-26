@@ -9,4 +9,9 @@ data class TimeRange(
     init {
         require(startTime < endTime) { "종료 시간은 시작 시간보다 커야합니다." }
     }
+
+    companion object {
+        @JvmField
+        val DUMMY = TimeRange(LocalTime.MIN, LocalTime.MAX)
+    }
 }

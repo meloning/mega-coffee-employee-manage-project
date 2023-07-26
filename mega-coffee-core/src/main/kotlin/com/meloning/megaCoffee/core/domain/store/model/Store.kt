@@ -16,6 +16,8 @@ data class Store(
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
+    constructor(id: Long?, name: Name, type: StoreType) :
+        this(id, name, type, 0, Address.DUMMY, TimeRange.DUMMY)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
