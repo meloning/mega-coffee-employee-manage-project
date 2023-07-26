@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:employee_manage;NON_KEYWORDS=from,to,user;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: false
+  sql:
+    init:
+      mode: never
+
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: trace
