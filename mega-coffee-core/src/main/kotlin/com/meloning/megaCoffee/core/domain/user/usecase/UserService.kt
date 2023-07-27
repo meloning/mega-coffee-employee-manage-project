@@ -45,7 +45,7 @@ class UserService(
         return userRepository.save(command.toModel(store.id!!)) to store
     }
 
-    fun update(id: Long, command: UpdateUserCommand) {
+    fun update(id: Long, command: UpdateUserCommand): User {
         val user = userRepository.findByIdOrThrow(id)
 
         storeRepository.findByIdOrThrow(id)
@@ -53,6 +53,8 @@ class UserService(
         with(command) {
             user.update(address, employeeType, phoneNumber, workTimeType, storeId)
         }
+
+        return user
     }
 
     fun delete(id: Long) {
