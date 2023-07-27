@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.core.domain.store.repository
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.store.model.Store
+import com.meloning.megaCoffee.core.util.InfiniteScrollType
 
 interface IStoreRepository {
     fun save(store: Store): Store
@@ -9,6 +10,7 @@ interface IStoreRepository {
     fun update(store: Store)
 
     fun findById(id: Long): Store?
+    fun findAll(storeId: Long?, page: Int, size: Int): InfiniteScrollType<Store>
 
     fun existsByName(name: Name): Boolean
 

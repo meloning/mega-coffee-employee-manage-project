@@ -5,6 +5,7 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
+import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
@@ -28,6 +29,16 @@ class EducationRepositoryImpl(
 
     override fun findById(id: Long): Education? {
         return educationJpaRepository.findByIdOrNull(id)?.toModel()
+    }
+
+    override fun findAllByStoreId(storeId: Long): List<Education> {
+        val educations = educationJpaRepository.findAllByStoreId(storeId)
+        educations.forEach { educationEntity ->
+            educationEntity.educationAddresses.value.forEach {
+                Hibernate.initialize(it)
+            }
+        }
+        return educations.map { it.toModel() }
     }
 
     override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education> {

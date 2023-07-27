@@ -19,6 +19,13 @@ data class Store(
     constructor(id: Long?, name: Name, type: StoreType) :
         this(id, name, type, 0, Address.DUMMY, TimeRange.DUMMY)
 
+    fun update(type: StoreType, ownerId: Long, address: Address, timeRange: TimeRange) {
+        this.type = type
+        this.ownerId = ownerId
+        this.address = address
+        this.timeRange = timeRange
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

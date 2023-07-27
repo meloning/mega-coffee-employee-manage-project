@@ -10,6 +10,7 @@ interface IEducationRepository {
 
     fun findById(id: Long): Education?
     fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education>
+    fun findAllByStoreId(storeId: Long): List<Education>
 
     fun existsByName(name: Name): Boolean
 

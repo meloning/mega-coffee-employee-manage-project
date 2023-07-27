@@ -3,6 +3,7 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.store.repository
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
+import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEntity
 import org.springframework.data.repository.findByIdOrNull
@@ -24,6 +25,11 @@ class StoreRepositoryImpl(
         storeJpaRepository.save(
             StoreEntity.from(store)
         )
+    }
+
+    override fun findAll(storeId: Long?, page: Int, size: Int): InfiniteScrollType<Store> {
+        val (content, hasNext) = storeJpaRepository.findAll(storeId, page, size)
+        return content.map { it.toModel() } to hasNext
     }
 
     override fun findById(id: Long): Store? {
