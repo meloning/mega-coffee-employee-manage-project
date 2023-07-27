@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.PhoneNumber
 import com.meloning.megaCoffee.core.domain.common.TimeRange
+import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -33,6 +34,9 @@ class UserServiceTest {
 
     @Mock
     private lateinit var storeRepository: IStoreRepository
+
+    @Mock
+    private lateinit var educationRepostiory: IEducationRepository
 
     @InjectMocks
     private lateinit var userService: UserService

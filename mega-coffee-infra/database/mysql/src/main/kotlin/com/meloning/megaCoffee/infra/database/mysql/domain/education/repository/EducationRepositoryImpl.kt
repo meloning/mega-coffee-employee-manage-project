@@ -30,6 +30,10 @@ class EducationRepositoryImpl(
         return educationJpaRepository.findByIdOrNull(id)?.toModel()
     }
 
+    override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education> {
+        return educationJpaRepository.findAllByStoreIdAndUserId(storeId, userId).map { it.toModel() }
+    }
+
     override fun existsByName(name: Name): Boolean {
         return educationJpaRepository.existsByName(NameVO.from(name))
     }

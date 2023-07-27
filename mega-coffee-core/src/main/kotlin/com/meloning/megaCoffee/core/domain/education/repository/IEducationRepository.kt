@@ -9,6 +9,7 @@ interface IEducationRepository {
     fun update(education: Education)
 
     fun findById(id: Long): Education?
+    fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education>
 
     fun existsByName(name: Name): Boolean
 

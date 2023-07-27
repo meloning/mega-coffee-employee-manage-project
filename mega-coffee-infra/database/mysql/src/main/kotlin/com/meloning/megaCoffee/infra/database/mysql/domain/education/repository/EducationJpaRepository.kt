@@ -4,6 +4,6 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface EducationJpaRepository : JpaRepository<EducationEntity, Long> {
+interface EducationJpaRepository : JpaRepository<EducationEntity, Long>, CustomEducationJpaRepository {
     fun existsByName(name: NameVO): Boolean
 }

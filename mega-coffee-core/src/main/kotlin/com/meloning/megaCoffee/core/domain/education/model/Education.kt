@@ -9,7 +9,7 @@ data class Education(
     val name: Name,
     var content: String,
     var targetTypes: MutableList<EmployeeType> = mutableListOf(),
-    // 교육장소들
+    var educationAddresses: EducationAddresses,
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {

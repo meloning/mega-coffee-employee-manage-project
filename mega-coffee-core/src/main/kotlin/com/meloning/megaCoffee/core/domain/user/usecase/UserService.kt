@@ -1,5 +1,7 @@
 package com.meloning.megaCoffee.core.domain.user.usecase
 
+import com.meloning.megaCoffee.core.domain.education.model.Education
+import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
@@ -17,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class UserService(
     private val userRepository: IUserRepository,
-    private val storeRepository: IStoreRepository
+    private val storeRepository: IStoreRepository,
+    private val educationRepository: IEducationRepository
 ) {
 
     // 이름, 역할, 근무시간대, 근무 장소
@@ -27,12 +30,13 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun detail(id: Long) {
+    fun detail(id: Long): Triple<User, Store, List<Education>> {
         // 근무 매장, 교육 프로그램, 교육 장소정보들
         val user = userRepository.findByIdOrThrow(id)
 
-        storeRepository.findByIdOrThrow(user.storeId)
-        // TODO: 내가 들어야할 교육 프로그램들과 교육 장소
+        val store = storeRepository.findByIdOrThrow(user.storeId)
+        val educations = educationRepository.findAllByStoreIdAndUserId(store.id!!, user.id!!)
+        return Triple(user, store, educations)
     }
 
     fun create(command: CreateUserCommand): Pair<User, Store> {

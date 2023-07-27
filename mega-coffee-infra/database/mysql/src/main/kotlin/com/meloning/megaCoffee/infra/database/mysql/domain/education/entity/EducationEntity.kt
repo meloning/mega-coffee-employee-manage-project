@@ -49,11 +49,16 @@ class EducationEntity : BaseTimeEntity {
     var targetTypes: MutableList<EmployeeType> = mutableListOf()
         protected set
 
+    @Embedded
+    var educationAddresses: EducationAddressesVO = EducationAddressesVO(mutableListOf())
+        protected set
+
     fun toModel() = Education(
         id = id,
         name = name.toModel(),
         content = content,
         targetTypes = targetTypes,
+        educationAddresses = educationAddresses.toModel(),
         createdAt = createdAt,
         updatedAt = updatedAt
     )
