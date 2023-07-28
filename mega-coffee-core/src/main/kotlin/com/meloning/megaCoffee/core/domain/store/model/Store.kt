@@ -35,6 +35,15 @@ data class Store(
         educations.removeIf { it.educationId == educationId }
     }
 
+    fun validateEligibility(educationId: Long, educationName: String) {
+        val educationIds = educations.map { it.educationId }
+        val storeName = name.name
+
+        if (educationIds.contains(educationId)) {
+            throw RuntimeException("$storeName 매장의 직원은 $educationName 교육 프로그램을 들을 수 없습니다.")
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

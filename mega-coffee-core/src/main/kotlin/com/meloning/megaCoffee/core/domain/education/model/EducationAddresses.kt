@@ -20,6 +20,17 @@ class EducationAddresses(
         _value.remove(model)
     }
 
+    fun validateExisting(educationAddressIds: List<Long>) {
+        val missingEducationAddresses = value.filterNot { educationAddressIds.contains(it.id) }.map { it.id }
+        if (missingEducationAddresses.isNotEmpty()) {
+            throw RuntimeException("존재하지 않는 교육 장소들이 있습니다. [$missingEducationAddresses]")
+        }
+    }
+
+    fun filterByContainedIds(educationAddressIds: List<Long>): List<EducationAddress> {
+        return _value.filter { educationAddressIds.contains(it.id) }
+    }
+
     companion object {
         const val MAX_EDUCATION_PLACE_COUNT = 3
     }

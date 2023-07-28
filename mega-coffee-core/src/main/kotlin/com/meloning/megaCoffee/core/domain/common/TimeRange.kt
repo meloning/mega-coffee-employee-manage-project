@@ -10,6 +10,10 @@ data class TimeRange(
         require(startTime < endTime) { "종료 시간은 시작 시간보다 커야합니다." }
     }
 
+    fun overlapsWith(other: TimeRange): Boolean {
+        return startTime <= other.endTime && other.startTime <= endTime
+    }
+
     companion object {
         @JvmField
         val DUMMY = TimeRange(LocalTime.MIN, LocalTime.MAX)

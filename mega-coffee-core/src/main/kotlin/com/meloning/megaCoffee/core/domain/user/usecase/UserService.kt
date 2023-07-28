@@ -2,13 +2,16 @@ package com.meloning.megaCoffee.core.domain.user.usecase
 
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
+import com.meloning.megaCoffee.core.domain.user.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserCommand
+import com.meloning.megaCoffee.core.domain.user.usecase.command.RegisterEducationAddressCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
@@ -39,6 +42,36 @@ class UserService(
         return Triple(user, store, educations)
     }
 
+    fun registerEducationAddress(id: Long, command: RegisterEducationAddressCommand) {
+        val user = userRepository.findDetailByIdOrThrow(id)
+        val store = storeRepository.findByIdOrThrow(user.storeId)
+        val education = educationRepository.findDetailByIdOrThrow(command.educationId)
+        val educationAddresses = education.educationAddresses
+
+        // [Validate]
+        store.validateEligibility(education.id!!, education.name.name)
+        education.validateUserEligibility(user.employeeType)
+
+        // 새로 등록할 것들중 비교
+        educationAddresses.validateExisting(command.educationAddressIds)
+
+        val selectedEducationAddresses = educationAddresses.filterByContainedIds(command.educationAddressIds)
+        val userEducationAddresses = educationAddresses.filterByContainedIds(user.educationAddressRelations.map { it.educationAddressId })
+
+        // 기존 등록한 것들과 비교
+        user.validateExistingEducationAddress(selectedEducationAddresses.map { it.id!! })
+
+        // 같은날, 겹치는 시간대가 있는지
+        UserEducationAddressValidator.validateDuplicateTimeSlots(selectedEducationAddresses + userEducationAddresses)
+
+        // 선택한 교육 장소의 수강인원이 가득차 있는지
+        selectedEducationAddresses.forEach {
+            it.checkMaxParticipantExceeded(educationRepository.countByEducationAddressId(it.id!!))
+        }
+
+        // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
+    }
+
     fun create(command: CreateUserCommand): Pair<User, Store> {
         if (userRepository.existsByNameAndEmail(command.name, command.email)) {
             throw RuntimeException("이미 존재하는 유저입니다.")
@@ -57,6 +90,8 @@ class UserService(
         with(command) {
             user.update(address, employeeType, phoneNumber, workTimeType, storeId)
         }
+
+        userRepository.update(user)
 
         return user
     }

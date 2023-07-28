@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.CreatedAtEntity
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -25,7 +26,7 @@ class StoreEducationRelationEntity : CreatedAtEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     val store: StoreEntity
 
