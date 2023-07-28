@@ -53,7 +53,7 @@ class EducationAddresses(
                 val educationAddress1 = value[i]
                 val educationAddress2 = value[j]
 
-                if (!educationAddress1.isSameDateTimePlace(educationAddress2)) continue
+                if (!educationAddress1.isSameDatePlaceTimeSlots(educationAddress2)) continue
                 else return true
             }
         }
