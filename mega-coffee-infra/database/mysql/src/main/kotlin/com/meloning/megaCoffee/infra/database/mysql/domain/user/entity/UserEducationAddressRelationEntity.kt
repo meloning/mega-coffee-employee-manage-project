@@ -1,4 +1,4 @@
-package com.meloning.megaCoffee.infra.database.mysql.domain.user
+package com.meloning.megaCoffee.infra.database.mysql.domain.user.entity
 
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.CreatedAtEntity
 import org.hibernate.proxy.HibernateProxy
