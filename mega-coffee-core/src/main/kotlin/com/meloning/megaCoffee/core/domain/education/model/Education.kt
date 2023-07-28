@@ -18,11 +18,11 @@ data class Education(
         this.educationAddresses = educationAddresses
     }
 
-    fun add(educationAddress: EducationAddress) {
+    fun addAddress(educationAddress: EducationAddress) {
         this.educationAddresses.add(educationAddress)
     }
 
-    fun remove(educationAddress: EducationAddress) {
+    fun removeAddress(educationAddress: EducationAddress) {
         this.educationAddresses.remove(educationAddress)
     }
 
