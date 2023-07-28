@@ -49,7 +49,7 @@ class UserService(
         val educationAddresses = education.educationAddresses
 
         // [Validate]
-        store.validateEligibility(education.id!!, education.name.name)
+        store.validateEligibility(education.id!!, education.name.value)
         education.validateUserEligibility(user.employeeType)
 
         // 새로 등록할 것들중 비교

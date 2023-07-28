@@ -37,7 +37,7 @@ data class Store(
 
     fun validateEligibility(educationId: Long, educationName: String) {
         val educationIds = educations.map { it.educationId }
-        val storeName = name.name
+        val storeName = name.value
 
         if (educationIds.contains(educationId)) {
             throw RuntimeException("$storeName 매장의 직원은 $educationName 교육 프로그램을 들을 수 없습니다.")

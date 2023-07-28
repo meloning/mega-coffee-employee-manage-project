@@ -28,7 +28,7 @@ data class Education(
 
     fun validateUserEligibility(userEmployeeType: EmployeeType) {
         if (!targetTypes.contains(userEmployeeType)) {
-            throw RuntimeException("해당 유저는 ${name.name} 교육 프로그램 대상자가 아닙니다.")
+            throw RuntimeException("해당 유저는 ${name.value} 교육 프로그램 대상자가 아닙니다.")
         }
     }
 

@@ -17,6 +17,6 @@ data class NameVO(
 
     companion object {
         @JvmStatic
-        fun from(model: Name) = NameVO(model.name)
+        fun from(model: Name) = NameVO(model.value)
     }
 }
