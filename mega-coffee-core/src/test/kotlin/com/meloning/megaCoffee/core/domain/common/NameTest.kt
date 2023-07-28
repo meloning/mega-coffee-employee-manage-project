@@ -15,7 +15,7 @@ class NameTest {
         // given, when
         val name = Name("장준수")
 
-        assertThat(name.name).isEqualTo("장준수")
+        assertThat(name.value).isEqualTo("장준수")
     }
 
     @ParameterizedTest

@@ -36,7 +36,7 @@ class UserServiceTest {
     private lateinit var storeRepository: IStoreRepository
 
     @Mock
-    private lateinit var educationRepostiory: IEducationRepository
+    private lateinit var educationRepository: IEducationRepository
 
     @InjectMocks
     private lateinit var userService: UserService
@@ -92,7 +92,7 @@ class UserServiceTest {
             it.run {
                 user.run {
                     assertThat(id).isEqualTo(1)
-                    assertThat(name.name).isEqualTo("메로닝")
+                    assertThat(name.value).isEqualTo("메로닝")
                     assertThat(email).isEqualTo("melon8372@gmail.com")
                     assertThat(homeAddress).isEqualTo(Address("서울", "관악", "1234"))
                     assertThat(deleted).isFalse
@@ -104,7 +104,7 @@ class UserServiceTest {
                 }
                 store.run {
                     assertThat(id).isEqualTo(1)
-                    assertThat(name.name).isEqualTo("관악점")
+                    assertThat(name.value).isEqualTo("관악점")
                     assertThat(type).isEqualTo(StoreType.FRANCHISE)
                     assertThat(ownerId).isEqualTo(1)
                     assertThat(address).isEqualTo(address)
