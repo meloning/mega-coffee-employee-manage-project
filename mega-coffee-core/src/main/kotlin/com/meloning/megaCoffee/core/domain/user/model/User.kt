@@ -38,7 +38,7 @@ data class User(
     }
 
     private fun filterByContainedIds(educationAddressIds: List<Long>): List<UserEducationAddressRelation> {
-        return educationAddressRelations.filter { educationAddressIds.contains(it.id) }
+        return educationAddressRelations.filter { educationAddressIds.contains(it.educationAddressId) }
     }
 
     fun validateExistingEducationAddress(educationAddressIds: List<Long>) {
@@ -73,5 +73,9 @@ data class User(
 
     override fun hashCode(): Int {
         return id?.hashCode() ?: javaClass.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, email='$email', name=$name, homeAddress=$homeAddress, employeeType=$employeeType, phoneNumber=$phoneNumber, workTimeType=$workTimeType, storeId=$storeId, deleted=$deleted, createdAt=$createdAt, updatedAt=$updatedAt)"
     }
 }
