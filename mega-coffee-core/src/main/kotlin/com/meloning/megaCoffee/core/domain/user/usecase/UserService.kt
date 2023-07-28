@@ -28,7 +28,7 @@ class UserService(
 
     // 이름, 역할, 근무시간대, 근무 장소
     @Transactional(readOnly = true)
-    fun list(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
+    fun scroll(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
         return userRepository.findAll(command, page, size)
     }
 
