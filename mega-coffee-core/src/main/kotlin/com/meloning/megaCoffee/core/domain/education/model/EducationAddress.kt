@@ -16,6 +16,16 @@ data class EducationAddress(
     var updatedAt: Instant? = null
 ) {
 
+    fun isSameDateTimeSlots(other: EducationAddress): Boolean {
+        return this.timeRange.overlapsWith(other.timeRange) && this.date == date
+    }
+
+    fun isSameDateTimePlace(other: EducationAddress): Boolean {
+        return this.address == other.address &&
+            this.timeRange.overlapsWith(other.timeRange) &&
+            this.date == other.date
+    }
+
     fun checkMaxParticipantExceeded(currentParticipantCount: Int) {
         if (maxParticipant <= currentParticipantCount) {
             throw RuntimeException("선택한 교육장소($id)의 수강인원($maxParticipant)이 가득차서 등록할 수 없습니다.")

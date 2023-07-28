@@ -17,11 +17,7 @@ object UserEducationAddressValidator {
                 val educationAddress1 = value[i]
                 val educationAddress2 = value[j]
 
-                if (educationAddress1.date == educationAddress2.date &&
-                    educationAddress1.timeRange.overlapsWith(educationAddress2.timeRange)
-                ) {
-                    return true
-                }
+                return educationAddress1.isSameDateTimeSlots(educationAddress2)
             }
         }
         return false

@@ -9,6 +9,7 @@ class EducationAddresses(
     init {
         require(_value.isNotEmpty()) { "교육 장소는 반드시 1개 이상이어야 합니다." }
         require(_value.size <= MAX_EDUCATION_PLACE_COUNT) { "교육 장소는 최대 ${MAX_EDUCATION_PLACE_COUNT}개까지 등록할 수 있습니다." }
+        validateDuplicatePlaceTimeSlots()
     }
 
     fun add(model: EducationAddress) {
@@ -31,7 +32,25 @@ class EducationAddresses(
         return _value.filter { educationAddressIds.contains(it.id) }
     }
 
+    fun validateDuplicatePlaceTimeSlots() {
+        if (hasDuplicatePlaceTimeSlots(_value)) {
+            throw RuntimeException("장소, 날짜, 시간대가 겹쳐 등록할 수 없습니다.")
+        }
+    }
+
+    private fun hasDuplicatePlaceTimeSlots(value: List<EducationAddress>): Boolean {
+        for (i in 0 until value.size - 1) {
+            for (j in i + 1 until value.size) {
+                val educationAddress1 = value[i]
+                val educationAddress2 = value[j]
+
+                return educationAddress1.isSameDateTimePlace(educationAddress2)
+            }
+        }
+        return false
+    }
+
     companion object {
-        const val MAX_EDUCATION_PLACE_COUNT = 3
+        const val MAX_EDUCATION_PLACE_COUNT = 5
     }
 }
