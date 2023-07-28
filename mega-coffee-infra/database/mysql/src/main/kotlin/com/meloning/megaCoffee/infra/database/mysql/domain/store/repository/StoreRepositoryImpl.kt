@@ -5,6 +5,7 @@ import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
+import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEducationRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
@@ -23,7 +24,11 @@ class StoreRepositoryImpl(
 
     override fun update(store: Store) {
         storeJpaRepository.save(
-            StoreEntity.from(store)
+            StoreEntity.from(store).apply {
+                update(
+                    store.educations.map { StoreEducationRelationEntity.from(it) }.toMutableList()
+                )
+            }
         )
     }
 

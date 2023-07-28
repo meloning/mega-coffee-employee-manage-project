@@ -13,6 +13,7 @@ data class Store(
     var address: Address,
     var timeRange: TimeRange,
     // 교육 프로그램 정보들
+    var educations: MutableList<StoreEducationRelation> = mutableListOf(),
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
@@ -24,6 +25,14 @@ data class Store(
         this.ownerId = ownerId
         this.address = address
         this.timeRange = timeRange
+    }
+
+    fun addEducation(educationId: Long) {
+        educations.add(StoreEducationRelation(store = this, educationId = educationId))
+    }
+
+    fun removeEducation(educationId: Long) {
+        educations.removeIf { it.educationId == educationId }
     }
 
     override fun equals(other: Any?): Boolean {

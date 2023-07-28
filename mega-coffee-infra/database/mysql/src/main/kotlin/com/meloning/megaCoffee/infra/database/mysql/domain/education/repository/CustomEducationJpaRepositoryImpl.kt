@@ -22,7 +22,7 @@ class CustomEducationJpaRepositoryImpl(
             .join(qStoreEducationRelationEntity)
             .on(
                 qEducationEntity.id.eq(qStoreEducationRelationEntity.educationId)
-                    .and(qStoreEducationRelationEntity.storeId.eq(storeId))
+                    .and(qStoreEducationRelationEntity.store.id.eq(storeId))
             )
             .leftJoin(qEducationEntity.educationAddresses.value, qEducationAddressEntity)
             .join(qUserEducationAddressRelationEntity)
@@ -38,7 +38,7 @@ class CustomEducationJpaRepositoryImpl(
             .join(qStoreEducationRelationEntity)
             .on(
                 qEducationEntity.id.eq(qStoreEducationRelationEntity.educationId)
-                    .and(qStoreEducationRelationEntity.storeId.eq(storeId))
+                    .and(qStoreEducationRelationEntity.store.id.eq(storeId))
             )
             .fetch()
     }

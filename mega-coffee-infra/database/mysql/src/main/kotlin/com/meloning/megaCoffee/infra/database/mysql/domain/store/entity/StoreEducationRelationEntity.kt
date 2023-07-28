@@ -1,20 +1,23 @@
-package com.meloning.megaCoffee.infra.database.mysql.domain.store
+package com.meloning.megaCoffee.infra.database.mysql.domain.store.entity
 
+import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.CreatedAtEntity
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
 @Table(name = "store_education_relation")
 class StoreEducationRelationEntity : CreatedAtEntity {
 
-    constructor(id: Long?, storeId: Long, educationId: Long) : super() {
+    constructor(id: Long?, store: StoreEntity, educationId: Long) : super() {
         this.id = id
-        this.storeId = storeId
+        this.store = store
         this.educationId = educationId
     }
 
@@ -22,9 +25,29 @@ class StoreEducationRelationEntity : CreatedAtEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    val storeId: Long
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    val store: StoreEntity
 
     val educationId: Long
+
+    fun toModel(): StoreEducationRelation = StoreEducationRelation(
+        id = id!!,
+        store = store.toModel(),
+        educationId = educationId,
+        createdAt = createdAt
+    )
+
+    companion object {
+        @JvmStatic
+        fun from(model: StoreEducationRelation) = with(model) {
+            StoreEducationRelationEntity(
+                id = id,
+                store = StoreEntity.from(store),
+                educationId = educationId
+            )
+        }
+    }
 
     final override fun equals(other: Any?): Boolean {
         if (this === other) return true

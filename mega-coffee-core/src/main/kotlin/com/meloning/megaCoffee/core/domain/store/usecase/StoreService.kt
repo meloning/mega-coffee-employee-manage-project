@@ -38,11 +38,17 @@ class StoreService(
     }
 
     fun registerForEducation(id: Long, educationIds: List<Long>) {
+        val store = storeRepository.findByIdOrThrow(id)
+
         val educations = educationIds.map {
             educationRepository.findByIdOrThrow(it)
         }
 
-        // StoreEducationRelation에 저장
+        educations.forEach {
+            store.addEducation(it.id!!)
+        }
+
+        storeRepository.update(store)
 
         // 교육 프로그램명과 내용이 매장 내 교육 대상자들에게 알림을 발송
     }
@@ -65,6 +71,8 @@ class StoreService(
         with(command) {
             store.update(type, ownerId, address, timeRange)
         }
+
+        storeRepository.update(store)
 
         return store
     }

@@ -17,11 +17,11 @@ class EducationAddressesVO(
         require(value.size <= MAX_EDUCATION_PLACE_COUNT) { "교육 장소는 최대 ${MAX_EDUCATION_PLACE_COUNT}개까지 가능합니다." }
     }
 
-    fun toModel() = EducationAddresses(value.map { it.toModel() }.toMutableList())
+    fun toModel(): EducationAddresses = EducationAddresses(value.map { it.toModel() }.toMutableList())
 
     companion object {
         @JvmStatic
-        fun from(model: EducationAddresses) = with(model) {
+        fun from(model: EducationAddresses): EducationAddressesVO = with(model) {
             EducationAddressesVO(value.map { EducationAddressEntity.from(it) }.toMutableList())
         }
     }
