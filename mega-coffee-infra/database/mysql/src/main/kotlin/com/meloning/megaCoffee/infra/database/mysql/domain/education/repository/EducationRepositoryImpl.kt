@@ -33,7 +33,7 @@ class EducationRepositoryImpl(
             Hibernate.initialize(it)
         }
         return educationEntity?.toModel()?.apply {
-            educationAddresses = educationEntity.educationAddresses.toModel()
+            update(educationEntity.educationAddresses.toModel())
         }
     }
 

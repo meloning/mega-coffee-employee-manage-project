@@ -20,6 +20,7 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -73,6 +74,10 @@ class UserEntity : BaseTimeEntity {
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault(value = "0")
     var deleted: Boolean = false
+        protected set
+
+    @OneToMany(mappedBy = "user")
+    var educationAddressRelations: MutableList<UserEducationAddressRelationEntity> = mutableListOf()
         protected set
 
     fun toModel(): User = User(

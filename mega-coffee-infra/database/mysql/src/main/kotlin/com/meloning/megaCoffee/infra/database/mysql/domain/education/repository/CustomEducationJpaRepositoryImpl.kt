@@ -3,8 +3,8 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.education.repository
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationAddressEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.store.QStoreEducationRelationEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.user.QUserEducationAddressRelationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEducationRelationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
 
@@ -34,8 +34,8 @@ class CustomEducationJpaRepositoryImpl(
             .leftJoin(qEducationEntity.educationAddresses.value, qEducationAddressEntity)
             .join(qUserEducationAddressRelationEntity)
             .on(
-                qUserEntity.id.eq(qUserEducationAddressRelationEntity.userId)
-                    .and(qUserEducationAddressRelationEntity.userId.eq(userId))
+                qUserEntity.id.eq(qUserEducationAddressRelationEntity.user.id)
+                    .and(qUserEducationAddressRelationEntity.user.id.eq(userId))
             )
             .fetch()
     }

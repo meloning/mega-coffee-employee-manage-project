@@ -8,6 +8,7 @@ import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserComman
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
+import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
@@ -44,5 +45,15 @@ class UserRepositoryImpl(
 
     override fun deleteById(id: Long) {
         return userJpaRepository.deleteById(id)
+    }
+
+    override fun findDetailById(id: Long): User? {
+        val userEntity = userJpaRepository.findByIdOrNull(id)
+        userEntity?.educationAddressRelations?.forEach {
+            Hibernate.initialize(it)
+        }
+        return userEntity?.toModel()?.apply {
+            update(userEntity.educationAddressRelations.map { it.toModel() }.toMutableList())
+        }
     }
 }
