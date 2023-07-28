@@ -9,6 +9,7 @@ interface IEducationRepository {
     fun update(education: Education)
 
     fun findById(id: Long): Education?
+    fun findDetailById(id: Long): Education?
     fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education>
     fun findAllByStoreId(storeId: Long): List<Education>
 
@@ -16,6 +17,9 @@ interface IEducationRepository {
 
     fun deleteById(id: Long)
 }
+
+fun IEducationRepository.findDetailByIdOrThrow(id: Long): Education =
+    this.findDetailById(id) ?: throw RuntimeException("교육프로그램이 존재하지 않습니다.")
 
 fun IEducationRepository.findByIdOrThrow(id: Long): Education =
     this.findById(id) ?: throw RuntimeException("교육프로그램이 존재하지 않습니다.")

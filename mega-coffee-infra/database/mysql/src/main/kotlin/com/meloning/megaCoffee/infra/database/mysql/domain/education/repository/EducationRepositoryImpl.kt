@@ -27,6 +27,16 @@ class EducationRepositoryImpl(
         )
     }
 
+    override fun findDetailById(id: Long): Education? {
+        val educationEntity = educationJpaRepository.findByIdOrNull(id)
+        educationEntity?.educationAddresses?.value?.forEach {
+            Hibernate.initialize(it)
+        }
+        return educationEntity?.toModel()?.apply {
+            educationAddresses = educationEntity.educationAddresses.toModel()
+        }
+    }
+
     override fun findById(id: Long): Education? {
         return educationJpaRepository.findByIdOrNull(id)?.toModel()
     }

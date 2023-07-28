@@ -13,6 +13,19 @@ data class Education(
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
+
+    fun update(educationAddresses: EducationAddresses) {
+        this.educationAddresses = educationAddresses
+    }
+
+    fun add(educationAddress: EducationAddress) {
+        this.educationAddresses.add(educationAddress)
+    }
+
+    fun remove(educationAddress: EducationAddress) {
+        this.educationAddresses.remove(educationAddress)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
