@@ -9,7 +9,7 @@ data class Store(
     val id: Long? = null,
     val name: Name,
     var type: StoreType,
-    var ownerId: Long,
+    var ownerId: Long?,
     var address: Address,
     var timeRange: TimeRange,
     // 교육 프로그램 정보들
@@ -18,13 +18,13 @@ data class Store(
     var updatedAt: Instant? = null
 ) {
     constructor(id: Long?, name: Name, type: StoreType) :
-        this(id, name, type, 0, Address.DUMMY, TimeRange.DUMMY)
+        this(id, name, type, null, Address.DUMMY, TimeRange.DUMMY)
 
-    fun update(type: StoreType, ownerId: Long, address: Address, timeRange: TimeRange) {
-        this.type = type
+    fun update(type: StoreType?, ownerId: Long?, address: Address?, timeRange: TimeRange?) {
+        type?.let { this.type = it }
         this.ownerId = ownerId
-        this.address = address
-        this.timeRange = timeRange
+        address?.let { this.address = it }
+        timeRange?.let { this.timeRange = it }
     }
 
     fun addEducation(educationId: Long) {

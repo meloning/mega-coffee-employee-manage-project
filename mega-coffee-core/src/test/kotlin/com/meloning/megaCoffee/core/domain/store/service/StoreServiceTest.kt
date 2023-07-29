@@ -53,37 +53,24 @@ class StoreServiceTest {
         val command = CreateStoreCommand(
             name = mockName,
             type = StoreType.FRANCHISE,
-            ownerId = 1,
             address = mockAddress,
             timeRange = mockTimeRange
-        )
-
-        val mockUser = User(
-            id = 1,
-            name = Name("메로닝"),
-            email = "melon8372@gmail.com",
-            homeAddress = mockAddress,
-            employeeType = EmployeeType.MANAGER,
-            phoneNumber = PhoneNumber("01012341234"),
-            workTimeType = WorkTimeType.WEEKEND,
-            storeId = 1
         )
 
         val mockStore = Store(
             id = 1,
             name = mockName,
             type = StoreType.FRANCHISE,
-            ownerId = 1,
+            ownerId = null,
             address = mockAddress,
             timeRange = mockTimeRange
         )
 
         whenever(storeRepository.existsByName(mockName)).thenReturn(false)
-        whenever(userRepository.findById(any())).thenReturn(mockUser)
         whenever(storeRepository.save(any())).thenReturn(mockStore)
 
         // when
-        val (store, _) = storeService.create(command)
+        val store = storeService.create(command)
 
         // then
         SoftAssertions.assertSoftly {
@@ -92,7 +79,7 @@ class StoreServiceTest {
                     assertThat(id).isEqualTo(1)
                     assertThat(name.value).isEqualTo(command.name.value)
                     assertThat(type).isEqualTo(command.type)
-                    assertThat(ownerId).isEqualTo(command.ownerId)
+                    assertThat(ownerId).isNull()
                     assertThat(address).isEqualTo(command.address)
                     assertThat(timeRange).isEqualTo(command.timeRange)
                     assertThat(createdAt).isNull()
@@ -113,7 +100,6 @@ class StoreServiceTest {
         val command = CreateStoreCommand(
             name = mockName,
             type = StoreType.FRANCHISE,
-            ownerId = 1,
             address = mockAddress,
             timeRange = mockTimeRange
         )

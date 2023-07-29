@@ -29,7 +29,7 @@ import javax.persistence.Table
 @DynamicUpdate
 class StoreEntity : BaseTimeEntity {
 
-    constructor(id: Long?, name: NameVO, type: StoreType, ownerId: Long, address: AddressVO, timeRange: TimeRangeVO) : super() {
+    constructor(id: Long?, name: NameVO, type: StoreType, ownerId: Long?, address: AddressVO, timeRange: TimeRangeVO) : super() {
         this.id = id
         this.name = name
         this.type = type
@@ -49,7 +49,7 @@ class StoreEntity : BaseTimeEntity {
     var type: StoreType
         protected set
 
-    var ownerId: Long
+    var ownerId: Long? = null
         protected set
 
     @Embedded

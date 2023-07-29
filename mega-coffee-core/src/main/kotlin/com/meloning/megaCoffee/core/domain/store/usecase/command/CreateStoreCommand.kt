@@ -9,15 +9,14 @@ import com.meloning.megaCoffee.core.domain.store.model.StoreType
 data class CreateStoreCommand(
     val name: Name,
     val type: StoreType,
-    val ownerId: Long,
     val address: Address,
     val timeRange: TimeRange
 ) {
 
-    fun toModel(ownerId: Long) = Store(
+    fun toModel() = Store(
         name = name,
         type = type,
-        ownerId = ownerId,
+        ownerId = null,
         address = address,
         timeRange = timeRange
     )
