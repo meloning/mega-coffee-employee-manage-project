@@ -56,7 +56,7 @@ class StoreApiController(
     @PostMapping("/stores/{id}/education/register")
     fun register(
         @PathVariable id: Long,
-        request: RegisterEducationsRequest
+        @Valid @RequestBody request: RegisterEducationsRequest
     ): ResponseEntity<Void> {
         storeService.registerForEducation(id, request.educations)
         return ResponseEntity.accepted().build()

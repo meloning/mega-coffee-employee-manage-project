@@ -66,7 +66,7 @@ class StoreEntity : BaseTimeEntity {
     var timeRange: TimeRangeVO
         protected set
 
-    @OneToMany(mappedBy = "store", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    @OneToMany(mappedBy = "store", cascade = [CascadeType.ALL], orphanRemoval = true)
     var educations: MutableList<StoreEducationRelationEntity> = mutableListOf()
         protected set
 

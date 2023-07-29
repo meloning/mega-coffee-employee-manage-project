@@ -62,4 +62,8 @@ data class Store(
     override fun hashCode(): Int {
         return id?.hashCode() ?: javaClass.hashCode()
     }
+
+    override fun toString(): String {
+        return "Store(id=$id, name=$name, type=$type, ownerId=$ownerId, address=$address, timeRange=$timeRange, createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
 }
