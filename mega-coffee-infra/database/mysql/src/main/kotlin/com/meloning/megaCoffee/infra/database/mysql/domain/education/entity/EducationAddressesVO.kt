@@ -8,12 +8,11 @@ import javax.persistence.OneToMany
 
 @Embeddable
 class EducationAddressesVO(
-    @OneToMany(mappedBy = "education", cascade = [CascadeType.PERSIST, CascadeType.REMOVE], orphanRemoval = true)
+    @OneToMany(mappedBy = "education", cascade = [CascadeType.ALL], orphanRemoval = true)
     val value: MutableList<EducationAddressEntity>
 ) {
 
     init {
-        require(value.isNotEmpty()) { "교육 장소는 반드시 1개 이상이어야 합니다." }
         require(value.size <= MAX_EDUCATION_PLACE_COUNT) { "교육 장소는 최대 ${MAX_EDUCATION_PLACE_COUNT}개까지 가능합니다." }
     }
 

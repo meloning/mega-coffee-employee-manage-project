@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.education.repository
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
+import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationAddressesVO
@@ -39,6 +40,7 @@ class EducationRepositoryImpl(
         educationEntity?.educationAddresses?.value?.forEach {
             Hibernate.initialize(it)
         }
+        Hibernate.initialize(educationEntity?.targetTypes)
         return educationEntity?.toModel()?.apply {
             update(educationEntity.educationAddresses.toModel())
         }
@@ -60,7 +62,13 @@ class EducationRepositoryImpl(
     }
 
     override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education> {
-        return educationJpaRepository.findAllByStoreIdAndUserId(storeId, userId).map { it.toModel() }
+        val (educations, userEducationAddresses) = educationJpaRepository.findAllByStoreIdAndUserId(storeId, userId)
+        return educations.map { educationEntity ->
+            educationEntity.toModel().apply {
+                val result = educationEntity.educationAddresses.toModel().filterByContainedIds(userEducationAddresses.map { it.id!! })
+                update(EducationAddresses(result.toMutableList()))
+            }
+        }
     }
 
     override fun existsByName(name: Name): Boolean {

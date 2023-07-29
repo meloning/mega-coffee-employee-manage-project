@@ -7,6 +7,7 @@ import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
+import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
 import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
@@ -31,7 +32,9 @@ class UserRepositoryImpl(
 
     override fun update(user: User) {
         userJpaRepository.save(
-            UserEntity.from(user)
+            UserEntity.from(user).apply {
+                update(user.educationAddressRelations.map { UserEducationAddressRelationEntity.from(it) }.toMutableList())
+            }
         )
     }
 

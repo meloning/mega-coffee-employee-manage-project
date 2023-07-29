@@ -49,7 +49,7 @@ class UserServiceTest {
         val mockEmail = "melon8372@gmail.com"
         val mockName = Name("메로닝")
         val mockAddress = Address("서울", "관악", "1234")
-        val mockPhoneNumber = PhoneNumber("01012341234")
+        val mockPhoneNumber = PhoneNumber("010-1234-1234")
 
         val command = CreateUserCommand(
             email = mockEmail,
@@ -97,7 +97,7 @@ class UserServiceTest {
                     assertThat(email).isEqualTo("melon8372@gmail.com")
                     assertThat(homeAddress).isEqualTo(Address("서울", "관악", "1234"))
                     assertThat(deleted).isFalse
-                    assertThat(phoneNumber.phone).isEqualTo("01012341234")
+                    assertThat(phoneNumber.phone).isEqualTo("010-1234-1234")
                     assertThat(employeeType).isEqualTo(EmployeeType.MANAGER)
                     assertThat(workTimeType).isEqualTo(WorkTimeType.WEEKEND)
                     assertThat(createdAt).isNull()
@@ -122,7 +122,7 @@ class UserServiceTest {
         val mockEmail = "melon8372@gmail.com"
         val mockName = Name("메로닝")
         val mockAddress = Address("서울", "관악", "1234")
-        val mockPhoneNumber = PhoneNumber("01012341234")
+        val mockPhoneNumber = PhoneNumber("010-1234-1234")
 
         val command = CreateUserCommand(
             email = mockEmail,
@@ -150,12 +150,12 @@ class UserServiceTest {
         val mockEmail = "melon8372@gmail.com"
         val mockName = Name("메로닝")
         val mockAddress = Address("서울", "관악", "1234")
-        val mockPhoneNumber = PhoneNumber("01012341234")
+        val mockPhoneNumber = PhoneNumber("010-1234-1234")
 
         val command = UpdateUserCommand(
             address = Address("부산", "해운대", "123"),
             employeeType = EmployeeType.PART_TIME,
-            phoneNumber = PhoneNumber("01011112222"),
+            phoneNumber = PhoneNumber("010-1111-2222"),
             workTimeType = WorkTimeType.WEEKDAY,
             storeId = 2
         )

@@ -2,7 +2,10 @@ package com.meloning.megaCoffee.core.domain.education.model
 
 import com.meloning.megaCoffee.core.exception.AlreadyFullException
 import com.meloning.megaCoffee.core.exception.ConflictFieldException
+import com.meloning.megaCoffee.core.exception.ExpiredFieldException
 import com.meloning.megaCoffee.core.exception.NotFoundException
+import java.time.LocalDate
+import java.time.LocalTime
 
 class EducationAddresses(
     private val _value: MutableList<EducationAddress>
@@ -32,6 +35,18 @@ class EducationAddresses(
     fun validateExisting(educationAddressIds: List<Long>) {
         if (!_value.mapNotNull { it.id }.containsAll(educationAddressIds)) {
             throw NotFoundException("존재하지 않는 교육 장소들이 있습니다.")
+        }
+    }
+
+    fun validateExpired(educationAddressIds: List<Long>) {
+        val currentDate = LocalDate.now()
+        val currentTime = LocalTime.now()
+        val selectedEducationAddresses = filterByContainedIds(educationAddressIds)
+        val isExpiredEducationAddress = selectedEducationAddresses.any {
+            it.date < currentDate || (it.date == currentDate && it.timeRange.endTime <= currentTime)
+        }
+        if (isExpiredEducationAddress) {
+            throw ExpiredFieldException("선택한 교육장소는 이미 만료되었습니다.")
         }
     }
 

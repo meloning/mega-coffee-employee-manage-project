@@ -21,7 +21,7 @@ class UserTest {
             name = Name("메로닝"),
             homeAddress = Address("서울", "관악", "1234"),
             employeeType = EmployeeType.MANAGER,
-            phoneNumber = PhoneNumber("01012341234"),
+            phoneNumber = PhoneNumber("010-1234-1234"),
             workTimeType = WorkTimeType.WEEKDAY,
             storeId = 1,
         ).apply {
@@ -48,7 +48,7 @@ class UserTest {
             name = Name("메로닝"),
             homeAddress = Address("서울", "관악", "1234"),
             employeeType = EmployeeType.MANAGER,
-            phoneNumber = PhoneNumber("01012341234"),
+            phoneNumber = PhoneNumber("010-1234-1234"),
             workTimeType = WorkTimeType.WEEKDAY,
             storeId = 1,
         ).apply {

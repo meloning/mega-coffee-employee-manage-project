@@ -144,7 +144,7 @@ class StoreServiceTest {
             email = "melon8372@gmail.com",
             homeAddress = mockAddress,
             employeeType = EmployeeType.MANAGER,
-            phoneNumber = PhoneNumber("01012341234"),
+            phoneNumber = PhoneNumber("010-1234-1234"),
             workTimeType = WorkTimeType.WEEKEND,
             storeId = 1
         )

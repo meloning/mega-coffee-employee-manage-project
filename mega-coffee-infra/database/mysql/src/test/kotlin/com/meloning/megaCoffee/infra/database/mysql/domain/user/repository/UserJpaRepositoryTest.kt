@@ -60,7 +60,7 @@ class UserJpaRepositoryTest {
             name = NameVO("메로닝"),
             address = AddressVO("서울특별시", "관악구 신림동", "12345"),
             employeeType = EmployeeType.OWNER,
-            phoneNumber = PhoneNumberVO("01012341234"),
+            phoneNumber = PhoneNumberVO("010-1234-1234"),
             workTimeType = WorkTimeType.WEEKDAY,
             storeId = 1,
             deleted = false

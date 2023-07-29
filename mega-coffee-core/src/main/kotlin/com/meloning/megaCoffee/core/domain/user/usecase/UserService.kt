@@ -5,6 +5,7 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.store.model.Store
+import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.model.User
@@ -47,6 +48,9 @@ class UserService(
     fun registerEducationAddress(id: Long, command: RegisterEducationAddressCommand) {
         val user = userRepository.findDetailByIdOrThrow(id)
         val store = storeRepository.findByIdOrThrow(user.storeId)
+        val storeEducations = educationRepository.findAllByStoreId(store.id!!)
+        store.update(storeEducations.map { StoreEducationRelation(store = store, educationId = it.id!!) })
+
         val education = educationRepository.findDetailByIdOrThrow(command.educationId)
         val educationAddresses = education.educationAddresses
 
@@ -56,6 +60,7 @@ class UserService(
 
         // 새로 등록할 것들중 비교
         educationAddresses.validateExisting(command.educationAddressIds)
+        educationAddresses.validateExpired(command.educationAddressIds)
 
         val selectedEducationAddresses = educationAddresses.filterByContainedIds(command.educationAddressIds)
         val userEducationAddresses = educationAddresses.filterByContainedIds(user.educationAddressRelations.map { it.educationAddressId })
@@ -70,6 +75,12 @@ class UserService(
         selectedEducationAddresses.forEach {
             it.validateMaxParticipantExceeded(educationRepository.countByEducationAddressId(it.id!!))
         }
+
+        command.educationAddressIds.forEach {
+            user.addEducationAddress(it)
+        }
+
+        userRepository.update(user)
 
         // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
     }

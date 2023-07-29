@@ -33,6 +33,10 @@ data class Store(
         timeRange?.let { this.timeRange = it }
     }
 
+    fun update(educations: List<StoreEducationRelation>) {
+        this.educations = educations.toMutableList()
+    }
+
     fun addEducation(educationId: Long) {
         educations.add(StoreEducationRelation(store = this, educationId = educationId))
     }

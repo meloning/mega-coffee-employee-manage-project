@@ -35,7 +35,7 @@ class EducationApiController(
         return ResponseEntity.ok(EducationDetailResponse.from(education))
     }
 
-    @PostMapping("/edcuations/{id}/address/register")
+    @PostMapping("/educations/{id}/address/register")
     fun register(
         @PathVariable id: Long,
         @Valid @RequestBody request: RegisterEducationAddressesRequest
