@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: employee-manage-project
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  profiles:
+    include:
+      - mysql
+      - logging
+    group:
+      local: db-dev, logging-local
+      dev: db-dev, logging-dev
+    active: local
+
+server:
+  port: 8080
+  shutdown: graceful
