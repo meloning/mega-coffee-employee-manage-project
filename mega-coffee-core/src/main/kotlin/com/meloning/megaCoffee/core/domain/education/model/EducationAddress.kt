@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.core.domain.education.model
 
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.TimeRange
+import com.meloning.megaCoffee.core.exception.AlreadyFullException
 import java.time.Instant
 import java.time.LocalDate
 
@@ -31,7 +32,7 @@ data class EducationAddress(
 
     fun validateMaxParticipantExceeded(currentParticipantCount: Int) {
         if (isMaxParticipantCountExceeded(currentParticipantCount)) {
-            throw RuntimeException("선택한 교육장소($id)의 수강인원($maxParticipant)이 가득찼습니다.")
+            throw AlreadyFullException("선택한 교육장소($id)의 수강인원($maxParticipant)이 가득찼습니다.")
         }
     }
 

@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.core.domain.store.repository
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.store.model.Store
+import com.meloning.megaCoffee.core.exception.NotFoundException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 
 interface IStoreRepository {
@@ -18,4 +19,4 @@ interface IStoreRepository {
 }
 
 fun IStoreRepository.findByIdOrThrow(id: Long): Store =
-    this.findById(id) ?: throw RuntimeException("매장이 존재하지 않습니다.")
+    this.findById(id) ?: throw NotFoundException("매장이 존재하지 않습니다.")

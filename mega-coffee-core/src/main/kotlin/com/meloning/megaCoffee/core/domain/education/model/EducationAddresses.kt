@@ -1,5 +1,9 @@
 package com.meloning.megaCoffee.core.domain.education.model
 
+import com.meloning.megaCoffee.core.exception.AlreadyFullException
+import com.meloning.megaCoffee.core.exception.ConflictFieldException
+import com.meloning.megaCoffee.core.exception.NotFoundException
+
 class EducationAddresses(
     private val _value: MutableList<EducationAddress>
 ) {
@@ -17,7 +21,7 @@ class EducationAddresses(
 
     fun add(model: EducationAddress) {
         validateDuplicatePlaceTimeSlots(model)
-        if (isMaxEducationPlaceCountExceeded()) throw IllegalStateException("이미 교육장소들이 가득찼습니다.")
+        if (isMaxEducationPlaceCountExceeded()) throw AlreadyFullException("이미 교육장소들이 가득찼습니다.")
         _value.add(model)
     }
 
@@ -27,7 +31,7 @@ class EducationAddresses(
 
     fun validateExisting(educationAddressIds: List<Long>) {
         if (!_value.mapNotNull { it.id }.containsAll(educationAddressIds)) {
-            throw RuntimeException("존재하지 않는 교육 장소들이 있습니다.")
+            throw NotFoundException("존재하지 않는 교육 장소들이 있습니다.")
         }
     }
 
@@ -42,7 +46,7 @@ class EducationAddresses(
     private fun validateDuplicatePlaceTimeSlots(educationAddress: EducationAddress? = null) {
         val targets = educationAddress?.let { value.plus(educationAddress) } ?: _value
         if (hasDuplicatePlaceTimeSlots(targets)) {
-            throw RuntimeException("장소, 날짜, 시간대가 겹쳐 등록할 수 없습니다.")
+            throw ConflictFieldException("장소, 날짜, 시간대가 겹쳐 등록할 수 없습니다.")
         }
     }
 

@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.common.constant.Constant
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.PhoneNumber
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import java.time.Instant
 
 data class User(
@@ -44,7 +45,7 @@ data class User(
     fun validateExistingEducationAddress(educationAddressIds: List<Long>) {
         val duplicatedValues = filterByContainedIds(educationAddressIds.map { it })
         if (duplicatedValues.isNotEmpty()) {
-            throw RuntimeException("이미 등록한 교육장소를 신청하였습니다. 재등록 바랍니다.")
+            throw AlreadyExistException("이미 등록한 교육장소를 신청하였습니다. 재등록 바랍니다.")
         }
     }
 

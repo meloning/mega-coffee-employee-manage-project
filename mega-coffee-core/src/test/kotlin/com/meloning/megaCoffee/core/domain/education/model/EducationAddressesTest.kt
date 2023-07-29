@@ -4,6 +4,9 @@ import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.exception.AlreadyFullException
+import com.meloning.megaCoffee.core.exception.ConflictFieldException
+import com.meloning.megaCoffee.core.exception.NotFoundException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -63,7 +66,7 @@ class EducationAddressesTest {
         // when, then
         Assertions.assertThatThrownBy {
             EducationAddresses(educationAddressList)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(ConflictFieldException::class.java)
             .hasMessage("장소, 날짜, 시간대가 겹쳐 등록할 수 없습니다.")
     }
 
@@ -91,7 +94,7 @@ class EducationAddressesTest {
         // when, then
         Assertions.assertThatThrownBy {
             EducationAddresses(educationAddressList)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("교육 장소는 최대 5개까지 등록할 수 있습니다.")
     }
 
@@ -120,7 +123,7 @@ class EducationAddressesTest {
         // when, then
         Assertions.assertThatThrownBy {
             educationAddresses.validateExisting(listOf(1, 3, 5, 7))
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(NotFoundException::class.java)
             .hasMessage("존재하지 않는 교육 장소들이 있습니다.")
     }
 
@@ -151,7 +154,7 @@ class EducationAddressesTest {
         // when, then
         Assertions.assertThatThrownBy {
             educationAddresses.add(mockEducationAddress)
-        }.isInstanceOf(IllegalStateException::class.java)
+        }.isInstanceOf(AlreadyFullException::class.java)
             .hasMessage("이미 교육장소들이 가득찼습니다.")
     }
 }

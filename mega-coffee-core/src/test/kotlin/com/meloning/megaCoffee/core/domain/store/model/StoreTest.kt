@@ -3,6 +3,7 @@ package com.meloning.megaCoffee.core.domain.store.model
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
+import com.meloning.megaCoffee.core.exception.NotRegisterException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -31,7 +32,7 @@ class StoreTest {
         // when, then
         Assertions.assertThatThrownBy {
             testStore.validateEligibility(4, "테스트")
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(NotRegisterException::class.java)
             .hasMessage("${testStore.name.value} 매장의 직원은 테스트 교육 프로그램을 들을 수 없습니다.")
     }
 

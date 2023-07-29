@@ -15,6 +15,7 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.DisplayName
@@ -109,7 +110,7 @@ class StoreServiceTest {
         // when, then
         Assertions.assertThatThrownBy {
             storeService.create(command)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(AlreadyExistException::class.java)
             .hasMessage("이미 존재하는 매장입니다.")
     }
 

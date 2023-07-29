@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.core.domain.education.model
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.exception.ConflictFieldException
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -23,7 +24,7 @@ class EducationTest {
         // when, then
         Assertions.assertThatThrownBy {
             education.validateUserEligibility(EmployeeType.SUPER_MANAGER)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(ConflictFieldException::class.java)
             .hasMessage("해당 유저는 테스트 교육 프로그램 대상자가 아닙니다.")
     }
 }

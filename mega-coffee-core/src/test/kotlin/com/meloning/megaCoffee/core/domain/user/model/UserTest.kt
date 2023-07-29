@@ -3,6 +3,7 @@ package com.meloning.megaCoffee.core.domain.user.model
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.PhoneNumber
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -33,7 +34,7 @@ class UserTest {
         // when, then
         Assertions.assertThatThrownBy {
             testUser.validateExistingEducationAddress(listOf(1, 3, 4))
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(AlreadyExistException::class.java)
             .hasMessage("이미 등록한 교육장소를 신청하였습니다. 재등록 바랍니다.")
     }
 

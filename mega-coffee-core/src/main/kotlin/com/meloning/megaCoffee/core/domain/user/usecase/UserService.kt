@@ -14,6 +14,7 @@ import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserComman
 import com.meloning.megaCoffee.core.domain.user.usecase.command.RegisterEducationAddressCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -74,7 +75,7 @@ class UserService(
 
     fun create(command: CreateUserCommand): Pair<User, Store> {
         if (userRepository.existsByNameAndEmail(command.name, command.email)) {
-            throw RuntimeException("이미 존재하는 유저입니다.")
+            throw AlreadyExistException("이미 존재하는 유저입니다.")
         }
 
         val store = storeRepository.findByIdOrThrow(command.storeId)

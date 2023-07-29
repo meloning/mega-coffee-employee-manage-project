@@ -3,6 +3,7 @@ package com.meloning.megaCoffee.core.domain.store.model
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
+import com.meloning.megaCoffee.core.exception.NotRegisterException
 import java.time.Instant
 
 data class Store(
@@ -40,7 +41,7 @@ data class Store(
         val storeName = name.value
 
         if (!educationIds.contains(educationId)) {
-            throw RuntimeException("$storeName 매장의 직원은 $educationName 교육 프로그램을 들을 수 없습니다.")
+            throw NotRegisterException("$storeName 매장의 직원은 $educationName 교육 프로그램을 들을 수 없습니다.")
         }
     }
 

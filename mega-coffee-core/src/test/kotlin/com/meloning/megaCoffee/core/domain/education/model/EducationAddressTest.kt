@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.exception.AlreadyFullException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -111,7 +112,7 @@ class EducationAddressTest {
         // when, then
         Assertions.assertThatThrownBy {
             educationAddress.validateMaxParticipantExceeded(23)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(AlreadyFullException::class.java)
             .hasMessage("선택한 교육장소(1)의 수강인원(23)이 가득찼습니다.")
     }
 }

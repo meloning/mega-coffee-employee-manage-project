@@ -7,6 +7,7 @@ import com.meloning.megaCoffee.core.domain.education.repository.IEducationReposi
 import com.meloning.megaCoffee.core.domain.education.usecase.EducationService
 import com.meloning.megaCoffee.core.domain.education.usecase.command.CreateEducationCommand
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.DisplayName
@@ -86,7 +87,7 @@ class EducationServiceTest {
         // when, then
         Assertions.assertThatThrownBy {
             educationService.create(command)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(AlreadyExistException::class.java)
             .hasMessage("이미 존재하는 교육프로그램입니다.")
     }
 }

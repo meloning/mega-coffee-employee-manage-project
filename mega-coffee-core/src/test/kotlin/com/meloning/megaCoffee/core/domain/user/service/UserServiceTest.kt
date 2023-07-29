@@ -15,6 +15,7 @@ import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.DisplayName
@@ -138,7 +139,7 @@ class UserServiceTest {
         // then, return
         Assertions.assertThatThrownBy {
             userService.create(command)
-        }.isInstanceOf(RuntimeException::class.java)
+        }.isInstanceOf(AlreadyExistException::class.java)
             .hasMessage("이미 존재하는 유저입니다.")
     }
 

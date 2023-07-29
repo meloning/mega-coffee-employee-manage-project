@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
+import com.meloning.megaCoffee.core.exception.NotFoundException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 
 interface IUserRepository {
@@ -20,7 +21,7 @@ interface IUserRepository {
 }
 
 fun IUserRepository.findDetailByIdOrThrow(id: Long): User =
-    this.findDetailById(id) ?: throw RuntimeException("유저가 존재하지 않습니다.")
+    this.findDetailById(id) ?: throw NotFoundException("유저가 존재하지 않습니다.")
 
 fun IUserRepository.findByIdOrThrow(id: Long): User =
-    this.findById(id) ?: throw RuntimeException("유저가 존재하지 않습니다.")
+    this.findById(id) ?: throw NotFoundException("유저가 존재하지 않습니다.")

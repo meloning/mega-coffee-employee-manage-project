@@ -10,6 +10,7 @@ import com.meloning.megaCoffee.core.domain.store.usecase.command.CreateStoreComm
 import com.meloning.megaCoffee.core.domain.store.usecase.command.UpdateStoreCommand
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -54,7 +55,7 @@ class StoreService(
 
     fun create(command: CreateStoreCommand): Store {
         if (storeRepository.existsByName(command.name)) {
-            throw RuntimeException("이미 존재하는 매장입니다.")
+            throw AlreadyExistException("이미 존재하는 매장입니다.")
         }
 
         return storeRepository.save(command.toModel())

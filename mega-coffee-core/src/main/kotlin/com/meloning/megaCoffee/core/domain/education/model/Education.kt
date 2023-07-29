@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.core.domain.education.model
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.exception.ConflictFieldException
 import java.time.Instant
 
 data class Education(
@@ -28,7 +29,7 @@ data class Education(
 
     fun validateUserEligibility(userEmployeeType: EmployeeType) {
         if (!targetTypes.contains(userEmployeeType)) {
-            throw RuntimeException("해당 유저는 ${name.value} 교육 프로그램 대상자가 아닙니다.")
+            throw ConflictFieldException("해당 유저는 ${name.value} 교육 프로그램 대상자가 아닙니다.")
         }
     }
 

@@ -6,6 +6,7 @@ import com.meloning.megaCoffee.core.domain.education.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.education.usecase.command.CreateEducationCommand
 import com.meloning.megaCoffee.core.domain.education.usecase.command.RegisterEducationAddressesCommand
+import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +23,7 @@ class EducationService(
 
     fun create(command: CreateEducationCommand): Education {
         if (educationRepository.existsByName(command.name)) {
-            throw RuntimeException("이미 존재하는 교육프로그램입니다.")
+            throw AlreadyExistException("이미 존재하는 교육프로그램입니다.")
         }
 
         return educationRepository.save(command.toModel())
