@@ -8,6 +8,7 @@ import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
+import com.meloning.megaCoffee.core.domain.user.event.AppliedUserEducationAddressEvent
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
@@ -18,6 +19,7 @@ import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserComman
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,7 +28,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     private val userRepository: IUserRepository,
     private val storeRepository: IStoreRepository,
-    private val educationRepository: IEducationRepository
+    private val educationRepository: IEducationRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) {
 
     // 이름, 역할, 근무시간대, 근무 장소
@@ -83,6 +86,17 @@ class UserService(
         userRepository.update(user)
 
         // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
+        selectedEducationAddresses.forEach {
+            applicationEventPublisher.publishEvent(
+                AppliedUserEducationAddressEvent(
+                    username = user.name.value,
+                    educationName = education.name.value,
+                    educationAddress = "${it.address.city} ${it.address.street}",
+                    date = it.date.toString(),
+                    time = "${it.timeRange.startTime} ~ ${it.timeRange.endTime}"
+                )
+            )
+        }
     }
 
     fun create(command: CreateUserCommand): Pair<User, Store> {

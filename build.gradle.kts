@@ -59,7 +59,10 @@ val kopringProjects = listOf(
     project(":mega-coffee-api"),
     project(":mega-coffee-core"),
     project(":mega-coffee-common"),
-    project(":mega-coffee-infra:database:mysql")
+    project(":mega-coffee-infra:database:mysql"),
+    project(":mega-coffee-infra:message-queue:rabbitmq"),
+    project(":clients:java-email"),
+    project(":event-server"),
 )
 configure(kopringProjects) {
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")

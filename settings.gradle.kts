@@ -24,5 +24,8 @@ include(
     "mega-coffee-api",
     "mega-coffee-common",
     "mega-coffee-core",
-    "mega-coffee-infra:database:mysql"
+    "mega-coffee-infra:database:mysql",
+    "mega-coffee-infra:message-queue:rabbitmq",
+    "clients:java-email",
+    "event-server",
 )
