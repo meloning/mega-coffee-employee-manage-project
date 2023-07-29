@@ -1,5 +1,6 @@
 package com.meloning.megaCoffee.core.domain.user.usecase
 
+import com.meloning.megaCoffee.common.extension.isNull
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
@@ -80,7 +81,12 @@ class UserService(
 
         val store = storeRepository.findByIdOrThrow(command.storeId)
 
-        return userRepository.save(command.toModel(store.id!!)) to store
+        val newUser = userRepository.save(command.toModel(store.id!!))
+        if (newUser.isOwner() && store.ownerId.isNull()) {
+            store.update(ownerId = newUser.id)
+        }
+
+        return newUser to store
     }
 
     fun update(id: Long, command: UpdateUserCommand): User {

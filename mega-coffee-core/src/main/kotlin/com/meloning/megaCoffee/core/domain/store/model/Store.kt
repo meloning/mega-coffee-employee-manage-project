@@ -21,7 +21,12 @@ data class Store(
     constructor(id: Long?, name: Name, type: StoreType) :
         this(id, name, type, null, Address.DUMMY, TimeRange.DUMMY)
 
-    fun update(type: StoreType?, ownerId: Long?, address: Address?, timeRange: TimeRange?) {
+    fun update(
+        type: StoreType? = null,
+        ownerId: Long? = null,
+        address: Address? = null,
+        timeRange: TimeRange? = null
+    ) {
         type?.let { this.type = it }
         this.ownerId = ownerId
         address?.let { this.address = it }

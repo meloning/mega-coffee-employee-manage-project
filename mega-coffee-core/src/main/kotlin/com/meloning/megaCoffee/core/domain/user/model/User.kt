@@ -28,6 +28,8 @@ data class User(
         this.educationAddressRelations = educationAddressRelations
     }
 
+    fun isOwner(): Boolean = this.employeeType == EmployeeType.OWNER
+
     fun addEducationAddress(educationAddressId: Long) {
         educationAddressRelations.add(
             UserEducationAddressRelation(user = this, educationAddressId = educationAddressId)
