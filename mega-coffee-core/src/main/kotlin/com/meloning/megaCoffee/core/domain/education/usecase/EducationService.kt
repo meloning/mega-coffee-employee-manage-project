@@ -5,7 +5,7 @@ import com.meloning.megaCoffee.core.domain.education.repository.IEducationReposi
 import com.meloning.megaCoffee.core.domain.education.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.education.usecase.command.CreateEducationCommand
-import com.meloning.megaCoffee.core.domain.education.usecase.command.RegisterEducationAddressCommand
+import com.meloning.megaCoffee.core.domain.education.usecase.command.RegisterEducationAddressesCommand
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,7 +28,7 @@ class EducationService(
         return educationRepository.save(command.toModel())
     }
 
-    fun registerAddress(id: Long, command: RegisterEducationAddressCommand) {
+    fun registerAddress(id: Long, command: RegisterEducationAddressesCommand) {
         val education = educationRepository.findByIdOrThrow(id)
         education.update(command.toModel(education))
 

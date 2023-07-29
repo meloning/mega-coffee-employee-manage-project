@@ -7,7 +7,7 @@ import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import java.time.LocalDate
 
-data class RegisterEducationAddressCommand(
+data class RegisterEducationAddressesCommand(
     val addresses: MutableList<EducationAddressItem>
 ) {
 
