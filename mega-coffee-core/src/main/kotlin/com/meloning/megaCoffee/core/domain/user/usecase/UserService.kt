@@ -85,10 +85,12 @@ class UserService(
     fun update(id: Long, command: UpdateUserCommand): User {
         val user = userRepository.findByIdOrThrow(id)
 
-        storeRepository.findByIdOrThrow(id)
+        val store = command.storeId?.let {
+            storeRepository.findByIdOrThrow(it)
+        }
 
         with(command) {
-            user.update(address, employeeType, phoneNumber, workTimeType, storeId)
+            user.update(address, employeeType, phoneNumber, workTimeType, store?.id)
         }
 
         userRepository.update(user)

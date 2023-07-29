@@ -49,17 +49,17 @@ data class User(
     }
 
     fun update(
-        homeAddress: Address,
-        employeeType: EmployeeType,
-        phoneNumber: PhoneNumber,
-        workTimeType: WorkTimeType,
-        storeId: Long
+        homeAddress: Address?,
+        employeeType: EmployeeType?,
+        phoneNumber: PhoneNumber?,
+        workTimeType: WorkTimeType?,
+        storeId: Long?
     ) {
-        this.homeAddress = homeAddress
-        this.employeeType = employeeType
-        this.phoneNumber = phoneNumber
-        this.workTimeType = workTimeType
-        this.storeId = storeId
+        homeAddress?.let { this.homeAddress = it }
+        employeeType?.let { this.employeeType = employeeType }
+        phoneNumber?.let { this.phoneNumber = it }
+        workTimeType?.let { this.workTimeType = it }
+        storeId?.let { this.storeId = storeId }
     }
 
     override fun equals(other: Any?): Boolean {

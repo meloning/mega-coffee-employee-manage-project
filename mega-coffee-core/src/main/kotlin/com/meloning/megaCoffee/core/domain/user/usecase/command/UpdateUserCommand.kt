@@ -6,9 +6,9 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 
 data class UpdateUserCommand(
-    val address: Address,
-    val employeeType: EmployeeType,
-    val phoneNumber: PhoneNumber,
-    val workTimeType: WorkTimeType,
-    val storeId: Long
+    val address: Address?,
+    val employeeType: EmployeeType?,
+    val phoneNumber: PhoneNumber?,
+    val workTimeType: WorkTimeType?,
+    val storeId: Long?
 )
