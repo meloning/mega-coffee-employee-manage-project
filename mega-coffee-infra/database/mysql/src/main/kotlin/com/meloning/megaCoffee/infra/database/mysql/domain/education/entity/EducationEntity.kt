@@ -12,6 +12,8 @@ import javax.persistence.Column
 import javax.persistence.ElementCollection
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -45,7 +47,9 @@ class EducationEntity : BaseTimeEntity {
         protected set
 
     @ElementCollection
+    @Enumerated(value = EnumType.STRING)
     @CollectionTable(name = "education_employee_type", joinColumns = [JoinColumn(name = "education_id")])
+    @Column(name = "employee_type", nullable = false)
     var targetTypes: MutableList<EmployeeType> = mutableListOf()
         protected set
 
@@ -53,12 +57,15 @@ class EducationEntity : BaseTimeEntity {
     var educationAddresses: EducationAddressesVO = EducationAddressesVO(mutableListOf())
         protected set
 
+    fun update(educationAddressesVO: EducationAddressesVO) {
+        this.educationAddresses = educationAddressesVO
+    }
+
     fun toModel() = Education(
         id = id,
         name = name.toModel(),
         content = content,
         targetTypes = targetTypes,
-        educationAddresses = educationAddresses.toModel(),
         createdAt = createdAt,
         updatedAt = updatedAt
     )

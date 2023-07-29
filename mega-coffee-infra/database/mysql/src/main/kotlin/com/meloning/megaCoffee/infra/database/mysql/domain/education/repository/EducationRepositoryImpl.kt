@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationAddressesVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
 import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
@@ -14,7 +15,9 @@ class EducationRepositoryImpl(
     private val educationJpaRepository: EducationJpaRepository
 ) : IEducationRepository {
     override fun save(education: Education): Education {
-        return educationJpaRepository.save(EducationEntity.from(education)).toModel()
+        val educationEntity = educationJpaRepository.save(EducationEntity.from(education))
+        educationEntity.update(EducationAddressesVO.from(education.educationAddresses))
+        return educationEntity.toModel()
     }
 
     override fun saveAll(educations: List<Education>): List<Education> {
@@ -23,7 +26,11 @@ class EducationRepositoryImpl(
 
     override fun update(education: Education) {
         educationJpaRepository.save(
-            EducationEntity.from(education)
+            EducationEntity.from(education).apply {
+                update(
+                    EducationAddressesVO.from(education.educationAddresses)
+                )
+            }
         )
     }
 
@@ -47,8 +54,9 @@ class EducationRepositoryImpl(
             educationEntity.educationAddresses.value.forEach {
                 Hibernate.initialize(it)
             }
+            Hibernate.initialize(educationEntity.targetTypes)
         }
-        return educations.map { it.toModel() }
+        return educations.map { it.toModel().apply { update(it.educationAddresses.toModel()) } }
     }
 
     override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education> {
