@@ -76,3 +76,10 @@ REST Docs + epages 조합으로 OAS를 만들어 API 문서 링크를 공유할 
   - Quartz의 트리거와 job 체이닝을 통해 구현
 - RestAssured를 이용한 API 통합 테스트 작성
 - Rest Docs + epages를 활용한 OAS 산출 및 API Document 작성
+
+## Reference
+사이드 프로젝트 진행과정에서 학습 및 참고했던 레퍼런스입니다.
+
+- [개발잼 유튜브](https://www.youtube.com/@devgem)
+- [스프링러너의스프링아카데미:스프링부트로 구현하는 실전 멀티모듈프로젝트](https://fastcampus.co.kr/dev_academy_springrunner201) 
+  - 수강 완료
