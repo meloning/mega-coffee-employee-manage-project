@@ -7,7 +7,10 @@
 핵심 기능은 매장 설립시 등록된 매장 내 직원들에게 교육 프로그램에 대한 알림 서비스를 제공하는 것이 핵심입니다.
 
 ## 요구사항
-[요구사항 문서](https://github.com/meloning/mega-coffee-employee-manage-project/wiki)
+
+아래 요구사항 내용은 사이드 프로젝트 진행을 위해 가상으로 기획하여 정리한 내용입니다.
+
+- [요구사항 문서](https://github.com/meloning/mega-coffee-employee-manage-project/wiki)
 
 ## 구조
 
