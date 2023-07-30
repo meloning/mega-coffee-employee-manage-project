@@ -1,4 +1,4 @@
-package com.meloning.megaCoffee.infra.messageQueue.rabbitmq.config
+package com.meloning.megaCoffee.config
 
 import org.springframework.amqp.core.TopicExchange
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory

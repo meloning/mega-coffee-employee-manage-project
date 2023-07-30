@@ -89,6 +89,7 @@ class UserService(
         selectedEducationAddresses.forEach {
             applicationEventPublisher.publishEvent(
                 AppliedUserEducationAddressEvent(
+                    email = user.email,
                     username = user.name.value,
                     educationName = education.name.value,
                     educationAddress = "${it.address.city} ${it.address.street}",

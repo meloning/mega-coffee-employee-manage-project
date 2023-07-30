@@ -13,6 +13,19 @@ class UserEventListener(
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun applyEducationAddressListener(eventModel: AppliedUserEducationAddressEvent) {
-        eventSender.send(EventType.EMAIL, eventModel)
+        eventSender.send(
+            EventType.EMAIL,
+            with(eventModel) {
+                mapOf(
+                    "email" to email,
+                    "username" to username,
+                    "educationName" to educationName,
+                    "educationAddress" to educationAddress,
+                    "date" to date,
+                    "time" to time,
+                    "type" to "complete_user_education"
+                )
+            }
+        )
     }
 }

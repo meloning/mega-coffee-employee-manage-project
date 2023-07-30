@@ -15,7 +15,7 @@ class EventSenderImpl(
 
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun send(type: EventType, payload: Any) {
+    override fun send(type: EventType, payload: Map<String, String>) {
         logger.info("routingKey=${type.value}, payload=$payload")
         rabbitTemplate.convertAndSend(exchange.name, type.value, payload)
     }

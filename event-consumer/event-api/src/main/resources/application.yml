@@ -1,0 +1,18 @@
+spring:
+    application:
+        name: event-consumer-project
+    lifecycle:
+        timeout-per-shutdown-phase: 30s
+    profiles:
+        include:
+            - logging
+            - rabbitmq
+            - mail
+        group:
+            local: logging-local
+            dev: logging-dev
+        active: local
+
+server:
+    port: 9090
+    shutdown: graceful
