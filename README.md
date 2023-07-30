@@ -14,7 +14,7 @@
 
 ## 구조
 
-### [v0.5]
+### [v0.5.0]
 ### <시스템 아키텍처>
 ![사이드_프로젝트_v0.5_아키텍처.png](images%2F%EC%82%AC%EC%9D%B4%EB%93%9C_%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_v0.5_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
 
@@ -70,12 +70,8 @@ REST Docs + epages 조합으로 OAS를 만들어 API 문서 링크를 공유할 
 
 
 ## Next 목표
-**[v1.0]**
-
-- 교육 장소별 교육 시작시간 1시간전 대상자들에게 알림을 발송하는 기능을 추가
-  - Quartz의 트리거와 job 체이닝을 통해 구현
-- RestAssured를 이용한 API 통합 테스트 작성
-- Rest Docs + epages를 활용한 OAS 산출 및 API Document 작성
+**[v1.0.0]**
+- [v1.0.0 마일스톤](https://github.com/meloning/mega-coffee-employee-manage-project/milestone/1)
 
 ## Reference
 사이드 프로젝트 진행과정에서 학습 및 참고했던 레퍼런스입니다.
