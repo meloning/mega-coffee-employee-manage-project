@@ -9,7 +9,6 @@ import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.store.repository.findNotDeletedByIdOrThrow
-import com.meloning.megaCoffee.core.domain.user.event.AppliedUserEducationAddressEvent
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
@@ -18,9 +17,10 @@ import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserComman
 import com.meloning.megaCoffee.core.domain.user.usecase.command.RegisterEducationAddressCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
+import com.meloning.megaCoffee.core.event.EventSender
+import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -30,7 +30,7 @@ class UserService(
     private val userRepository: IUserRepository,
     private val storeRepository: IStoreRepository,
     private val educationRepository: IEducationRepository,
-    private val applicationEventPublisher: ApplicationEventPublisher
+    private val eventSender: EventSender
 ) {
 
     // 이름, 역할, 근무시간대, 근무 장소
@@ -88,14 +88,16 @@ class UserService(
 
         // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
         selectedEducationAddresses.forEach {
-            applicationEventPublisher.publishEvent(
-                AppliedUserEducationAddressEvent(
-                    email = user.email,
-                    username = user.name.value,
-                    educationName = education.name.value,
-                    educationAddress = "${it.address.city} ${it.address.street}",
-                    date = it.date.toString(),
-                    time = "${it.timeRange.startTime} ~ ${it.timeRange.endTime}"
+            eventSender.send(
+                type = EventType.EMAIL,
+                payload = mapOf(
+                    "email" to user.email,
+                    "username" to user.name.value,
+                    "educationName" to education.name.value,
+                    "educationAddress" to "${it.address.city} ${it.address.street}",
+                    "date" to it.date.toString(),
+                    "time" to "${it.timeRange.startTime} ~ ${it.timeRange.endTime}",
+                    "type" to "complete_user_education"
                 )
             )
         }
