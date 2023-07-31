@@ -10,6 +10,7 @@ interface IStoreRepository {
     fun saveAll(stores: List<Store>): List<Store>
     fun update(store: Store)
 
+    fun findNotDeletedById(id: Long): Store?
     fun findById(id: Long): Store?
     fun findAll(storeId: Long?, page: Int, size: Int): InfiniteScrollType<Store>
 
@@ -17,6 +18,9 @@ interface IStoreRepository {
 
     fun deleteById(id: Long)
 }
+
+fun IStoreRepository.findNotDeletedByIdOrThrow(id: Long): Store =
+    this.findNotDeletedById(id) ?: throw NotFoundException("매장이 존재하지 않습니다.")
 
 fun IStoreRepository.findByIdOrThrow(id: Long): Store =
     this.findById(id) ?: throw NotFoundException("매장이 존재하지 않습니다.")

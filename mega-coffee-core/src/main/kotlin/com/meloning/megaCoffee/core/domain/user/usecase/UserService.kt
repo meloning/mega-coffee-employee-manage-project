@@ -8,6 +8,7 @@ import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
+import com.meloning.megaCoffee.core.domain.store.repository.findNotDeletedByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.event.AppliedUserEducationAddressEvent
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
@@ -50,7 +51,7 @@ class UserService(
 
     fun registerEducationAddress(id: Long, command: RegisterEducationAddressCommand) {
         val user = userRepository.findDetailByIdOrThrow(id)
-        val store = storeRepository.findByIdOrThrow(user.storeId)
+        val store = storeRepository.findNotDeletedByIdOrThrow(user.storeId)
         val storeEducations = educationRepository.findAllByStoreId(store.id!!)
         store.update(storeEducations.map { StoreEducationRelation(store = store, educationId = it.id!!) })
 
@@ -105,7 +106,7 @@ class UserService(
             throw AlreadyExistException("이미 존재하는 유저입니다.")
         }
 
-        val store = storeRepository.findByIdOrThrow(command.storeId)
+        val store = storeRepository.findNotDeletedByIdOrThrow(command.storeId)
 
         val newUser = userRepository.save(command.toModel(store.id!!))
         if (newUser.isOwner() && store.ownerId.isNull()) {
@@ -119,7 +120,7 @@ class UserService(
         val user = userRepository.findByIdOrThrow(id)
 
         val store = command.storeId?.let {
-            storeRepository.findByIdOrThrow(it)
+            storeRepository.findNotDeletedByIdOrThrow(it)
         }
 
         with(command) {

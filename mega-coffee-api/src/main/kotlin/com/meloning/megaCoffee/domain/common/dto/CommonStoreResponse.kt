@@ -8,7 +8,8 @@ data class CommonStoreResponse(
     val name: String,
     val type: StoreType,
     val address: AddressResponse,
-    val timeRange: TimeRangeResponse
+    val timeRange: TimeRangeResponse,
+    val deleted: Boolean
 ) {
     companion object {
         @JvmStatic
@@ -18,7 +19,8 @@ data class CommonStoreResponse(
                 name = name.value,
                 type = type,
                 address = AddressResponse.from(address),
-                timeRange = TimeRangeResponse.from(timeRange)
+                timeRange = TimeRangeResponse.from(timeRange),
+                deleted = deleted
             )
         }
     }

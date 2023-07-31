@@ -7,6 +7,7 @@ import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEducationRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -36,8 +37,12 @@ class StoreRepositoryImpl(
         return content.map { it.toModel() } to hasNext
     }
 
-    override fun findById(id: Long): Store? {
+    override fun findNotDeletedById(id: Long): Store? {
         return storeJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
+    }
+
+    override fun findById(id: Long): Store? {
+        return storeJpaRepository.findByIdOrNull(id)?.toModel()
     }
 
     override fun existsByName(name: Name): Boolean {

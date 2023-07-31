@@ -26,6 +26,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
+import org.springframework.context.ApplicationEventPublisher
 
 @ExtendWith(MockitoExtension::class)
 class UserServiceTest {
@@ -38,6 +39,9 @@ class UserServiceTest {
 
     @Mock
     private lateinit var educationRepository: IEducationRepository
+
+    @Mock
+    private lateinit var applicationEventPublisher: ApplicationEventPublisher
 
     @InjectMocks
     private lateinit var userService: UserService
@@ -82,7 +86,7 @@ class UserServiceTest {
         )
 
         whenever(userRepository.existsByNameAndEmail(mockName, mockEmail)).thenReturn(false)
-        whenever(storeRepository.findById(1)).thenReturn(mockStore)
+        whenever(storeRepository.findNotDeletedById(1)).thenReturn(mockStore)
         whenever(userRepository.save(any())).thenReturn(mockUser)
 
         // when
@@ -181,7 +185,7 @@ class UserServiceTest {
         )
 
         whenever(userRepository.findById(any())).thenReturn(mockUser)
-        whenever(storeRepository.findById(any())).thenReturn(mockStore)
+        whenever(storeRepository.findNotDeletedById(any())).thenReturn(mockStore)
 
         // when
         val updatedUser = userService.update(1, command)
