@@ -10,7 +10,6 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
 import org.hibernate.Hibernate
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -39,11 +38,11 @@ class UserRepositoryImpl(
     }
 
     override fun findById(id: Long): User? {
-        return userJpaRepository.findByIdOrNull(id)?.toModel()
+        return userJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
     }
 
     override fun existsByNameAndEmail(name: Name, email: String): Boolean {
-        return userJpaRepository.existsByNameAndEmail(NameVO.from(name), email)
+        return userJpaRepository.existsByNameAndEmailAndDeletedIsFalse(NameVO.from(name), email)
     }
 
     override fun deleteById(id: Long) {
@@ -51,7 +50,7 @@ class UserRepositoryImpl(
     }
 
     override fun findDetailById(id: Long): User? {
-        val userEntity = userJpaRepository.findByIdOrNull(id)
+        val userEntity = userJpaRepository.findByIdAndDeletedIsFalse(id)
         userEntity?.educationAddressRelations?.forEach {
             Hibernate.initialize(it)
         }

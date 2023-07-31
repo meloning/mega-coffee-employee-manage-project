@@ -38,6 +38,7 @@ class CustomUserJpaRepositoryImpl(
             .from(qUserEntity)
             .join(qStoreEntity).on(qUserEntity.storeId.eq(qStoreEntity.id))
             .where(
+                qUserEntity.deleted.isFalse,
                 gtUserLastId(command.userId),
                 filterStoreId(command.storeId),
                 filterEmployeeType(command.employeeType),
