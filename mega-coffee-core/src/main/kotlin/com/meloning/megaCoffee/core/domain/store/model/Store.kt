@@ -13,7 +13,7 @@ data class Store(
     var ownerId: Long?,
     var address: Address,
     var timeRange: TimeRange,
-    // 교육 프로그램 정보들
+    var deleted: Boolean = false,
     var educations: MutableList<StoreEducationRelation> = mutableListOf(),
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
