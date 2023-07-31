@@ -31,13 +31,15 @@ class CustomUserJpaRepositoryImpl(
                 store = QUserShortRow_UserStoreRow(
                     id = qStoreEntity.id,
                     name = qStoreEntity.name,
-                    type = qStoreEntity.type
+                    type = qStoreEntity.type,
+                    deleted = qStoreEntity.deleted
                 )
             )
         )
             .from(qUserEntity)
             .join(qStoreEntity).on(qUserEntity.storeId.eq(qStoreEntity.id))
             .where(
+                qUserEntity.deleted.isFalse,
                 gtUserLastId(command.userId),
                 filterStoreId(command.storeId),
                 filterEmployeeType(command.employeeType),

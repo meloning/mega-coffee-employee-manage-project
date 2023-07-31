@@ -5,5 +5,6 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEnt
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface StoreJpaRepository : JpaRepository<StoreEntity, Long>, CustomStoreJpaRepository {
-    fun existsByName(name: NameVO): Boolean
+    fun existsByNameAndDeletedIsFalse(name: NameVO): Boolean
+    fun findByIdAndDeletedIsFalse(id: Long): StoreEntity?
 }

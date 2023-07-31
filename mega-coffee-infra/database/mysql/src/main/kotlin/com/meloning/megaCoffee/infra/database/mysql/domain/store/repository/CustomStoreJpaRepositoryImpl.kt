@@ -17,6 +17,7 @@ class CustomStoreJpaRepositoryImpl(
         val pageRequest = PageRequest.of(page, size)
         val result = jpaQueryFactory.selectFrom(qStoreEntity)
             .where(
+                qStoreEntity.deleted.isFalse,
                 gtStoreLastId(storeId)
             )
             .orderBy(qStoreEntity.id.asc())

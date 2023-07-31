@@ -37,12 +37,16 @@ class StoreRepositoryImpl(
         return content.map { it.toModel() } to hasNext
     }
 
+    override fun findNotDeletedById(id: Long): Store? {
+        return storeJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
+    }
+
     override fun findById(id: Long): Store? {
         return storeJpaRepository.findByIdOrNull(id)?.toModel()
     }
 
     override fun existsByName(name: Name): Boolean {
-        return storeJpaRepository.existsByName(NameVO.from(name))
+        return storeJpaRepository.existsByNameAndDeletedIsFalse(NameVO.from(name))
     }
 
     override fun deleteById(id: Long) {

@@ -16,7 +16,8 @@ data class ScrollUserResponse(
     data class StoreSimpleResponse(
         val id: Long,
         val name: String,
-        val type: StoreType
+        val type: StoreType,
+        val deleted: Boolean
     ) {
         companion object {
             @JvmStatic
@@ -24,7 +25,8 @@ data class ScrollUserResponse(
                 StoreSimpleResponse(
                     id = id!!,
                     name = name.value,
-                    type = type
+                    type = type,
+                    deleted = deleted
                 )
             }
         }

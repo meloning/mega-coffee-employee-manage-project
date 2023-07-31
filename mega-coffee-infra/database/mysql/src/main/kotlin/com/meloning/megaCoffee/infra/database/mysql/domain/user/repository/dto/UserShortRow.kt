@@ -23,12 +23,14 @@ constructor(
     constructor(
         val id: Long,
         val name: NameVO,
-        val type: StoreType
+        val type: StoreType,
+        val deleted: Boolean,
     ) {
         fun toModel() = Store(
             id = id,
             name = name.toModel(),
-            type = type
+            type = type,
+            deleted = deleted
         )
     }
 
