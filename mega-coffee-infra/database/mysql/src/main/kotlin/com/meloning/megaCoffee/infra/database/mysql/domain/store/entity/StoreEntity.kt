@@ -6,8 +6,10 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.common.AddressVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.BaseTimeEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.TimeRangeVO
+import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import org.hibernate.annotations.SQLDelete
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
@@ -27,15 +29,17 @@ import javax.persistence.Table
 @Table(name = "store")
 @DynamicInsert
 @DynamicUpdate
+@SQLDelete(sql = "update store set is_deleted = true where id = ?")
 class StoreEntity : BaseTimeEntity {
 
-    constructor(id: Long?, name: NameVO, type: StoreType, ownerId: Long?, address: AddressVO, timeRange: TimeRangeVO) : super() {
+    constructor(id: Long?, name: NameVO, type: StoreType, ownerId: Long?, address: AddressVO, timeRange: TimeRangeVO, deleted: Boolean) : super() {
         this.id = id
         this.name = name
         this.type = type
         this.ownerId = ownerId
         this.address = address
         this.timeRange = timeRange
+        this.deleted = deleted
     }
 
     @Id
@@ -70,6 +74,11 @@ class StoreEntity : BaseTimeEntity {
     var educations: MutableList<StoreEducationRelationEntity> = mutableListOf()
         protected set
 
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault(value = "0")
+    var deleted: Boolean = false
+        protected set
+
     fun update(educations: MutableList<StoreEducationRelationEntity>) {
         this.educations = educations
     }
@@ -94,7 +103,8 @@ class StoreEntity : BaseTimeEntity {
                 type = type,
                 ownerId = ownerId,
                 address = AddressVO.from(address),
-                timeRange = TimeRangeVO.from(timeRange)
+                timeRange = TimeRangeVO.from(timeRange),
+                deleted = deleted
             )
         }
     }

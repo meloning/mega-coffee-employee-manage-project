@@ -5,6 +5,7 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.Educ
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationAddressEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEducationRelationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -13,6 +14,7 @@ class CustomEducationJpaRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : CustomEducationJpaRepository {
     private val qUserEntity = QUserEntity.userEntity
+    private val qStoreEntity = QStoreEntity.storeEntity
     private val qEducationEntity = QEducationEntity.educationEntity
     private val qEducationAddressEntity = QEducationAddressEntity.educationAddressEntity
     private val qStoreEducationRelationEntity = QStoreEducationRelationEntity.storeEducationRelationEntity
@@ -32,12 +34,18 @@ class CustomEducationJpaRepositoryImpl(
                 qEducationEntity.id.eq(qStoreEducationRelationEntity.educationId)
                     .and(qStoreEducationRelationEntity.store.id.eq(storeId))
             )
+            .innerJoin(qStoreEducationRelationEntity.store, qStoreEntity)
             .leftJoin(qEducationEntity.educationAddresses.value, qEducationAddressEntity)
             .join(qUserEducationAddressRelationEntity)
             .on(
                 qEducationAddressEntity.id.eq(qUserEducationAddressRelationEntity.educationAddressId)
             )
-            .where(qUserEducationAddressRelationEntity.user.id.eq(userId))
+            .innerJoin(qUserEducationAddressRelationEntity.user, qUserEntity)
+            .where(
+                qStoreEntity.deleted.isFalse,
+                qUserEntity.deleted.isFalse,
+                qUserEducationAddressRelationEntity.user.id.eq(userId)
+            )
             .fetch()
 
         val userEducationAddresses = jpaQueryFactory.selectFrom(qEducationAddressEntity)
