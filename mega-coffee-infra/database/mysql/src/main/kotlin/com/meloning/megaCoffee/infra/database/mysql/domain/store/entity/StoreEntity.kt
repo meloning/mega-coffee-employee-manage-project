@@ -90,6 +90,7 @@ class StoreEntity : BaseTimeEntity {
         ownerId = ownerId,
         address = address.toModel(),
         timeRange = timeRange.toModel(),
+        deleted = deleted,
         createdAt = createdAt,
         updatedAt = updatedAt
     )

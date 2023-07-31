@@ -18,8 +18,8 @@ data class Store(
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
-    constructor(id: Long?, name: Name, type: StoreType) :
-        this(id, name, type, null, Address.DUMMY, TimeRange.DUMMY)
+    constructor(id: Long?, name: Name, type: StoreType, deleted: Boolean) :
+        this(id, name, type, null, Address.DUMMY, TimeRange.DUMMY, deleted)
 
     fun update(
         type: StoreType? = null,

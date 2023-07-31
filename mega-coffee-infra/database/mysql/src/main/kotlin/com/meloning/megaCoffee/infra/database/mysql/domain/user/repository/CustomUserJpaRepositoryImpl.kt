@@ -31,7 +31,8 @@ class CustomUserJpaRepositoryImpl(
                 store = QUserShortRow_UserStoreRow(
                     id = qStoreEntity.id,
                     name = qStoreEntity.name,
-                    type = qStoreEntity.type
+                    type = qStoreEntity.type,
+                    deleted = qStoreEntity.deleted
                 )
             )
         )
