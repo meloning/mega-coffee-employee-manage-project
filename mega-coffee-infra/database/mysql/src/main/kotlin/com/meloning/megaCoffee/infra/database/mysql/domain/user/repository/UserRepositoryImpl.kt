@@ -16,10 +16,6 @@ import org.springframework.stereotype.Repository
 class UserRepositoryImpl(
     private val userJpaRepository: UserJpaRepository
 ) : IUserRepository {
-    override fun findAll(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
-        val (content, hasNext) = userJpaRepository.scroll(command, page, size)
-        return content.map { it.toModel() to it.store.toModel() } to hasNext
-    }
 
     override fun save(user: User): User {
         return userJpaRepository.save(UserEntity.from(user)).toModel()
@@ -37,16 +33,13 @@ class UserRepositoryImpl(
         )
     }
 
+    override fun findAll(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
+        val (content, hasNext) = userJpaRepository.scroll(command, page, size)
+        return content.map { it.toModel() to it.store.toModel() } to hasNext
+    }
+
     override fun findById(id: Long): User? {
         return userJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
-    }
-
-    override fun existsByNameAndEmail(name: Name, email: String): Boolean {
-        return userJpaRepository.existsByNameAndEmailAndDeletedIsFalse(NameVO.from(name), email)
-    }
-
-    override fun deleteById(id: Long) {
-        return userJpaRepository.deleteById(id)
     }
 
     override fun findDetailById(id: Long): User? {
@@ -57,5 +50,17 @@ class UserRepositoryImpl(
         return userEntity?.toModel()?.apply {
             update(userEntity.educationAddressRelations.map { it.toModel() }.toMutableList())
         }
+    }
+
+    override fun findByStoreId(storeId: Long): List<User> {
+        return userJpaRepository.findByStoreIdAndDeletedIsFalse(storeId).map { it.toModel() }
+    }
+
+    override fun existsByNameAndEmail(name: Name, email: String): Boolean {
+        return userJpaRepository.existsByNameAndEmailAndDeletedIsFalse(NameVO.from(name), email)
+    }
+
+    override fun deleteById(id: Long) {
+        return userJpaRepository.deleteById(id)
     }
 }

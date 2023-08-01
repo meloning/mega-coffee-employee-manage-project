@@ -15,6 +15,7 @@ import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
+import com.meloning.megaCoffee.core.event.EventSender
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
@@ -26,7 +27,6 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
-import org.springframework.context.ApplicationEventPublisher
 
 @ExtendWith(MockitoExtension::class)
 class UserServiceTest {
@@ -41,7 +41,7 @@ class UserServiceTest {
     private lateinit var educationRepository: IEducationRepository
 
     @Mock
-    private lateinit var applicationEventPublisher: ApplicationEventPublisher
+    private lateinit var eventSender: EventSender
 
     @InjectMocks
     private lateinit var userService: UserService
