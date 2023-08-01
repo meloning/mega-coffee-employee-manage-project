@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface UserJpaRepository : JpaRepository<UserEntity, Long>, CustomUserJpaRepository {
     fun existsByNameAndEmailAndDeletedIsFalse(name: NameVO, email: String): Boolean
     fun findByIdAndDeletedIsFalse(id: Long): UserEntity?
+    fun findByStoreIdAndDeletedIsFalse(storeId: Long): List<UserEntity>
 }
