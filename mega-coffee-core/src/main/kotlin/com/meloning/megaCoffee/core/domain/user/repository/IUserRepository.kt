@@ -15,6 +15,7 @@ interface IUserRepository {
 
     fun findById(id: Long): User?
     fun findDetailById(id: Long): User?
+    fun findByStoreId(storeId: Long): List<User>
     fun existsByNameAndEmail(name: Name, email: String): Boolean
 
     fun deleteById(id: Long)
