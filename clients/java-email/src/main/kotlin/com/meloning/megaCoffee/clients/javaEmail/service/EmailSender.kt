@@ -20,12 +20,12 @@ class EmailSender(
                 message,
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name()
-            )
-
-            helper.setTo(emailFormDto.to)
-            helper.setText(emailFormDto.text, true)
-            helper.setSubject(emailFormDto.subject)
-            helper.setFrom(emailFormDto.from)
+            ).apply {
+                setTo(emailFormDto.to)
+                setText(emailFormDto.text, true)
+                setSubject(emailFormDto.subject)
+                setFrom(emailFormDto.from)
+            }
 
             javaMailSender.send(message)
             logger.info("${Thread.currentThread().name} - Send Email Success for ${emailFormDto.to}")
