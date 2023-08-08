@@ -68,6 +68,8 @@ project
 ## API 문서
 REST Docs + epages 조합으로 OAS를 만들어 API 문서 링크를 공유할 예정입니다.
 
+- [참고할 이슈 내용](https://github.com/meloning/mega-coffee-employee-manage-project/issues/2#issue-1827956311)
+
 
 ## Next 목표
 **[v1.0.0]**
