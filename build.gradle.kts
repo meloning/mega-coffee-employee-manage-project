@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /**
@@ -9,6 +10,7 @@ plugins {
     id("io.spring.dependency-management") apply false
 
     id("org.jmailen.kotlinter")
+    id("java-test-fixtures")
 
     kotlin("jvm")
     kotlin("kapt")
@@ -71,12 +73,32 @@ configure(kopringProjects) {
 
     val mockitoKotlinVersion: String by project
 
+    the<DependencyManagementExtension>().apply {
+        imports {
+            val testContainersVersion: String by project
+            mavenBom("org.testcontainers:testcontainers-bom:${testContainersVersion}")
+        }
+    }
+
     dependencies {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
 
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion")
+    }
+}
+
+val integrationTestProjects = listOf(
+    project(":mega-coffee-infra:database:mysql"),
+    project(":mega-coffee-infra:message-queue:rabbitmq")
+)
+configure(integrationTestProjects) {
+    apply(plugin = "java-test-fixtures")
+
+    dependencies {
+        testFixturesApi("org.testcontainers:testcontainers")
+        testFixturesApi("org.testcontainers:junit-jupiter")
     }
 }
 
@@ -98,5 +120,3 @@ kotlinter {
     experimentalRules = false
     disabledRules = emptyArray()
 }
-
-

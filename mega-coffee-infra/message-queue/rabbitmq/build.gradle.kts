@@ -9,5 +9,7 @@ dependencies {
     implementation(project(":mega-coffee-common"))
     compileOnly(project(":mega-coffee-core"))
 
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    api("org.springframework.boot:spring-boot-starter-amqp")
+
+    testFixturesApi("org.testcontainers:rabbitmq")
 }

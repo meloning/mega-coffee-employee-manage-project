@@ -21,6 +21,7 @@ sourceSets {
 dependencies {
     val mysqlVersion: String by project
     val querydslVersion: String by project
+    val guavaVersion: String by project
 
     implementation(project(":mega-coffee-common"))
     compileOnly(project(":mega-coffee-core"))
@@ -36,6 +37,8 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java:$mysqlVersion")
 
     testImplementation(project(":mega-coffee-core"))
+
+    testFixturesApi("com.google.guava:guava:$guavaVersion")
 }
 
 allOpen {
