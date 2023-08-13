@@ -42,6 +42,7 @@ class UserApiTest : ApiTest() {
 
     @BeforeEach
     fun init() {
+        // TODO: Refactoring Target
         val stores = storeRepository.saveAll(
             listOf(
                 Store(1, Name("메가커피 서대문역점"), StoreType.FRANCHISE, false),
