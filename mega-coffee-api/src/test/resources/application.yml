@@ -3,5 +3,5 @@ spring:
     include:
       - mysql
     group:
-      default: db-local
-    active: default
+      test: db-local
+    active: test
