@@ -1,3 +1,4 @@
+import com.epages.restdocs.apispec.gradle.OpenApi3Extension
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -11,6 +12,8 @@ plugins {
 
     id("org.jmailen.kotlinter")
     id("java-test-fixtures")
+
+    id("com.epages.restdocs-api-spec") apply false
 
     kotlin("jvm")
     kotlin("kapt")
@@ -111,6 +114,51 @@ configure(querydslProjects) {
     dependencies {
         kapt("com.querydsl:querydsl-kotlin-codegen:$querydslVersion")
         kapt("org.springframework.boot:spring-boot-configuration-processor")
+    }
+}
+
+val restDocsProjects = listOf(
+    project(":mega-coffee-api"), // Admin API가 추가될 수 있으니 list로 미리 선언
+)
+configure(restDocsProjects) {
+    apply(plugin = "com.epages.restdocs-api-spec")
+
+    extensions.extraProperties["snippetsDir"] = file("build/generated-snippets")
+
+    val epagesApiDocsVersion: String by project
+
+    dependencies {
+        testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
+        testImplementation("com.epages:restdocs-api-spec:$epagesApiDocsVersion")
+        testImplementation("com.epages:restdocs-api-spec-mockmvc:$epagesApiDocsVersion")
+    }
+
+    /**
+     * @see <a href="https://github.com/ePages-de/restdocs-api-spec">Spring REST Docs API specification Integration</a>
+     */
+    configure<OpenApi3Extension> {
+        setServer("http://localhost:9000")
+        title = "MGC Employee Manage OpenApi Specification"
+        version = "1.0.0"
+        format = "yaml"
+    }
+
+    tasks.named("bootJar") {
+        doLast {
+            val sourceDir = project.file("swagger-ui")
+            val yamlFile = project.file("${project.buildDir}/api-spec/openapi3.yaml")
+            val targetDir = project.file("build/classes/kotlin/main/BOOT-INF/classes/static/swagger-ui")
+
+            copy {
+                from(sourceDir) {
+                    into(targetDir)
+                }
+                from(yamlFile) {
+                    into(targetDir)
+                }
+            }
+        }
     }
 }
 
