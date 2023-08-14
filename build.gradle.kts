@@ -148,7 +148,7 @@ configure(restDocsProjects) {
         doLast {
             val sourceDir = project.file("swagger-ui")
             val yamlFile = project.file("${project.buildDir}/api-spec/openapi3.yaml")
-            val targetDir = project.file("build/classes/kotlin/main/BOOT-INF/classes/static/swagger-ui")
+            val targetDir = project.file("BOOT-INF/classes/static/swagger-ui")
 
             copy {
                 from(sourceDir) {
