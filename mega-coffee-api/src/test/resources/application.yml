@@ -2,6 +2,7 @@ spring:
   profiles:
     include:
       - mysql
+      - logging
     group:
-      test: db-local
+      test: db-local, logging-local
     active: test
