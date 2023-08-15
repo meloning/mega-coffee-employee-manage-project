@@ -104,6 +104,7 @@ class EducationAddressTest {
             id = 1,
             education = education,
             address = Address("서울", "관악구", "123"),
+            currentParticipant = 23,
             maxParticipant = 23,
             date = LocalDate.now(),
             timeRange = TimeRange(LocalTime.of(10, 0), LocalTime.of(20, 0))
@@ -111,7 +112,7 @@ class EducationAddressTest {
 
         // when, then
         Assertions.assertThatThrownBy {
-            educationAddress.validateMaxParticipantExceeded(23)
+            educationAddress.validateMaxParticipantExceeded()
         }.isInstanceOf(AlreadyFullException::class.java)
             .hasMessage("선택한 교육장소(1)의 수강인원(23)이 가득찼습니다.")
     }

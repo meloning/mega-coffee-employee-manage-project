@@ -89,7 +89,7 @@ class EducationApiTest : ApiTest() {
 
         val education = Education(educationId, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
         val createdEducation = educationRepository.save(education)
-        val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, LocalDate.now(), TimeRange.DUMMY)
+        val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
         educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
 
         // when

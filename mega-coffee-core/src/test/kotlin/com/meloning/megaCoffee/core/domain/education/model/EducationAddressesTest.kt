@@ -29,11 +29,11 @@ class EducationAddressesTest {
         )
 
         val educationAddressList = mutableListOf(
-            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
-            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
-            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
+            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, 0, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, 0, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
+            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, 0, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, 0, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
+            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
         )
 
         // when
@@ -56,11 +56,11 @@ class EducationAddressesTest {
         )
 
         val educationAddressList = mutableListOf(
-            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
-            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(4, mockEducation, Address("서울", "강남구", "123"), 9, LocalDate.now(), TimeRange(LocalTime.of(9, 30), LocalTime.of(18, 0))),
-            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
+            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, 0, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, 0, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
+            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, 0, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(4, mockEducation, Address("서울", "강남구", "123"), 9, 0, LocalDate.now(), TimeRange(LocalTime.of(9, 30), LocalTime.of(18, 0))),
+            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
         )
 
         // when, then
@@ -83,12 +83,12 @@ class EducationAddressesTest {
         )
 
         val educationAddressList = mutableListOf(
-            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
-            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
-            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
-            EducationAddress(6, mockEducation, Address("서울", "서초구", "123"), 21, LocalDate.of(2023, 12, 25), TimeRange(LocalTime.of(9, 0), LocalTime.of(23, 0))),
+            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, 0, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, 0, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
+            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, 0, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, 0, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
+            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
+            EducationAddress(6, mockEducation, Address("서울", "서초구", "123"), 21, 0, LocalDate.of(2023, 12, 25), TimeRange(LocalTime.of(9, 0), LocalTime.of(23, 0))),
         )
 
         // when, then
@@ -111,11 +111,11 @@ class EducationAddressesTest {
         )
 
         val educationAddressList = mutableListOf(
-            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
-            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
-            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
+            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, 0, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, 0, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
+            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, 0, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, 0, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
+            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(23, 0))),
         )
 
         val educationAddresses = EducationAddresses(educationAddressList)
@@ -140,14 +140,14 @@ class EducationAddressesTest {
         )
 
         val educationAddressList = mutableListOf(
-            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
-            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
-            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
-            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(10, 0), LocalTime.of(23, 0))),
+            EducationAddress(1, mockEducation, Address("서울", "관악구", "123"), 13, 0, LocalDate.of(2023, 1, 27), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(2, mockEducation, Address("서울", "강서구", "123"), 15, 0, LocalDate.of(2023, 4, 19), TimeRange(LocalTime.of(13, 0), LocalTime.of(17, 0))),
+            EducationAddress(3, mockEducation, Address("서울", "강남구", "123"), 4, 0, LocalDate.now(), TimeRange(LocalTime.of(8, 0), LocalTime.of(11, 0))),
+            EducationAddress(4, mockEducation, Address("서울", "구로구", "123"), 9, 0, LocalDate.now(), TimeRange(LocalTime.of(12, 0), LocalTime.of(18, 0))),
+            EducationAddress(5, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(10, 0), LocalTime.of(23, 0))),
         )
 
-        val mockEducationAddress = EducationAddress(6, mockEducation, Address("서울", "송파구", "123"), 21, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(9, 0)))
+        val mockEducationAddress = EducationAddress(6, mockEducation, Address("서울", "송파구", "123"), 21, 0, LocalDate.of(2023, 12, 24), TimeRange(LocalTime.of(1, 0), LocalTime.of(9, 0)))
 
         val educationAddresses = EducationAddresses(educationAddressList)
 

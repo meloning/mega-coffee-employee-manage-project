@@ -78,10 +78,10 @@ class UserEntity : BaseTimeEntity {
         protected set
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var educationAddressRelations: MutableList<UserEducationAddressRelationEntity> = mutableListOf()
+    var educationAddressRelations: MutableSet<UserEducationAddressRelationEntity> = mutableSetOf()
         protected set
 
-    fun update(educationAddresses: MutableList<UserEducationAddressRelationEntity>) {
+    fun update(educationAddresses: MutableSet<UserEducationAddressRelationEntity>) {
         this.educationAddressRelations = educationAddresses
     }
 

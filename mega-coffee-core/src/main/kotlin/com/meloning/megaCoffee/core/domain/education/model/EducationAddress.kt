@@ -11,6 +11,7 @@ data class EducationAddress(
     var education: Education,
     var address: Address,
     var maxParticipant: Int,
+    var currentParticipant: Int = 0,
     var date: LocalDate,
     var timeRange: TimeRange,
     var createdAt: Instant? = null,
@@ -26,14 +27,18 @@ data class EducationAddress(
             isSameDateTimeSlots(other)
     }
 
-    private fun isMaxParticipantCountExceeded(currentParticipantCount: Int): Boolean {
-        return currentParticipantCount == maxParticipant
+    private fun isParticipantExceeded(): Boolean {
+        return currentParticipant == maxParticipant
     }
 
-    fun validateMaxParticipantExceeded(currentParticipantCount: Int) {
-        if (isMaxParticipantCountExceeded(currentParticipantCount)) {
+    fun validateMaxParticipantExceeded() {
+        if (isParticipantExceeded()) {
             throw AlreadyFullException("선택한 교육장소($id)의 수강인원($maxParticipant)이 가득찼습니다.")
         }
+    }
+
+    fun increaseCurrentParticipant() {
+        this.currentParticipant++
     }
 
     override fun equals(other: Any?): Boolean {

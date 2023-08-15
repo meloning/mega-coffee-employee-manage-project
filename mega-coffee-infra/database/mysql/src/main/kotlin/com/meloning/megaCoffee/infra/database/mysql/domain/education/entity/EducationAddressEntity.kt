@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.AddressVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.BaseTimeEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.TimeRangeVO
+import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.proxy.HibernateProxy
@@ -18,6 +19,7 @@ import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
+import javax.persistence.Version
 
 @Entity
 @Table(name = "education_address")
@@ -25,10 +27,11 @@ import javax.persistence.Table
 @DynamicUpdate
 class EducationAddressEntity : BaseTimeEntity {
 
-    constructor(id: Long?, education: EducationEntity, address: AddressVO, maxParticipant: Int, date: LocalDate, timeRange: TimeRangeVO) : super() {
+    constructor(id: Long?, education: EducationEntity, address: AddressVO, currentParticipant: Int, maxParticipant: Int, date: LocalDate, timeRange: TimeRangeVO) : super() {
         this.id = id
         this.education = education
         this.address = address
+        this.currentParticipant = currentParticipant
         this.maxParticipant = maxParticipant
         this.date = date
         this.timeRange = timeRange
@@ -52,6 +55,11 @@ class EducationAddressEntity : BaseTimeEntity {
         protected set
 
     @Column(nullable = false)
+    @ColumnDefault("0")
+    var currentParticipant: Int = 0
+        protected set
+
+    @Column(nullable = false)
     var date: LocalDate
         protected set
 
@@ -59,10 +67,15 @@ class EducationAddressEntity : BaseTimeEntity {
     var timeRange: TimeRangeVO
         protected set
 
+    @Version
+    @ColumnDefault("0")
+    var version: Long = 0
+
     fun toModel() = EducationAddress(
         id = id,
         education = education.toModel(),
         address = address.toModel(),
+        currentParticipant = currentParticipant,
         maxParticipant = maxParticipant,
         date = date,
         timeRange = timeRange.toModel(),
@@ -77,6 +90,7 @@ class EducationAddressEntity : BaseTimeEntity {
                 id = id,
                 education = EducationEntity.from(education),
                 address = AddressVO.from(address),
+                currentParticipant = currentParticipant,
                 maxParticipant = maxParticipant,
                 date = date,
                 timeRange = TimeRangeVO.from(timeRange)
