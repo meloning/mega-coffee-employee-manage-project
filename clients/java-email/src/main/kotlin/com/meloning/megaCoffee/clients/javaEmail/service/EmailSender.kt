@@ -16,7 +16,7 @@ class EmailSender(
     fun send(emailFormDto: EmailFormDto) {
         try {
             val message = javaMailSender.createMimeMessage()
-            val helper = MimeMessageHelper(
+            MimeMessageHelper(
                 message,
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name()
