@@ -20,13 +20,6 @@ class CustomEducationJpaRepositoryImpl(
     private val qStoreEducationRelationEntity = QStoreEducationRelationEntity.storeEducationRelationEntity
     private val qUserEducationAddressRelationEntity = QUserEducationAddressRelationEntity.userEducationAddressRelationEntity
 
-    override fun countByEducationAddressId(educationAddressId: Long): Int {
-        return jpaQueryFactory.selectFrom(qUserEducationAddressRelationEntity)
-            .where(qUserEducationAddressRelationEntity.educationAddressId.eq(educationAddressId))
-            .fetch()
-            .size
-    }
-
     override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): Pair<List<EducationEntity>, List<EducationAddressEntity>> {
         val educations = jpaQueryFactory.selectFrom(qEducationEntity)
             .join(qStoreEducationRelationEntity)

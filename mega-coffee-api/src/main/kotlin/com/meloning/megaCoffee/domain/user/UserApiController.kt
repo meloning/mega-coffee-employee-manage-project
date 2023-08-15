@@ -1,5 +1,6 @@
 package com.meloning.megaCoffee.domain.user
 
+import com.meloning.megaCoffee.core.domain.user.usecase.RegisterEducationAddressFacadeService
 import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.domain.user.dto.CreateUserRequest
 import com.meloning.megaCoffee.domain.user.dto.CreateUserResponse
@@ -27,7 +28,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1")
 class UserApiController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val registerEducationAddressFacadeService: RegisterEducationAddressFacadeService
 ) {
 
     @GetMapping("/users/scroll")
@@ -59,7 +61,7 @@ class UserApiController(
         @PathVariable id: Long,
         @Valid @RequestBody request: RegisterEducationAddressRequest
     ): ResponseEntity<Void> {
-        userService.registerEducationAddress(id, request.toCommand())
+        registerEducationAddressFacadeService.execute(id, request.toCommand())
         return ResponseEntity.accepted().build()
     }
 

@@ -78,8 +78,4 @@ class EducationRepositoryImpl(
     override fun deleteById(id: Long) {
         educationJpaRepository.deleteById(id)
     }
-
-    override fun countByEducationAddressId(educationAddressId: Long): Int {
-        return educationJpaRepository.countByEducationAddressId(educationAddressId)
-    }
 }

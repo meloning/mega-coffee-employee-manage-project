@@ -77,14 +77,17 @@ class UserService(
 
         // 선택한 교육 장소의 수강인원이 가득차 있는지
         selectedEducationAddresses.forEach {
-            it.validateMaxParticipantExceeded(educationRepository.countByEducationAddressId(it.id!!))
+            it.validateMaxParticipantExceeded()
         }
 
         command.educationAddressIds.forEach {
+            // TODO: Refactoring Target
             user.addEducationAddress(it)
+            educationAddresses.findAndIncreaseCurrentParticipant(it)
         }
 
         userRepository.update(user)
+        educationRepository.update(education)
 
         // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
         selectedEducationAddresses.forEach {

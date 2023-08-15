@@ -50,6 +50,10 @@ class EducationAddresses(
         }
     }
 
+    fun findAndIncreaseCurrentParticipant(id: Long) {
+        _value.find { it.id!! == id }?.increaseCurrentParticipant()
+    }
+
     fun filterByContainedIds(educationAddressIds: List<Long>): List<EducationAddress> {
         return _value.filter { educationAddressIds.contains(it.id) }
     }

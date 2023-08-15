@@ -28,7 +28,7 @@ class UserRepositoryImpl(
     override fun update(user: User) {
         userJpaRepository.save(
             UserEntity.from(user).apply {
-                update(user.educationAddressRelations.map { UserEducationAddressRelationEntity.from(it) }.toMutableList())
+                update(user.educationAddressRelations.map { UserEducationAddressRelationEntity.from(it) }.toMutableSet())
             }
         )
     }
@@ -48,7 +48,7 @@ class UserRepositoryImpl(
             Hibernate.initialize(it)
         }
         return userEntity?.toModel()?.apply {
-            update(userEntity.educationAddressRelations.map { it.toModel() }.toMutableList())
+            update(userEntity.educationAddressRelations.map { it.toModel() }.toMutableSet())
         }
     }
 

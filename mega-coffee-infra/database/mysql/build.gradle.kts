@@ -30,6 +30,9 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // https://github.com/spring-projects/spring-retry
+    api("org.springframework.retry:spring-retry")
+
     implementation("com.querydsl:querydsl-jpa")
     kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
 

@@ -17,14 +17,14 @@ data class User(
     var workTimeType: WorkTimeType,
     var storeId: Long,
     var deleted: Boolean = false,
-    var educationAddressRelations: MutableList<UserEducationAddressRelation> = mutableListOf(),
+    var educationAddressRelations: MutableSet<UserEducationAddressRelation> = mutableSetOf(),
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
     constructor(id: Long?, name: Name, employeeType: EmployeeType, workTimeType: WorkTimeType, storeId: Long) :
         this(id, Constant.EMPTY, name, Address.DUMMY, employeeType, PhoneNumber.DUMMY, workTimeType, storeId)
 
-    fun update(educationAddressRelations: MutableList<UserEducationAddressRelation>) {
+    fun update(educationAddressRelations: MutableSet<UserEducationAddressRelation>) {
         this.educationAddressRelations = educationAddressRelations
     }
 
