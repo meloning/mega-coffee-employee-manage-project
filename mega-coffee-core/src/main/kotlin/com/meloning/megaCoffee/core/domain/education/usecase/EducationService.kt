@@ -18,7 +18,6 @@ import com.meloning.megaCoffee.core.domain.user.usecase.UserEducationAddressVali
 import com.meloning.megaCoffee.core.event.EventSender
 import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
-import com.meloning.megaCoffee.core.exception.NotRegisterException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -88,28 +87,27 @@ class EducationService(
         val educationAddresses = education.educationAddresses
 
         // [Validate]
-        education.validateUserEligibility(currentUser.employeeType)
-        if (!requiredEducationsByStore.contains(education)) {
-            throw NotRegisterException("${store.name.value} 매장의 직원은 ${education.name.value}을 들을 수 없습니다.")
+        education.run {
+            validateUserEligibility(currentUser.employeeType)
+            validateStoreEligibility(requiredEducationsByStore.map { it.id!! }, store.name.value)
         }
 
         // 새로 등록할 것들중 비교
-        educationAddresses.validateExisting(educationAddressIds)
-        educationAddresses.validateExpired(educationAddressIds)
-
-        val selectedEducationAddresses = educationAddresses.filterByContainedIds(educationAddressIds)
-
-        val userEducationAddresses = educationRepository.findEducationAddressAllByUserId(currentUser.id!!)
-        val ids = selectedEducationAddresses.map { it.id!! }
-
-        // 기존 등록한 것들과 비교
-        val duplicatedValues = userEducationAddresses.filter { ids.contains(it.id) }
-        if (duplicatedValues.isNotEmpty()) {
-            throw AlreadyExistException("이미 등록한 교육장소를 신청하였습니다. 재등록 바랍니다.")
+        educationAddresses.run {
+            validateExisting(educationAddressIds)
+            validateExpired(educationAddressIds)
         }
 
-        // 같은날, 겹치는 시간대가 있는지 검증
-        UserEducationAddressValidator.validateDuplicateTimeSlots(selectedEducationAddresses + userEducationAddresses)
+        val selectedEducationAddresses = educationAddresses.filterByContainedIds(educationAddressIds)
+        val userEducationAddresses = educationRepository.findEducationAddressAllByUserId(currentUser.id!!)
+
+        UserEducationAddressValidator.run {
+            // 기존 등록한 것들과 비교
+            validateAlreadyRegister(userEducationAddresses, selectedEducationAddresses.map { it.id!! })
+
+            // 같은날, 겹치는 시간대가 있는지 검증
+            validateDuplicateTimeSlots(selectedEducationAddresses + userEducationAddresses)
+        }
 
         // 선택한 교육 장소의 수강인원이 가득차 있는지
         selectedEducationAddresses.forEach {
