@@ -1,10 +1,8 @@
 package com.meloning.megaCoffee.domain.user
 
-import com.meloning.megaCoffee.core.domain.user.usecase.RegisterEducationAddressFacadeService
 import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.domain.user.dto.CreateUserRequest
 import com.meloning.megaCoffee.domain.user.dto.CreateUserResponse
-import com.meloning.megaCoffee.domain.user.dto.RegisterEducationAddressRequest
 import com.meloning.megaCoffee.domain.user.dto.ScrollUserRequest
 import com.meloning.megaCoffee.domain.user.dto.ScrollUserResponse
 import com.meloning.megaCoffee.domain.user.dto.UpdateUserRequest
@@ -28,8 +26,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1")
 class UserApiController(
-    private val userService: UserService,
-    private val registerEducationAddressFacadeService: RegisterEducationAddressFacadeService
+    private val userService: UserService
 ) {
 
     @GetMapping("/users/scroll")
@@ -53,16 +50,6 @@ class UserApiController(
         return ResponseEntity
             .created(URI.create("/users/${user.id}"))
             .body(CreateUserResponse.from(user, store))
-    }
-
-    // path내 id로 로그인 유저 Id를 대체함
-    @PostMapping("/users/{id}/education-place/register")
-    fun register(
-        @PathVariable id: Long,
-        @Valid @RequestBody request: RegisterEducationAddressRequest
-    ): ResponseEntity<Void> {
-        registerEducationAddressFacadeService.execute(id, request.toCommand())
-        return ResponseEntity.accepted().build()
     }
 
     @PutMapping("/users/{id}")

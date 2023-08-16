@@ -12,6 +12,7 @@ interface IStoreRepository {
 
     fun findNotDeletedById(id: Long): Store?
     fun findById(id: Long): Store?
+    fun findAllById(ids: List<Long>): List<Store>
     fun findAll(storeId: Long?, page: Int, size: Int): InfiniteScrollType<Store>
 
     fun existsByName(name: Name): Boolean

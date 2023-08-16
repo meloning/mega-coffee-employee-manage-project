@@ -3,22 +3,16 @@ package com.meloning.megaCoffee.core.domain.user.usecase
 import com.meloning.megaCoffee.common.extension.isNull
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
-import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.store.model.Store
-import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.store.repository.findNotDeletedByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
-import com.meloning.megaCoffee.core.domain.user.repository.findDetailByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.usecase.command.CreateUserCommand
-import com.meloning.megaCoffee.core.domain.user.usecase.command.RegisterEducationAddressCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.domain.user.usecase.command.UpdateUserCommand
-import com.meloning.megaCoffee.core.event.EventSender
-import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import org.springframework.stereotype.Service
@@ -29,8 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     private val userRepository: IUserRepository,
     private val storeRepository: IStoreRepository,
-    private val educationRepository: IEducationRepository,
-    private val eventSender: EventSender
+    private val educationRepository: IEducationRepository
 ) {
 
     // 이름, 역할, 근무시간대, 근무 장소
@@ -47,63 +40,6 @@ class UserService(
         val store = storeRepository.findByIdOrThrow(user.storeId)
         val educations = educationRepository.findAllByStoreIdAndUserId(store.id!!, user.id!!)
         return Triple(user, store, educations)
-    }
-
-    fun registerEducationAddress(id: Long, command: RegisterEducationAddressCommand) {
-        val user = userRepository.findDetailByIdOrThrow(id)
-        val store = storeRepository.findNotDeletedByIdOrThrow(user.storeId)
-        val storeEducations = educationRepository.findAllByStoreId(store.id!!)
-        store.update(storeEducations.map { StoreEducationRelation(store = store, educationId = it.id!!) })
-
-        val education = educationRepository.findDetailByIdOrThrow(command.educationId)
-        val educationAddresses = education.educationAddresses
-
-        // [Validate]
-        store.validateEligibility(education.id!!, education.name.value)
-        education.validateUserEligibility(user.employeeType)
-
-        // 새로 등록할 것들중 비교
-        educationAddresses.validateExisting(command.educationAddressIds)
-        educationAddresses.validateExpired(command.educationAddressIds)
-
-        val selectedEducationAddresses = educationAddresses.filterByContainedIds(command.educationAddressIds)
-        val userEducationAddresses = educationAddresses.filterByContainedIds(user.educationAddressRelations.map { it.educationAddressId })
-
-        // 기존 등록한 것들과 비교
-        user.validateExistingEducationAddress(selectedEducationAddresses.map { it.id!! })
-
-        // 같은날, 겹치는 시간대가 있는지
-        UserEducationAddressValidator.validateDuplicateTimeSlots(selectedEducationAddresses + userEducationAddresses)
-
-        // 선택한 교육 장소의 수강인원이 가득차 있는지
-        selectedEducationAddresses.forEach {
-            it.validateMaxParticipantExceeded()
-        }
-
-        command.educationAddressIds.forEach {
-            // TODO: Refactoring Target
-            user.addEducationAddress(it)
-            educationAddresses.findAndIncreaseCurrentParticipant(it)
-        }
-
-        userRepository.update(user)
-        educationRepository.update(education)
-
-        // 교육 신청한 직원은 신청 완료에 대한 알림을 받을 수 있다.
-        selectedEducationAddresses.forEach {
-            eventSender.send(
-                type = EventType.EMAIL,
-                payload = mapOf(
-                    "email" to user.email,
-                    "username" to user.name.value,
-                    "educationName" to education.name.value,
-                    "educationAddress" to "${it.address.city} ${it.address.street}",
-                    "date" to it.date.toString(),
-                    "time" to "${it.timeRange.startTime} ~ ${it.timeRange.endTime}",
-                    "type" to "complete_user_education"
-                )
-            )
-        }
     }
 
     fun create(command: CreateUserCommand): Pair<User, Store> {

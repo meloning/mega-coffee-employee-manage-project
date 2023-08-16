@@ -3,7 +3,6 @@ package com.meloning.megaCoffee.domain.store
 import com.meloning.megaCoffee.core.domain.store.usecase.StoreService
 import com.meloning.megaCoffee.domain.store.dto.CreateStoreRequest
 import com.meloning.megaCoffee.domain.store.dto.CreateStoreResponse
-import com.meloning.megaCoffee.domain.store.dto.RegisterEducationsRequest
 import com.meloning.megaCoffee.domain.store.dto.ScrollStoreResponse
 import com.meloning.megaCoffee.domain.store.dto.StoreDetailResponse
 import com.meloning.megaCoffee.domain.store.dto.UpdateStoreRequest
@@ -51,15 +50,6 @@ class StoreApiController(
         return ResponseEntity
             .created(URI.create("/stores/${store.id}"))
             .body(CreateStoreResponse.from(store))
-    }
-
-    @PostMapping("/stores/{id}/education/register")
-    fun register(
-        @PathVariable id: Long,
-        @Valid @RequestBody request: RegisterEducationsRequest
-    ): ResponseEntity<Void> {
-        storeService.registerForEducation(id, request.educations)
-        return ResponseEntity.accepted().build()
     }
 
     @PutMapping("/stores/{id}")

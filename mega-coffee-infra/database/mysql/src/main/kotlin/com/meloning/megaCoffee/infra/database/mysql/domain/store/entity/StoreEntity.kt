@@ -13,7 +13,6 @@ import org.hibernate.annotations.SQLDelete
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.AttributeOverride
 import javax.persistence.AttributeOverrides
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -22,7 +21,6 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -70,18 +68,10 @@ class StoreEntity : BaseTimeEntity {
     var timeRange: TimeRangeVO
         protected set
 
-    @OneToMany(mappedBy = "store", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var educations: MutableList<StoreEducationRelationEntity> = mutableListOf()
-        protected set
-
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault(value = "0")
     var deleted: Boolean = false
         protected set
-
-    fun update(educations: MutableList<StoreEducationRelationEntity>) {
-        this.educations = educations
-    }
 
     fun toModel() = Store(
         id = id,

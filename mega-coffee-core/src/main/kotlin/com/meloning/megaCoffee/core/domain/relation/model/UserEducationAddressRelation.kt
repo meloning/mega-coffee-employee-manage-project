@@ -1,11 +1,12 @@
-package com.meloning.megaCoffee.core.domain.user.model
+package com.meloning.megaCoffee.core.domain.relation.model
 
+import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import java.time.Instant
 
 data class UserEducationAddressRelation(
     val id: Long? = null,
-    val user: User,
-    val educationAddressId: Long,
+    val userId: Long,
+    val educationAddress: EducationAddress,
     var createdAt: Instant? = null
 ) {
     override fun equals(other: Any?): Boolean {
@@ -14,15 +15,15 @@ data class UserEducationAddressRelation(
 
         other as UserEducationAddressRelation
 
-        if (user != other.user) return false
-        if (educationAddressId != other.educationAddressId) return false
+        if (userId != other.userId) return false
+        if (educationAddress != other.educationAddress) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = user.hashCode()
-        result = 31 * result + educationAddressId.hashCode()
+        var result = userId.hashCode()
+        result = 31 * result + educationAddress.hashCode()
         return result
     }
 }

@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.proxy.HibernateProxy
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
@@ -21,7 +20,6 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -76,14 +74,6 @@ class UserEntity : BaseTimeEntity {
     @ColumnDefault(value = "0")
     var deleted: Boolean = false
         protected set
-
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var educationAddressRelations: MutableSet<UserEducationAddressRelationEntity> = mutableSetOf()
-        protected set
-
-    fun update(educationAddresses: MutableSet<UserEducationAddressRelationEntity>) {
-        this.educationAddressRelations = educationAddresses
-    }
 
     fun toModel(): User = User(
         id = id,

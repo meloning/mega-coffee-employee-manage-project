@@ -10,8 +10,6 @@ import com.meloning.megaCoffee.core.domain.store.usecase.command.CreateStoreComm
 import com.meloning.megaCoffee.core.domain.store.usecase.command.UpdateStoreCommand
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
-import com.meloning.megaCoffee.core.event.EventSender
-import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import org.springframework.stereotype.Service
@@ -23,7 +21,6 @@ class StoreService(
     private val storeRepository: IStoreRepository,
     private val userRepository: IUserRepository,
     private val educationRepository: IEducationRepository,
-    private val eventSender: EventSender
 ) {
 
     @Transactional(readOnly = true)
@@ -38,38 +35,6 @@ class StoreService(
         // 교육 프로그램들 및 교육장소들
         val educations = educationRepository.findAllByStoreId(store.id!!)
         return store to educations
-    }
-
-    fun registerForEducation(id: Long, educationIds: List<Long>) {
-        val store = storeRepository.findByIdOrThrow(id)
-
-        val educations = educationIds.map {
-            educationRepository.findByIdOrThrow(it)
-        }
-
-        educations.forEach {
-            store.addEducation(it.id!!)
-        }
-
-        storeRepository.update(store)
-
-        // 교육 프로그램명을 매장 내 교육 대상자들에게 알림을 발송
-        val targetUsersInStore = userRepository.findByStoreId(store.id!!)
-
-        educations.forEach { education ->
-            val targetUsersToNotify = targetUsersInStore.filter { education.targetTypes.contains(it.employeeType) }
-            targetUsersToNotify.forEach {
-                eventSender.send(
-                    type = EventType.EMAIL,
-                    payload = mapOf(
-                        "email" to it.email,
-                        "username" to it.name.value,
-                        "educationName" to education.name.value,
-                        "type" to "notify_user_education"
-                    )
-                )
-            }
-        }
     }
 
     fun create(command: CreateStoreCommand): Store {

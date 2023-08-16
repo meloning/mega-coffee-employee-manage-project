@@ -2,6 +2,7 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.education.repository
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
+import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
@@ -16,9 +17,7 @@ class EducationRepositoryImpl(
     private val educationJpaRepository: EducationJpaRepository
 ) : IEducationRepository {
     override fun save(education: Education): Education {
-        val educationEntity = educationJpaRepository.save(EducationEntity.from(education))
-        educationEntity.update(EducationAddressesVO.from(education.educationAddresses))
-        return educationEntity.toModel()
+        return educationJpaRepository.save(EducationEntity.from(education)).toModel()
     }
 
     override fun saveAll(educations: List<Education>): List<Education> {
@@ -69,6 +68,10 @@ class EducationRepositoryImpl(
                 update(EducationAddresses(result.toMutableList()))
             }
         }
+    }
+
+    override fun findEducationAddressAllByUserId(userId: Long): List<EducationAddress> {
+        return educationJpaRepository.findEducationAddressAllByUserId(userId).map { it.toModel() }
     }
 
     override fun existsByName(name: Name): Boolean {
