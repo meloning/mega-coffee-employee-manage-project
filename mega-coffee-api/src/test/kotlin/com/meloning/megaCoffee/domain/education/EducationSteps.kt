@@ -74,7 +74,7 @@ object EducationSteps {
             .log().all().extract()
     }
 
-    fun 매장_등록(): RegisterStoresRequest = RegisterStoresRequest(listOf(1))
+    fun 매장_등록(storeId: Long = 1): RegisterStoresRequest = RegisterStoresRequest(listOf(storeId))
 
     fun 유저_교육장소_등록_요청(id: Long, userId: Long, request: RegisterEducationAddressParticipantRequest): ExtractableResponse<Response> {
         return RestAssured.given().log().all()
