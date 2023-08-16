@@ -42,6 +42,7 @@ dependencies {
     testImplementation(project(":mega-coffee-core"))
 
     testFixturesApi("com.google.guava:guava:$guavaVersion")
+    testFixturesApi("org.testcontainers:mysql")
 }
 
 allOpen {
