@@ -1,17 +1,14 @@
 package com.meloning.megaCoffee.domain.user
 
 import com.meloning.megaCoffee.ApiTest
-import com.meloning.megaCoffee.common.constant.Constant
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
-import com.meloning.megaCoffee.core.domain.common.PhoneNumber
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
-import com.meloning.megaCoffee.core.domain.relation.model.UserEducationAddressRelation
 import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
 import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationAddressRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
@@ -22,6 +19,8 @@ import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
+import com.meloning.megaCoffee.domain.education.EducationSteps
+import com.meloning.megaCoffee.domain.store.StoreSteps
 import com.meloning.megaCoffee.filter.MDCFilter.Companion.RESPONSE_TRACE_NAME
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.BeforeEach
@@ -75,10 +74,13 @@ class UserApiTest : ApiTest() {
         val educationAddress = EducationAddress(1, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
         educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
         storeEducationRelationRepository.save(StoreEducationRelation.create(storeId = stores.first().id!!, education = createdEducation))
-
-        userEducationRelationRepository.save(UserEducationAddressRelation(userId = 1, educationAddress = educationAddress))
     }
 
+    /**
+     * Given: 테스트를 위한 유저들을 생성한 후,
+     * When: 유저 리스트를 조회하면
+     * Then: 스크롤 형식으로 유저 정보들이 조회된다.
+     */
     @Test
     @DisplayName("유저 스크롤 리스트 API")
     fun scrollTest() {
@@ -102,11 +104,25 @@ class UserApiTest : ApiTest() {
         }
     }
 
+    /**
+     * Given: 신규 매장 및 유저를 생성하고 교육 장소 참여자로 등록한 후,
+     * When: 해당 유저를 상세 조회하면
+     * Then: 유저의 상세 정보들이 모두 조회된다.
+     */
     @Test
     @DisplayName("유저 상세 조회 API")
     fun detailTest() {
         // given
-        val userId = 1L
+        val createStoreRequest = StoreSteps.생성()
+        val storeId = StoreSteps.생성_요청(createStoreRequest).jsonPath().getLong("id")
+
+        val registerStoreRequest = EducationSteps.매장_등록(storeId)
+        EducationSteps.매장_등록_요청(1L, registerStoreRequest)
+
+        val createUserRequest = UserSteps.생성(storeId)
+        val userId = UserSteps.생성_요청(createUserRequest).jsonPath().getLong("id")
+
+        EducationSteps.유저_교육장소_등록_요청(1, userId, EducationSteps.유저_교육장소_등록())
 
         // when
         val response = UserSteps.상세_요청(userId)
@@ -116,23 +132,23 @@ class UserApiTest : ApiTest() {
             it.run {
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
                 assertThat(response.header(RESPONSE_TRACE_NAME)).isNotNull
-                assertThat(response.jsonPath().getLong("id")).isEqualTo(1)
-                assertThat(response.jsonPath().getString("email")).isEqualTo(Constant.EMPTY)
-                assertThat(response.jsonPath().getString("name")).isEqualTo("메로닝1")
-                assertThat(response.jsonPath().getString("address.city")).isEqualTo("도시")
-                assertThat(response.jsonPath().getString("address.street")).isEqualTo("거리")
-                assertThat(response.jsonPath().getString("address.zipCode")).isEqualTo("12345")
-                assertThat(response.jsonPath().getString("employeeType")).isEqualTo(EmployeeType.MANAGER.name)
-                assertThat(response.jsonPath().getString("phoneNumber")).isEqualTo(PhoneNumber.DUMMY.phone)
-                assertThat(response.jsonPath().getString("workTimeType")).isEqualTo(WorkTimeType.WEEKDAY.name)
-                assertThat(response.jsonPath().getLong("store.id")).isEqualTo(1)
-                assertThat(response.jsonPath().getString("store.name")).isEqualTo("메가커피 서대문역점")
-                assertThat(response.jsonPath().getString("store.type")).isEqualTo(StoreType.FRANCHISE.name)
-                assertThat(response.jsonPath().getString("store.address.city")).isEqualTo("도시")
-                assertThat(response.jsonPath().getString("store.address.street")).isEqualTo("거리")
-                assertThat(response.jsonPath().getString("store.address.zipCode")).isEqualTo("12345")
-                assertThat(response.jsonPath().getString("store.timeRange.startTime")).isEqualTo(TimeRange.DUMMY.startTime.toString())
-                assertThat(response.jsonPath().getString("store.timeRange.endTime")).isEqualTo(TimeRange.DUMMY.endTime.withNano(0).toString())
+                assertThat(response.jsonPath().getLong("id")).isEqualTo(userId)
+                assertThat(response.jsonPath().getString("email")).isEqualTo(createUserRequest.email)
+                assertThat(response.jsonPath().getString("name")).isEqualTo(createUserRequest.name)
+                assertThat(response.jsonPath().getString("address.city")).isEqualTo(createUserRequest.address.city)
+                assertThat(response.jsonPath().getString("address.street")).isEqualTo(createUserRequest.address.street)
+                assertThat(response.jsonPath().getString("address.zipCode")).isEqualTo(createUserRequest.address.zipCode)
+                assertThat(response.jsonPath().getString("employeeType")).isEqualTo(createUserRequest.employeeType.name)
+                assertThat(response.jsonPath().getString("phoneNumber")).isEqualTo(createUserRequest.phoneNumber)
+                assertThat(response.jsonPath().getString("workTimeType")).isEqualTo(createUserRequest.workTimeType.name)
+                assertThat(response.jsonPath().getLong("store.id")).isEqualTo(storeId)
+                assertThat(response.jsonPath().getString("store.name")).isEqualTo(createStoreRequest.name)
+                assertThat(response.jsonPath().getString("store.type")).isEqualTo(createStoreRequest.type.name)
+                assertThat(response.jsonPath().getString("store.address.city")).isEqualTo(createStoreRequest.address.city)
+                assertThat(response.jsonPath().getString("store.address.street")).isEqualTo(createStoreRequest.address.street)
+                assertThat(response.jsonPath().getString("store.address.zipCode")).isEqualTo(createStoreRequest.address.zipCode)
+                assertThat(response.jsonPath().getString("store.timeRange.startTime")).isEqualTo(createStoreRequest.timeRange.startTime)
+                assertThat(response.jsonPath().getString("store.timeRange.endTime")).isEqualTo(createStoreRequest.timeRange.endTime)
                 assertThat(response.jsonPath().getBoolean("store.deleted")).isFalse
                 assertThat(response.jsonPath().getList<Any>("educations").size).isEqualTo(1)
                 assertThat(response.jsonPath().getList<Any>("educations[0].educationAddresses").size).isEqualTo(1)
@@ -142,6 +158,10 @@ class UserApiTest : ApiTest() {
         }
     }
 
+    /**
+     * When: 유저 생성 요청을 하면
+     * Then: 새로운 유저가 생성된다.
+     */
     @Test
     @DisplayName("유저 생성 API")
     fun createTest() {
@@ -183,11 +203,18 @@ class UserApiTest : ApiTest() {
         }
     }
 
+    /**
+     * Given: 유저를 생성한 후,
+     * When: 생성한 유저의 정보 변경을 요청하면
+     * Then: 유저의 정보들이 변경된다.
+     */
     @Test
     @DisplayName("유저 정보 변경 API")
     fun updateTest() {
         // given
-        val userId = 1L
+        val createUserRequest = UserSteps.생성(1)
+        val userId = UserSteps.생성_요청(createUserRequest).jsonPath().getLong("id")
+
         val request = UserSteps.수정()
 
         // when
@@ -209,11 +236,17 @@ class UserApiTest : ApiTest() {
         }
     }
 
+    /**
+     * Given: 유저를 생성한 후,
+     * When: 해당 유저 삭제 요청을 하면
+     * Then: 유저는 삭제된다.
+     */
     @Test
     @DisplayName("유저 삭제 API")
     fun deleteTest() {
         // given
-        val userId = 1L
+        val createUserRequest = UserSteps.생성(1)
+        val userId = UserSteps.생성_요청(createUserRequest).jsonPath().getLong("id")
 
         // when
         val response = UserSteps.삭제_요청(userId)
