@@ -172,7 +172,7 @@ class StoreApiTest : ApiTest() {
 
     /**
      * Given: 매장을 생성한 후,
-     * When: 생성한 매정의 정보 변경을 요청하면
+     * When: 생성한 매장의 정보 변경을 요청하면
      * Then: 매장의 정보들이 변경된다.
      */
     @Test
