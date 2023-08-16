@@ -1,4 +1,4 @@
-package com.meloning.megaCoffee.domain.user
+package com.meloning.megaCoffee.domain.education
 
 import com.meloning.megaCoffee.ApiTest
 import com.meloning.megaCoffee.core.domain.common.Address
@@ -8,6 +8,8 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
+import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -15,7 +17,7 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
-import org.assertj.core.api.Assertions.assertThat
+import com.meloning.megaCoffee.domain.user.UserSteps
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -27,7 +29,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class UserConcurrencyTest : ApiTest() {
+class RegisterParticipantConcurrencyTest : ApiTest() {
 
     private lateinit var executorService: ExecutorService
     private lateinit var latch: CountDownLatch
@@ -37,6 +39,9 @@ class UserConcurrencyTest : ApiTest() {
 
     @Autowired
     private lateinit var userRepository: IUserRepository
+
+    @Autowired
+    private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
 
     @Autowired
     private lateinit var educationRepository: IEducationRepository
@@ -57,18 +62,18 @@ class UserConcurrencyTest : ApiTest() {
 
         val store = storeRepository.save(Store(null, Name("메가커피 서대문점"), StoreType.FRANCHISE, false))
         userRepository.save(User(null, Name("메로닝"), EmployeeType.PART_TIME, WorkTimeType.WEEKEND, store.id!!))
-        storeRepository.update(store.apply { addEducation(education.id!!) })
+        storeEducationRelationRepository.save(StoreEducationRelation.create(storeId = store.id!!, education = education))
     }
 
     @Test
-    @DisplayName("교육 신청 동시성 테스트")
+    @DisplayName("교육장소 참여자 등록 동시성 테스트")
     fun test() {
         val userId = 1L
-        val request = UserSteps.교육장소_등록()
+        val request = EducationSteps.유저_교육장소_등록()
 
         for (i in 0..THREAD_SIZE) {
             executorService.execute {
-                UserSteps.교육장소_등록_요청(userId, request)
+                EducationSteps.유저_교육장소_등록_요청(1, userId, request)
                 latch.countDown()
             }
         }

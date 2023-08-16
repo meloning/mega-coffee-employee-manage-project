@@ -8,6 +8,8 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
+import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -39,6 +41,9 @@ class StoreApiTest : ApiTest() {
     @Autowired
     private lateinit var educationRepository: IEducationRepository
 
+    @Autowired
+    private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
+
     @BeforeEach
     fun init() {
         // TODO: Refactoring Target
@@ -68,6 +73,7 @@ class StoreApiTest : ApiTest() {
         val createdEducation = educationRepository.save(education)
         val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
         educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
+        storeEducationRelationRepository.save(StoreEducationRelation.create(storeId = 1, education = education))
     }
 
     @Test
@@ -113,6 +119,9 @@ class StoreApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("address.zipCode")).isEqualTo("12345")
                 assertThat(response.jsonPath().getString("timeRange.startTime")).isEqualTo(TimeRange.DUMMY.startTime.toString())
                 assertThat(response.jsonPath().getString("timeRange.endTime")).isEqualTo(TimeRange.DUMMY.endTime.withNano(0).toString())
+                assertThat(response.jsonPath().getList<Any>("educations").size).isEqualTo(1)
+                assertThat(response.jsonPath().getList<Any>("educations[0].educationAddresses").size).isEqualTo(1)
+                assertThat(response.jsonPath().getLong("educations[0].educationAddresses[0].maxParticipant")).isEqualTo(3)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }
@@ -145,25 +154,6 @@ class StoreApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("timeRange.endTime")).isEqualTo(TimeRange.DUMMY.endTime.withNano(0).toString())
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
-            }
-        }
-    }
-
-    @Test
-    @DisplayName("매장이 들어야할 교육 프로그램 등록 API")
-    fun registerEducationTest() {
-        // given
-        val storeId = 1L
-        val request = StoreSteps.교육프로그램_등록()
-
-        // when
-        val response = StoreSteps.교육프로그램_등록_요청(storeId, request)
-
-        // then
-        SoftAssertions.assertSoftly {
-            it.run {
-                assertThat(response.statusCode()).isEqualTo(HttpStatus.ACCEPTED.value())
-                assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
             }
         }
     }

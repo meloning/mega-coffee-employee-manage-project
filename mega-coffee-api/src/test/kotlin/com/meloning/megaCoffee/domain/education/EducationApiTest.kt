@@ -1,13 +1,11 @@
 package com.meloning.megaCoffee.domain.education
 
 import com.meloning.megaCoffee.ApiTest
-import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
-import com.meloning.megaCoffee.core.domain.common.TimeRange
-import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.education.repository.findByIdOrThrow
+import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
+import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -23,7 +21,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 
 class EducationApiTest : ApiTest() {
 
@@ -35,6 +32,9 @@ class EducationApiTest : ApiTest() {
 
     @Autowired
     private lateinit var educationRepository: IEducationRepository
+
+    @Autowired
+    private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
 
     @BeforeEach
     fun init() {
@@ -53,6 +53,10 @@ class EducationApiTest : ApiTest() {
         )
     }
 
+    /**
+     * When: 교육 프로그램을 생성 요청을 하면
+     * Then: 교육 프로그램이 생성된다.
+     */
     @Test
     @DisplayName("교육 프로그램 생성 API")
     fun createTest() {
@@ -81,16 +85,22 @@ class EducationApiTest : ApiTest() {
         }
     }
 
+    /**
+     * Given: 교육 프로그램을 생성하고, 장소를 등록한후
+     * When: 교육 프로그램을 조회하면
+     * Then: 교육 프로그램과 등록된 장소가 조회된다.
+     */
     @Test
     @DisplayName("교육 프로그램 상세 조회 API")
     fun detailTest() {
         // given
-        val educationId = 1L
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
 
-        val education = Education(educationId, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
-        val createdEducation = educationRepository.save(education)
-        val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
-        educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
+        val createAddressRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+
+        val educationAddressRequest = createAddressRequest.addresses[0]
 
         // when
         val response = EducationSteps.상세_요청(educationId)
@@ -101,36 +111,103 @@ class EducationApiTest : ApiTest() {
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
                 assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
                 assertThat(response.jsonPath().getLong("id")).isEqualTo(educationId)
-                assertThat(response.jsonPath().getString("name")).isEqualTo(education.name.value)
-                assertThat(response.jsonPath().getString("content")).isEqualTo(education.content)
+                assertThat(response.jsonPath().getString("name")).isEqualTo(createRequest.name)
+                assertThat(response.jsonPath().getString("content")).isEqualTo(createRequest.content)
                 assertThat(response.jsonPath().getList<String>("targetTypes")).isNotNull
-                assertThat(response.jsonPath().getList<String>("targetTypes")).contains(*education.targetTypes.map { type -> type.name }.toTypedArray())
+                assertThat(response.jsonPath().getList<String>("targetTypes")).contains(*createRequest.targetTypes.map { type -> type.name }.toTypedArray())
                 assertThat(response.jsonPath().getLong("educationAddresses[0].id")).isEqualTo(1)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.city")).isEqualTo(Address.DUMMY.city)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.street")).isEqualTo(Address.DUMMY.street)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.zipCode")).isEqualTo(Address.DUMMY.zipCode)
-                assertThat(response.jsonPath().getLong("educationAddresses[0].maxParticipant")).isEqualTo(3)
-                assertThat(response.jsonPath().getString("educationAddresses[0].date")).isEqualTo(LocalDate.now().toString())
-                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.startTime")).isEqualTo(TimeRange.DUMMY.startTime.toString())
-                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.endTime")).isEqualTo(TimeRange.DUMMY.endTime.withNano(0).toString())
+                assertThat(response.jsonPath().getString("educationAddresses[0].address.city")).isEqualTo(educationAddressRequest.address.city)
+                assertThat(response.jsonPath().getString("educationAddresses[0].address.street")).isEqualTo(educationAddressRequest.address.street)
+                assertThat(response.jsonPath().getString("educationAddresses[0].address.zipCode")).isEqualTo(educationAddressRequest.address.zipCode)
+                assertThat(response.jsonPath().getInt("educationAddresses[0].maxParticipant")).isEqualTo(educationAddressRequest.maxParticipant)
+                assertThat(response.jsonPath().getString("educationAddresses[0].date")).isEqualTo(educationAddressRequest.date)
+                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.startTime")).isEqualTo(educationAddressRequest.timeRange.startTime)
+                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.endTime")).isEqualTo(educationAddressRequest.timeRange.endTime)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }
         }
     }
 
+    /**
+     * Given: 교육 프로그램을 생성하고
+     * When: 교육 프로그램의 장소를 등록하면
+     * Then: 교육 프로그램의 장소가 등록된다.
+     */
     @Test
     @DisplayName("교육장소 등록 API")
     fun registerEducationPlaceTest() {
         // given
-        val educationId = 1L
-        val education = Education(educationId, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
-        val createdEducation = educationRepository.save(education)
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
 
         val request = EducationSteps.교육장소_생성()
 
         // when
-        val response = EducationSteps.교육장소_생성_요청(createdEducation.id!!, request)
+        val response = EducationSteps.교육장소_생성_요청(educationId, request)
+
+        // then
+        SoftAssertions.assertSoftly {
+            it.run {
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.ACCEPTED.value())
+                assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
+            }
+        }
+    }
+
+    /**
+     * Given: 교육 프로그램을 생성하고 장소를 등록한 후,
+     * When: 교육 프로그램을 이수할 매장을 선택하면
+     * Then: 매장은 교육 프로그램을 필수로 들을 수 있도록 등록된다.
+     */
+    @Test
+    @DisplayName("교육 프로그램 이수할 매장 등록 API")
+    fun registerStoreTest() {
+        // given
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
+
+        val createAddressRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+
+        val request = EducationSteps.매장_등록()
+
+        // when
+        val response = EducationSteps.매장_등록_요청(educationId, request)
+
+        // then
+        SoftAssertions.assertSoftly {
+            it.run {
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.ACCEPTED.value())
+                assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
+            }
+        }
+    }
+
+    /**
+     * Given: 교육 프로그램 생성 및 장소를 등록한 후,
+     * When: 참여자인 인증된 유저가 장소를 선택하면
+     * Then: 선택한 장소에 유저는 등록된다.
+     */
+    @Test
+    @DisplayName("교육장소의 현재 참여자 등록 API")
+    fun registerParticipantTest() {
+        // given
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
+
+        val createAddressRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+
+        val education = educationRepository.findByIdOrThrow(educationId)
+        storeEducationRelationRepository.save(StoreEducationRelation.create(1L, education))
+
+        val userId = 1L
+
+        val request = EducationSteps.유저_교육장소_등록()
+
+        // when
+        val response = EducationSteps.유저_교육장소_등록_요청(educationId, userId, request)
 
         // then
         SoftAssertions.assertSoftly {

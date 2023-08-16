@@ -1,9 +1,8 @@
-package com.meloning.megaCoffee.infra.database.mysql.domain.user.lock
+package com.meloning.megaCoffee.infra.database.mysql.domain.education.lock
 
 import com.meloning.megaCoffee.common.error.exception.RetryFailedException
-import com.meloning.megaCoffee.core.domain.user.usecase.RegisterEducationAddressFacadeService
-import com.meloning.megaCoffee.core.domain.user.usecase.UserService
-import com.meloning.megaCoffee.core.domain.user.usecase.command.RegisterEducationAddressCommand
+import com.meloning.megaCoffee.core.domain.education.usecase.EducationService
+import com.meloning.megaCoffee.core.domain.user.usecase.RegisterParticipantFacadeService
 import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.retry.RecoveryCallback
 import org.springframework.retry.RetryCallback
@@ -11,18 +10,18 @@ import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 
 @Service
-class RegisterEducationAddressFacadeServiceImpl(
-    private val userService: UserService,
+class RegisterParticipantFacadeServiceImpl(
+    private val educationService: EducationService,
     private val retryTemplate: RetryTemplate
-) : RegisterEducationAddressFacadeService {
+) : RegisterParticipantFacadeService {
 
-    override fun execute(id: Long, command: RegisterEducationAddressCommand) {
+    override fun execute(id: Long, userId: Long, educationAddressIds: List<Long>) {
         try {
-            userService.registerEducationAddress(id, command)
+            educationService.registerParticipant(id, userId, educationAddressIds)
         } catch (e: ObjectOptimisticLockingFailureException) {
             retryTemplate.execute(
                 RetryCallback<Unit, Exception> {
-                    userService.registerEducationAddress(id, command)
+                    educationService.registerParticipant(id, userId, educationAddressIds)
                 },
                 RecoveryCallback {
                     throw RetryFailedException("OptimisticLock 발생에 대한 Retry 처리를 실패하였습니다.", e)

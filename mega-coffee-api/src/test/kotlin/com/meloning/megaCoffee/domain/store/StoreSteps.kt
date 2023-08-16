@@ -4,7 +4,6 @@ import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.store.dto.CreateStoreRequest
-import com.meloning.megaCoffee.domain.store.dto.RegisterEducationsRequest
 import com.meloning.megaCoffee.domain.store.dto.UpdateStoreRequest
 import io.restassured.RestAssured
 import io.restassured.response.ExtractableResponse
@@ -50,21 +49,6 @@ object StoreSteps {
         type = StoreType.FRANCHISE,
         address = AddressRequest("어느 도시", "어느 거리", "123"),
         timeRange = TimeRangeRequest(LocalTime.MIN.toString(), LocalTime.MAX.withNano(0).toString())
-    )
-
-    fun 교육프로그램_등록_요청(id: Long, request: RegisterEducationsRequest): ExtractableResponse<Response> {
-        return RestAssured.given().log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .pathParam("id", id)
-            .body(request)
-            .`when`()
-            .post("/api/v1/stores/{id}/education/register")
-            .then()
-            .log().all().extract()
-    }
-
-    fun 교육프로그램_등록(): RegisterEducationsRequest = RegisterEducationsRequest(
-        educations = listOf(1)
     )
 
     fun 수정_요청(id: Long, request: UpdateStoreRequest): ExtractableResponse<Response> {

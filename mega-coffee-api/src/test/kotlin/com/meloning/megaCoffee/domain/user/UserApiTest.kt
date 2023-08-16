@@ -10,6 +10,10 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
 import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
+import com.meloning.megaCoffee.core.domain.relation.model.UserEducationAddressRelation
+import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
+import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationAddressRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -38,6 +42,12 @@ class UserApiTest : ApiTest() {
     private lateinit var storeRepository: IStoreRepository
 
     @Autowired
+    private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
+
+    @Autowired
+    private lateinit var userEducationRelationRepository: IUserEducationAddressRelationRepository
+
+    @Autowired
     private lateinit var educationRepository: IEducationRepository
 
     @BeforeEach
@@ -62,9 +72,11 @@ class UserApiTest : ApiTest() {
         )
         val education = Education(1, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
         val createdEducation = educationRepository.save(education)
-        val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
+        val educationAddress = EducationAddress(1, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
         educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
-        storeRepository.update(stores.first().apply { addEducation(createdEducation.id!!) })
+        storeEducationRelationRepository.save(StoreEducationRelation.create(storeId = stores.first().id!!, education = createdEducation))
+
+        userEducationRelationRepository.save(UserEducationAddressRelation(userId = 1, educationAddress = educationAddress))
     }
 
     @Test
@@ -122,6 +134,8 @@ class UserApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("store.timeRange.startTime")).isEqualTo(TimeRange.DUMMY.startTime.toString())
                 assertThat(response.jsonPath().getString("store.timeRange.endTime")).isEqualTo(TimeRange.DUMMY.endTime.withNano(0).toString())
                 assertThat(response.jsonPath().getBoolean("store.deleted")).isFalse
+                assertThat(response.jsonPath().getList<Any>("educations").size).isEqualTo(1)
+                assertThat(response.jsonPath().getList<Any>("educations[0].educationAddresses").size).isEqualTo(1)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }
@@ -165,25 +179,6 @@ class UserApiTest : ApiTest() {
                 assertThat(response.jsonPath().getBoolean("store.deleted")).isFalse
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
-            }
-        }
-    }
-
-    @Test
-    @DisplayName("유저 교육장소 등록 API")
-    fun registerEducationPlaceTest() {
-        // given
-        val userId = 1L
-        val request = UserSteps.교육장소_등록()
-
-        // when
-        val response = UserSteps.교육장소_등록_요청(userId, request)
-
-        // then
-        SoftAssertions.assertSoftly {
-            it.run {
-                assertThat(response.statusCode()).isEqualTo(HttpStatus.ACCEPTED.value())
-                assertThat(response.header(RESPONSE_TRACE_NAME)).isNotNull
             }
         }
     }

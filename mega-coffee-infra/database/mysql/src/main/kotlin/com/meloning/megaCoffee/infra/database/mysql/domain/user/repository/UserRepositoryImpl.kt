@@ -7,9 +7,7 @@ import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.usecase.command.ScrollUserCommand
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
-import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
-import org.hibernate.Hibernate
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -26,11 +24,7 @@ class UserRepositoryImpl(
     }
 
     override fun update(user: User) {
-        userJpaRepository.save(
-            UserEntity.from(user).apply {
-                update(user.educationAddressRelations.map { UserEducationAddressRelationEntity.from(it) }.toMutableSet())
-            }
-        )
+        userJpaRepository.save(UserEntity.from(user))
     }
 
     override fun findAll(command: ScrollUserCommand, page: Int, size: Int): InfiniteScrollType<Pair<User, Store>> {
@@ -42,18 +36,8 @@ class UserRepositoryImpl(
         return userJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
     }
 
-    override fun findDetailById(id: Long): User? {
-        val userEntity = userJpaRepository.findByIdAndDeletedIsFalse(id)
-        userEntity?.educationAddressRelations?.forEach {
-            Hibernate.initialize(it)
-        }
-        return userEntity?.toModel()?.apply {
-            update(userEntity.educationAddressRelations.map { it.toModel() }.toMutableSet())
-        }
-    }
-
-    override fun findByStoreId(storeId: Long): List<User> {
-        return userJpaRepository.findByStoreIdAndDeletedIsFalse(storeId).map { it.toModel() }
+    override fun findAllByStoreIdIn(storeIds: List<Long>): List<User> {
+        return userJpaRepository.findAllByStoreIdInAndDeletedIsFalse(storeIds).map { it.toModel() }
     }
 
     override fun existsByNameAndEmail(name: Name, email: String): Boolean {

@@ -6,4 +6,5 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.Educ
 interface CustomEducationJpaRepository {
     fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): Pair<List<EducationEntity>, List<EducationAddressEntity>>
     fun findAllByStoreId(storeId: Long): List<EducationEntity>
+    fun findEducationAddressAllByUserId(userId: Long): List<EducationAddressEntity>
 }

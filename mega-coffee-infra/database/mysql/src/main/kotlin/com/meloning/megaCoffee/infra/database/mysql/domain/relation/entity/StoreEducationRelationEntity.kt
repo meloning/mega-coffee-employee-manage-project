@@ -1,7 +1,8 @@
-package com.meloning.megaCoffee.infra.database.mysql.domain.store.entity
+package com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity
 
-import com.meloning.megaCoffee.core.domain.store.model.StoreEducationRelation
+import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.CreatedAtEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
 import org.hibernate.proxy.HibernateProxy
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -16,10 +17,10 @@ import javax.persistence.Table
 @Table(name = "store_education_relation")
 class StoreEducationRelationEntity : CreatedAtEntity {
 
-    constructor(id: Long?, store: StoreEntity, educationId: Long) : super() {
+    constructor(id: Long?, education: EducationEntity, storeId: Long) : super() {
         this.id = id
-        this.store = store
-        this.educationId = educationId
+        this.education = education
+        this.storeId = storeId
     }
 
     @Id
@@ -27,15 +28,15 @@ class StoreEducationRelationEntity : CreatedAtEntity {
     var id: Long? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    val store: StoreEntity
+    @JoinColumn(name = "education_id")
+    val education: EducationEntity
 
-    val educationId: Long
+    val storeId: Long
 
     fun toModel(): StoreEducationRelation = StoreEducationRelation(
         id = id!!,
-        store = store.toModel(),
-        educationId = educationId,
+        storeId = storeId,
+        education = education.toModel(),
         createdAt = createdAt
     )
 
@@ -44,8 +45,8 @@ class StoreEducationRelationEntity : CreatedAtEntity {
         fun from(model: StoreEducationRelation) = with(model) {
             StoreEducationRelationEntity(
                 id = id,
-                store = StoreEntity.from(store),
-                educationId = educationId
+                storeId = storeId,
+                education = EducationEntity.from(education)
             )
         }
     }
