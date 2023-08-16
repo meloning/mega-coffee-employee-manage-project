@@ -5,7 +5,6 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.user.dto.CreateUserRequest
-import com.meloning.megaCoffee.domain.user.dto.RegisterEducationAddressRequest
 import com.meloning.megaCoffee.domain.user.dto.ScrollUserRequest
 import com.meloning.megaCoffee.domain.user.dto.UpdateUserRequest
 import io.restassured.RestAssured
@@ -66,22 +65,6 @@ object UserSteps {
         phoneNumber = PhoneNumber.DUMMY.phone,
         workTimeType = WorkTimeType.WEEKEND,
         storeId = storeId
-    )
-
-    fun 교육장소_등록_요청(id: Long, request: RegisterEducationAddressRequest): ExtractableResponse<Response> {
-        return RestAssured.given().log().all()
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .pathParam("id", id)
-            .body(request)
-            .`when`()
-            .post("/api/v1/users/{id}/education-place/register")
-            .then()
-            .log().all().extract()
-    }
-
-    fun 교육장소_등록(): RegisterEducationAddressRequest = RegisterEducationAddressRequest(
-        educationId = 1L,
-        educationAddressIds = listOf(1L)
     )
 
     fun 수정_요청(id: Long, request: UpdateUserRequest): ExtractableResponse<Response> {

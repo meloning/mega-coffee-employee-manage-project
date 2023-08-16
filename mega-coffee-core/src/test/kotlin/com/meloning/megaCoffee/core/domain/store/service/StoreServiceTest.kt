@@ -15,7 +15,6 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
-import com.meloning.megaCoffee.core.event.EventSender
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
@@ -41,14 +40,11 @@ class StoreServiceTest {
     @Mock
     private lateinit var educationRepository: IEducationRepository
 
-    @Mock
-    private lateinit var eventSender: EventSender
-
     @InjectMocks
     private lateinit var storeService: StoreService
 
     @Test
-    @DisplayName("유저 생성 테스트")
+    @DisplayName("매장 생성 테스트")
     fun createTest() {
         // given
         val mockName = Name("관악점")

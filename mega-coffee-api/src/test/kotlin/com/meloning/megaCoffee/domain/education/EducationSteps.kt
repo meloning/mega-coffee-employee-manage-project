@@ -4,7 +4,9 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressParticipantRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressesRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
 import io.restassured.RestAssured
 import io.restassured.response.ExtractableResponse
 import io.restassured.response.Response
@@ -60,4 +62,31 @@ object EducationSteps {
             )
         )
     )
+
+    fun 매장_등록_요청(id: Long, request: RegisterStoresRequest): ExtractableResponse<Response> {
+        return RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .pathParam("id", id)
+            .body(request)
+            .`when`()
+            .post("/api/v1/educations/{id}/stores/register")
+            .then()
+            .log().all().extract()
+    }
+
+    fun 매장_등록(): RegisterStoresRequest = RegisterStoresRequest(listOf(1))
+
+    fun 유저_교육장소_등록_요청(id: Long, userId: Long, request: RegisterEducationAddressParticipantRequest): ExtractableResponse<Response> {
+        return RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .pathParam("id", id)
+            .pathParam("userId", userId)
+            .body(request)
+            .`when`()
+            .post("/api/v1/educations/{id}/addresses/participant/{userId}/register")
+            .then()
+            .log().all().extract()
+    }
+
+    fun 유저_교육장소_등록(): RegisterEducationAddressParticipantRequest = RegisterEducationAddressParticipantRequest(listOf(1))
 }

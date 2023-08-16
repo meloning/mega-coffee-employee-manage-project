@@ -6,7 +6,12 @@ import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.usecase.EducationService
 import com.meloning.megaCoffee.core.domain.education.usecase.command.CreateEducationCommand
+import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
+import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationAddressRelationRepository
+import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
+import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
+import com.meloning.megaCoffee.core.event.EventSender
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
@@ -24,6 +29,21 @@ class EducationServiceTest {
 
     @Mock
     private lateinit var educationRepository: IEducationRepository
+
+    @Mock
+    private lateinit var userRepository: IUserRepository
+
+    @Mock
+    private lateinit var storeRepository: IStoreRepository
+
+    @Mock
+    private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
+
+    @Mock
+    private lateinit var userEducationRelationRepository: IUserEducationAddressRelationRepository
+
+    @Mock
+    private lateinit var eventSender: EventSender
 
     @InjectMocks
     private lateinit var educationService: EducationService
