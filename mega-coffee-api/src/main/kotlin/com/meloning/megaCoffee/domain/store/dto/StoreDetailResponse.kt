@@ -5,7 +5,7 @@ import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.domain.common.dto.AddressResponse
-import com.meloning.megaCoffee.domain.common.dto.EducationAddressRow
+import com.meloning.megaCoffee.domain.common.dto.EducationPlaceRow
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeResponse
 
 data class StoreDetailResponse(
@@ -24,7 +24,7 @@ data class StoreDetailResponse(
         val id: Long,
         val name: String,
         val targetTypes: List<EmployeeType>,
-        val educationAddresses: List<EducationAddressRow>
+        val educationPlaces: List<EducationPlaceRow>
     ) {
         companion object {
             @JvmStatic
@@ -33,7 +33,7 @@ data class StoreDetailResponse(
                     id = id!!,
                     name = name.value,
                     targetTypes = targetTypes.toList(),
-                    educationAddresses = educationAddresses.value.map { EducationAddressRow.from(it) }
+                    educationPlaces = educationPlaces.value.map { EducationPlaceRow.from(it) }
                 )
             }
         }

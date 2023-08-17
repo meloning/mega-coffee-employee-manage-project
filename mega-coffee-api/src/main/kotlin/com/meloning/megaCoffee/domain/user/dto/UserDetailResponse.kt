@@ -7,7 +7,7 @@ import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.domain.common.dto.AddressResponse
 import com.meloning.megaCoffee.domain.common.dto.CommonStoreResponse
-import com.meloning.megaCoffee.domain.common.dto.EducationAddressRow
+import com.meloning.megaCoffee.domain.common.dto.EducationPlaceRow
 
 data class UserDetailResponse(
     val id: Long,
@@ -26,7 +26,7 @@ data class UserDetailResponse(
     data class EducationResponse(
         val id: Long,
         val name: String,
-        val educationAddresses: List<EducationAddressRow>
+        val educationPlaces: List<EducationPlaceRow>
     ) {
         companion object {
             @JvmStatic
@@ -34,7 +34,7 @@ data class UserDetailResponse(
                 EducationResponse(
                     id = id!!,
                     name = name.value,
-                    educationAddresses = educationAddresses.value.map { EducationAddressRow.from(it) }
+                    educationPlaces = educationPlaces.value.map { EducationPlaceRow.from(it) }
                 )
             }
         }

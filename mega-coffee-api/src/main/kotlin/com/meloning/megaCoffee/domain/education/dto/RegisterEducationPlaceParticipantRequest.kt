@@ -2,7 +2,7 @@ package com.meloning.megaCoffee.domain.education.dto
 
 import javax.validation.constraints.Size
 
-data class RegisterEducationAddressParticipantRequest(
+data class RegisterEducationPlaceParticipantRequest(
     @field:Size(min = 1, message = "최소 1개 이상이어야 합니다.")
-    val educationAddressIds: List<Long>
+    val educationPlaceIds: List<Long>
 )

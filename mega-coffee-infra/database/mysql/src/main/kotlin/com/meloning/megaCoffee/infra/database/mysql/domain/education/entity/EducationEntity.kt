@@ -54,11 +54,11 @@ class EducationEntity : BaseTimeEntity {
         protected set
 
     @Embedded
-    var educationAddresses: EducationAddressesVO = EducationAddressesVO(mutableListOf())
+    var educationPlaces: EducationPlacesVO = EducationPlacesVO(mutableListOf())
         protected set
 
-    fun update(educationAddressesVO: EducationAddressesVO) {
-        this.educationAddresses = educationAddressesVO
+    fun update(educationPlacesVO: EducationPlacesVO) {
+        this.educationPlaces = educationPlacesVO
     }
 
     fun toModel() = Education(

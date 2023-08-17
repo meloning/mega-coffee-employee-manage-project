@@ -5,8 +5,8 @@ import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
@@ -66,8 +66,8 @@ class StoreApiTest : ApiTest() {
         )
         val education = Education(1, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
         val createdEducation = educationRepository.save(education)
-        val educationAddress = EducationAddress(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
-        educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
+        val educationPlace = EducationPlace(null, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
+        educationRepository.update(createdEducation.apply { update(EducationPlaces(mutableListOf(educationPlace))) })
     }
 
     /**
@@ -128,8 +128,8 @@ class StoreApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("timeRange.startTime")).isEqualTo(createRequest.timeRange.startTime)
                 assertThat(response.jsonPath().getString("timeRange.endTime")).isEqualTo(createRequest.timeRange.endTime)
                 assertThat(response.jsonPath().getList<Any>("educations").size).isEqualTo(1)
-                assertThat(response.jsonPath().getList<Any>("educations[0].educationAddresses").size).isEqualTo(1)
-                assertThat(response.jsonPath().getLong("educations[0].educationAddresses[0].maxParticipant")).isEqualTo(3)
+                assertThat(response.jsonPath().getList<Any>("educations[0].educationPlaces").size).isEqualTo(1)
+                assertThat(response.jsonPath().getLong("educations[0].educationPlaces[0].maxParticipant")).isEqualTo(3)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }

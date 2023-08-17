@@ -5,8 +5,8 @@ import com.meloning.megaCoffee.core.domain.user.usecase.RegisterParticipantFacad
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationResponse
 import com.meloning.megaCoffee.domain.education.dto.EducationDetailResponse
-import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressParticipantRequest
-import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressesRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlaceParticipantRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -39,10 +39,10 @@ class EducationApiController(
         return ResponseEntity.ok(EducationDetailResponse.from(education))
     }
 
-    @PostMapping("/educations/{id}/address/register")
+    @PostMapping("/educations/{id}/place/register")
     fun register(
         @PathVariable id: Long,
-        @Valid @RequestBody request: RegisterEducationAddressesRequest
+        @Valid @RequestBody request: RegisterEducationPlacesRequest
     ): ResponseEntity<Void> {
         educationService.registerAddress(id, request.toCommand())
         return ResponseEntity.accepted().build()
@@ -57,13 +57,13 @@ class EducationApiController(
         return ResponseEntity.accepted().build()
     }
 
-    @PostMapping("/educations/{id}/addresses/participant/{userId}/register")
+    @PostMapping("/educations/{id}/places/participant/{userId}/register")
     fun registerParticipant(
         @PathVariable id: Long,
         @PathVariable userId: Long,
-        @Valid @RequestBody request: RegisterEducationAddressParticipantRequest
+        @Valid @RequestBody request: RegisterEducationPlaceParticipantRequest
     ): ResponseEntity<Void> {
-        registerParticipantFacadeService.execute(id, userId, request.educationAddressIds)
+        registerParticipantFacadeService.execute(id, userId, request.educationPlaceIds)
         return ResponseEntity.accepted().build()
     }
 }

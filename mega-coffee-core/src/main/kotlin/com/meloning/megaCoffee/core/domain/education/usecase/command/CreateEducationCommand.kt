@@ -2,7 +2,7 @@ package com.meloning.megaCoffee.core.domain.education.usecase.command
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 
 data class CreateEducationCommand(
@@ -15,6 +15,6 @@ data class CreateEducationCommand(
         name = name,
         content = content,
         targetTypes = targetTypes,
-        educationAddresses = EducationAddresses(mutableListOf()),
+        educationPlaces = EducationPlaces(mutableListOf()),
     )
 }

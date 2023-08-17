@@ -5,12 +5,12 @@ import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.relation.model.StoreEducationRelation
 import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
-import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationAddressRelationRepository
+import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationPlaceRelationRepository
 import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
@@ -44,7 +44,7 @@ class UserApiTest : ApiTest() {
     private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
 
     @Autowired
-    private lateinit var userEducationRelationRepository: IUserEducationAddressRelationRepository
+    private lateinit var userEducationRelationRepository: IUserEducationPlaceRelationRepository
 
     @Autowired
     private lateinit var educationRepository: IEducationRepository
@@ -71,8 +71,8 @@ class UserApiTest : ApiTest() {
         )
         val education = Education(1, Name("테스트 교육"), "어쩌구", mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME))
         val createdEducation = educationRepository.save(education)
-        val educationAddress = EducationAddress(1, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
-        educationRepository.update(createdEducation.apply { update(EducationAddresses(mutableListOf(educationAddress))) })
+        val educationPlace = EducationPlace(1, createdEducation, Address.DUMMY, 3, 0, LocalDate.now(), TimeRange.DUMMY)
+        educationRepository.update(createdEducation.apply { update(EducationPlaces(mutableListOf(educationPlace))) })
         storeEducationRelationRepository.save(StoreEducationRelation.create(storeId = stores.first().id!!, education = createdEducation))
     }
 
@@ -151,7 +151,7 @@ class UserApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("store.timeRange.endTime")).isEqualTo(createStoreRequest.timeRange.endTime)
                 assertThat(response.jsonPath().getBoolean("store.deleted")).isFalse
                 assertThat(response.jsonPath().getList<Any>("educations").size).isEqualTo(1)
-                assertThat(response.jsonPath().getList<Any>("educations[0].educationAddresses").size).isEqualTo(1)
+                assertThat(response.jsonPath().getList<Any>("educations[0].educationPlaces").size).isEqualTo(1)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }

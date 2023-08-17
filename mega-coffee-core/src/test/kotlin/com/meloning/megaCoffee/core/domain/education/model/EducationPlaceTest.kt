@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalTime
 
-class EducationAddressTest {
+class EducationPlaceTest {
 
     @Test
     @DisplayName("같은날, 시간대가 겹치는지 테스트")
@@ -23,10 +23,10 @@ class EducationAddressTest {
             name = Name("테스트"),
             content = "테스트라구 테스트",
             targetTypes = mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME),
-            educationAddresses = EducationAddresses(mutableListOf()),
+            educationPlaces = EducationPlaces(mutableListOf()),
         )
 
-        val educationAddress = EducationAddress(
+        val educationPlace = EducationPlace(
             id = 1,
             education = education,
             address = Address("서울", "관악구", "123"),
@@ -35,7 +35,7 @@ class EducationAddressTest {
             timeRange = TimeRange(LocalTime.of(10, 0), LocalTime.of(20, 0))
         )
 
-        val target = EducationAddress(
+        val target = EducationPlace(
             id = 1,
             education = education,
             address = Address("서울", "강서구", "123"),
@@ -45,7 +45,7 @@ class EducationAddressTest {
         )
 
         // when
-        val result = educationAddress.isSameDateTimeSlots(target)
+        val result = educationPlace.isSameDateTimeSlots(target)
 
         // then
         assertThat(result).isTrue()
@@ -60,10 +60,10 @@ class EducationAddressTest {
             name = Name("테스트"),
             content = "테스트라구 테스트",
             targetTypes = mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME),
-            educationAddresses = EducationAddresses(mutableListOf()),
+            educationPlaces = EducationPlaces(mutableListOf()),
         )
 
-        val educationAddress = EducationAddress(
+        val educationPlace = EducationPlace(
             id = 1,
             education = education,
             address = Address("서울", "관악구", "123"),
@@ -72,7 +72,7 @@ class EducationAddressTest {
             timeRange = TimeRange(LocalTime.of(10, 0), LocalTime.of(20, 0))
         )
 
-        val target = EducationAddress(
+        val target = EducationPlace(
             id = 1,
             education = education,
             address = Address("서울", "관악구", "123"),
@@ -82,7 +82,7 @@ class EducationAddressTest {
         )
 
         // when
-        val result = educationAddress.isSameDatePlaceTimeSlots(target)
+        val result = educationPlace.isSameDatePlaceTimeSlots(target)
 
         // then
         assertThat(result).isTrue()
@@ -97,10 +97,10 @@ class EducationAddressTest {
             name = Name("테스트"),
             content = "테스트라구 테스트",
             targetTypes = mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME),
-            educationAddresses = EducationAddresses(mutableListOf()),
+            educationPlaces = EducationPlaces(mutableListOf()),
         )
 
-        val educationAddress = EducationAddress(
+        val educationPlace = EducationPlace(
             id = 1,
             education = education,
             address = Address("서울", "관악구", "123"),
@@ -112,7 +112,7 @@ class EducationAddressTest {
 
         // when, then
         Assertions.assertThatThrownBy {
-            educationAddress.validateMaxParticipantExceeded()
+            educationPlace.validateMaxParticipantExceeded()
         }.isInstanceOf(AlreadyFullException::class.java)
             .hasMessage("선택한 교육장소(1)의 수강인원(23)이 가득찼습니다.")
     }

@@ -4,8 +4,8 @@ import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
-import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressParticipantRequest
-import com.meloning.megaCoffee.domain.education.dto.RegisterEducationAddressesRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlaceParticipantRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
 import io.restassured.RestAssured
 import io.restassured.response.ExtractableResponse
@@ -41,20 +41,20 @@ object EducationSteps {
             .log().all().extract()
     }
 
-    fun 교육장소_생성_요청(id: Long, request: RegisterEducationAddressesRequest): ExtractableResponse<Response> {
+    fun 교육장소_생성_요청(id: Long, request: RegisterEducationPlacesRequest): ExtractableResponse<Response> {
         return RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .pathParam("id", id)
             .body(request)
             .`when`()
-            .post("/api/v1/educations/{id}/address/register")
+            .post("/api/v1/educations/{id}/place/register")
             .then()
             .log().all().extract()
     }
 
-    fun 교육장소_생성(): RegisterEducationAddressesRequest = RegisterEducationAddressesRequest(
-        addresses = listOf(
-            RegisterEducationAddressesRequest.EducationAddressRequest(
+    fun 교육장소_생성(): RegisterEducationPlacesRequest = RegisterEducationPlacesRequest(
+        places = listOf(
+            RegisterEducationPlacesRequest.EducationPlaceRequest(
                 address = AddressRequest("어느 도시", "어느 거리", "12345"),
                 maxParticipant = 2,
                 date = LocalDate.now().toString(),
@@ -76,17 +76,17 @@ object EducationSteps {
 
     fun 매장_등록(storeId: Long = 1): RegisterStoresRequest = RegisterStoresRequest(listOf(storeId))
 
-    fun 유저_교육장소_등록_요청(id: Long, userId: Long, request: RegisterEducationAddressParticipantRequest): ExtractableResponse<Response> {
+    fun 유저_교육장소_등록_요청(id: Long, userId: Long, request: RegisterEducationPlaceParticipantRequest): ExtractableResponse<Response> {
         return RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .pathParam("id", id)
             .pathParam("userId", userId)
             .body(request)
             .`when`()
-            .post("/api/v1/educations/{id}/addresses/participant/{userId}/register")
+            .post("/api/v1/educations/{id}/places/participant/{userId}/register")
             .then()
             .log().all().extract()
     }
 
-    fun 유저_교육장소_등록(): RegisterEducationAddressParticipantRequest = RegisterEducationAddressParticipantRequest(listOf(1))
+    fun 유저_교육장소_등록(): RegisterEducationPlaceParticipantRequest = RegisterEducationPlaceParticipantRequest(listOf(1))
 }
