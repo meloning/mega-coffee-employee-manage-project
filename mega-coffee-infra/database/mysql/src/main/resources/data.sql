@@ -127,81 +127,81 @@ VALUES
 
 -- 교육프로그램별 교육 장소
 -- 교육 프로그램 1 - 커피 추출과 조리 기초 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (1, CURRENT_TIMESTAMP(6), NULL, '서울', '강남구 테헤란로 123번길', '06132', '2023-08-15', 0, 2, '17:00:00', '14:00:00', 1),
-    (2, CURRENT_TIMESTAMP(6), NULL, '서울', '서초구 반포대로 456번길', '06577', '2023-08-16', 0, 3, '17:00:00', '14:00:00', 1),
-    (3, CURRENT_TIMESTAMP(6), NULL, '인천', '남동구 성리로 789번길', '21536', '2023-08-17', 0, 5, '17:00:00', '14:00:00', 1);
+    (1, CURRENT_TIMESTAMP(6), NULL, '서울', '강남구 테헤란로 123번길', '06132', '2023-12-15', 0, 2, '17:00:00', '14:00:00', 1),
+    (2, CURRENT_TIMESTAMP(6), NULL, '서울', '서초구 반포대로 456번길', '06577', '2023-12-16', 0, 3, '17:00:00', '14:00:00', 1),
+    (3, CURRENT_TIMESTAMP(6), NULL, '인천', '남동구 성리로 789번길', '21536', '2023-12-17', 0, 5, '17:00:00', '14:00:00', 1);
 
 -- 교육 프로그램 2 - 커피 음료와 레시피 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (4, CURRENT_TIMESTAMP(6), NULL, '부산', '해운대구 해운대로 111번길', '48100', '2023-08-15', 0, 3, '18:00:00', '15:00:00', 2),
-    (5, CURRENT_TIMESTAMP(6), NULL, '부산', '사하구 하단로 222번길', '49494', '2023-08-16', 0, 5, '18:00:00', '15:00:00', 2),
-    (6, CURRENT_TIMESTAMP(6), NULL, '대구', '수성구 중동로 333번길', '42185', '2023-08-17', 0, 7, '18:00:00', '15:00:00', 2);
+    (4, CURRENT_TIMESTAMP(6), NULL, '부산', '해운대구 해운대로 111번길', '48100', '2023-12-15', 0, 3, '18:00:00', '15:00:00', 2),
+    (5, CURRENT_TIMESTAMP(6), NULL, '부산', '사하구 하단로 222번길', '49494', '2023-12-16', 0, 5, '18:00:00', '15:00:00', 2),
+    (6, CURRENT_TIMESTAMP(6), NULL, '대구', '수성구 중동로 333번길', '42185', '2023-12-17', 0, 7, '18:00:00', '15:00:00', 2);
 
 -- 교육 프로그램 3 - 커피 맛 평가 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (7, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 분당구 성남대로 444번길', '13489', '2023-08-15', 0, 2, '16:00:00', '13:00:00', 3),
-    (8, CURRENT_TIMESTAMP(6), NULL, '경기', '고양시 일산동구 일산로 555번길', '10452', '2023-08-16', 0, 5, '16:00:00', '13:00:00', 3),
-    (9, CURRENT_TIMESTAMP(6), NULL, '서울', '양천구 목동중앙북로 666번길', '08081', '2023-08-17', 0, 3, '16:00:00', '13:00:00', 3);
+    (7, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 분당구 성남대로 444번길', '13489', '2023-12-15', 0, 2, '16:00:00', '13:00:00', 3),
+    (8, CURRENT_TIMESTAMP(6), NULL, '경기', '고양시 일산동구 일산로 555번길', '10452', '2023-12-16', 0, 5, '16:00:00', '13:00:00', 3),
+    (9, CURRENT_TIMESTAMP(6), NULL, '서울', '양천구 목동중앙북로 666번길', '08081', '2023-12-17', 0, 3, '16:00:00', '13:00:00', 3);
 
 -- 교육 프로그램 4 - 고객 상담 및 서비스 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (10, CURRENT_TIMESTAMP(6), NULL, '서울', '강동구 천호대로 777번길', '05364', '2023-08-15', 0, 30, '17:00:00', '14:00:00', 4),
-    (11, CURRENT_TIMESTAMP(6), NULL, '서울', '관악구 관악로 888번길', '08776', '2023-08-16', 0, 15, '17:00:00', '14:00:00', 4),
-    (12, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 수정구 수정로 999번길', '13485', '2023-08-17', 0, 20, '17:00:00', '14:00:00', 4);
+    (10, CURRENT_TIMESTAMP(6), NULL, '서울', '강동구 천호대로 777번길', '05364', '2023-12-15', 0, 30, '17:00:00', '14:00:00', 4),
+    (11, CURRENT_TIMESTAMP(6), NULL, '서울', '관악구 관악로 888번길', '08776', '2023-12-16', 0, 15, '17:00:00', '14:00:00', 4),
+    (12, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 수정구 수정로 999번길', '13485', '2023-12-17', 0, 20, '17:00:00', '14:00:00', 4);
 
 -- 교육 프로그램 5 - 커피 원두 관리 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (13, CURRENT_TIMESTAMP(6), NULL, '인천', '남동구 인주대로 1010번길', '21546', '2023-08-15', 0, 5, '18:00:00', '15:00:00', 5),
-    (14, CURRENT_TIMESTAMP(6), NULL, '인천', '연수구 연수로 1111번길', '22004', '2023-08-16', 0, 15, '18:00:00', '15:00:00', 5),
-    (15, CURRENT_TIMESTAMP(6), NULL, '대구', '수성구 고산로 1212번길', '42178', '2023-08-17', 0, 25, '18:00:00', '15:00:00', 5);
+    (13, CURRENT_TIMESTAMP(6), NULL, '인천', '남동구 인주대로 1010번길', '21546', '2023-12-15', 0, 5, '18:00:00', '15:00:00', 5),
+    (14, CURRENT_TIMESTAMP(6), NULL, '인천', '연수구 연수로 1111번길', '22004', '2023-12-16', 0, 15, '18:00:00', '15:00:00', 5),
+    (15, CURRENT_TIMESTAMP(6), NULL, '대구', '수성구 고산로 1212번길', '42178', '2023-12-17', 0, 25, '18:00:00', '15:00:00', 5);
 
 -- 교육 프로그램 6 - 디저트와 커피 매칭 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (16, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 중원구 중앙로 1313번길', '13585', '2023-08-15', 0, 10, '16:00:00', '13:00:00', 6),
-    (17, CURRENT_TIMESTAMP(6), NULL, '경기', '고양시 덕양구 고양대로 1414번길', '10522', '2023-08-16', 0, 20, '16:00:00', '13:00:00', 6),
-    (18, CURRENT_TIMESTAMP(6), NULL, '서울', '영등포구 여의나루로 1515번길', '07311', '2023-08-17', 0, 4, '16:00:00', '13:00:00', 6);
+    (16, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 중원구 중앙로 1313번길', '13585', '2023-12-15', 0, 10, '16:00:00', '13:00:00', 6),
+    (17, CURRENT_TIMESTAMP(6), NULL, '경기', '고양시 덕양구 고양대로 1414번길', '10522', '2023-12-16', 0, 20, '16:00:00', '13:00:00', 6),
+    (18, CURRENT_TIMESTAMP(6), NULL, '서울', '영등포구 여의나루로 1515번길', '07311', '2023-12-17', 0, 4, '16:00:00', '13:00:00', 6);
 
 -- 교육 프로그램 7 - 스페셜티 커피와 라떼아트 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (19, CURRENT_TIMESTAMP(6), NULL, '부산', '남구 암남로 1616번길', '48563', '2023-08-15', 0, 5, '19:00:00', '16:00:00', 7),
-    (20, CURRENT_TIMESTAMP(6), NULL, '부산', '기장군 기장읍 기장대로 1717번길', '46020', '2023-08-16', 0, 5, '19:00:00', '16:00:00', 7),
-    (21, CURRENT_TIMESTAMP(6), NULL, '대구', '달성군 다사읍 성서로 1818번길', '42926', '2023-08-17', 0, 5, '19:00:00', '16:00:00', 7);
+    (19, CURRENT_TIMESTAMP(6), NULL, '부산', '남구 암남로 1616번길', '48563', '2023-12-15', 0, 5, '19:00:00', '16:00:00', 7),
+    (20, CURRENT_TIMESTAMP(6), NULL, '부산', '기장군 기장읍 기장대로 1717번길', '46020', '2023-12-16', 0, 5, '19:00:00', '16:00:00', 7),
+    (21, CURRENT_TIMESTAMP(6), NULL, '대구', '달성군 다사읍 성서로 1818번길', '42926', '2023-12-17', 0, 5, '19:00:00', '16:00:00', 7);
 
 -- 교육 프로그램 8 - 커피 블렌딩과 로스팅 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (22, CURRENT_TIMESTAMP(6), NULL, '서울', '서대문구 연세로 2020번길', '03722', '2023-08-15', 0, 3, '17:00:00', '14:00:00', 8),
-    (23, CURRENT_TIMESTAMP(6), NULL, '서울', '마포구 와우산로 2121번길', '04011', '2023-08-16', 0, 3, '17:00:00', '14:00:00', 8),
-    (24, CURRENT_TIMESTAMP(6), NULL, '인천', '연수구 연수로 2222번길', '22004', '2023-08-17', 0, 3, '17:00:00', '14:00:00', 8);
+    (22, CURRENT_TIMESTAMP(6), NULL, '서울', '서대문구 연세로 2020번길', '03722', '2023-12-15', 0, 3, '17:00:00', '14:00:00', 8),
+    (23, CURRENT_TIMESTAMP(6), NULL, '서울', '마포구 와우산로 2121번길', '04011', '2023-12-16', 0, 3, '17:00:00', '14:00:00', 8),
+    (24, CURRENT_TIMESTAMP(6), NULL, '인천', '연수구 연수로 2222번길', '22004', '2023-12-17', 0, 3, '17:00:00', '14:00:00', 8);
 
 -- 교육 프로그램 9 - 커피 장비 사용 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (25, CURRENT_TIMESTAMP(6), NULL, '부산', '서구 보수대로 2323번길', '49108', '2023-08-15', 0, 2, '18:00:00', '15:00:00', 9),
-    (26, CURRENT_TIMESTAMP(6), NULL, '부산', '동래구 온천장로 2424번길', '47891', '2023-08-16', 0, 2, '18:00:00', '15:00:00', 9),
-    (27, CURRENT_TIMESTAMP(6), NULL, '대구', '달서구 달구벌대로 2525번길', '42702', '2023-08-17', 0, 2, '18:00:00', '15:00:00', 9);
+    (25, CURRENT_TIMESTAMP(6), NULL, '부산', '서구 보수대로 2323번길', '49108', '2023-12-15', 0, 2, '18:00:00', '15:00:00', 9),
+    (26, CURRENT_TIMESTAMP(6), NULL, '부산', '동래구 온천장로 2424번길', '47891', '2023-12-16', 0, 2, '18:00:00', '15:00:00', 9),
+    (27, CURRENT_TIMESTAMP(6), NULL, '대구', '달서구 달구벌대로 2525번길', '42702', '2023-12-17', 0, 2, '18:00:00', '15:00:00', 9);
 
 -- 교육 프로그램 10 - 매장 운영과 관리 교육
-INSERT INTO education_address (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
+INSERT INTO education_place (id, created_at, updated_at, city, street, zip_code, date, current_participant, max_participant, end_time, start_time, education_id)
 VALUES
-    (28, CURRENT_TIMESTAMP(6), NULL, '경기', '용인시 기흥구 용구대로 2626번길', '16977', '2023-08-15', 0, 7, '16:00:00', '13:00:00', 10),
-    (29, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 분당구 서현로 2727번길', '13623', '2023-08-16', 0, 8, '16:00:00', '13:00:00', 10),
-    (30, CURRENT_TIMESTAMP(6), NULL, '서울', '강서구 화곡로 2828번길', '07679', '2023-08-17', 0, 9, '16:00:00', '13:00:00', 10);
+    (28, CURRENT_TIMESTAMP(6), NULL, '경기', '용인시 기흥구 용구대로 2626번길', '16977', '2023-12-15', 0, 7, '16:00:00', '13:00:00', 10),
+    (29, CURRENT_TIMESTAMP(6), NULL, '경기', '성남시 분당구 서현로 2727번길', '13623', '2023-12-16', 0, 8, '16:00:00', '13:00:00', 10),
+    (30, CURRENT_TIMESTAMP(6), NULL, '서울', '강서구 화곡로 2828번길', '07679', '2023-12-17', 0, 9, '16:00:00', '13:00:00', 10);
 
 -- 매장에서 들어야할 교육 프로그램 데이터
 INSERT INTO store_education_relation(id, created_at, education_id, store_id)
 VALUES
     (1, CURRENT_TIMESTAMP(6), 1, 7);
 
-INSERT INTO user_education_address_relation(id, created_at, education_address_id, user_id)
+INSERT INTO user_education_place_relation(id, created_at, education_place_id, user_id)
 VALUES
     (1, CURRENT_TIMESTAMP(6), 7, 7),
     (2, CURRENT_TIMESTAMP(6), 8, 8),

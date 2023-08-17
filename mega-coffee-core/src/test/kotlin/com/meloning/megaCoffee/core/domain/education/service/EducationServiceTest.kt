@@ -2,12 +2,12 @@ package com.meloning.megaCoffee.core.domain.education.service
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.usecase.EducationService
 import com.meloning.megaCoffee.core.domain.education.usecase.command.CreateEducationCommand
 import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRelationRepository
-import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationAddressRelationRepository
+import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationPlaceRelationRepository
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
@@ -40,7 +40,7 @@ class EducationServiceTest {
     private lateinit var storeEducationRelationRepository: IStoreEducationRelationRepository
 
     @Mock
-    private lateinit var userEducationRelationRepository: IUserEducationAddressRelationRepository
+    private lateinit var userEducationRelationRepository: IUserEducationPlaceRelationRepository
 
     @Mock
     private lateinit var eventSender: EventSender
@@ -67,7 +67,7 @@ class EducationServiceTest {
             name = mockName,
             content = mockContent,
             targetTypes = mockTargetTypes,
-            educationAddresses = EducationAddresses(mutableListOf())
+            educationPlaces = EducationPlaces(mutableListOf())
         )
 
         whenever(educationRepository.existsByName(mockName)).thenReturn(false)

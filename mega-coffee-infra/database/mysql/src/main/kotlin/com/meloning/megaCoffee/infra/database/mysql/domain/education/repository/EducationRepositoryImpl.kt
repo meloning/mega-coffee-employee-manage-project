@@ -2,12 +2,12 @@ package com.meloning.megaCoffee.infra.database.mysql.domain.education.repository
 
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddresses
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
-import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationAddressesVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationPlacesVO
 import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
@@ -28,7 +28,7 @@ class EducationRepositoryImpl(
         educationJpaRepository.save(
             EducationEntity.from(education).apply {
                 update(
-                    EducationAddressesVO.from(education.educationAddresses)
+                    EducationPlacesVO.from(education.educationPlaces)
                 )
             }
         )
@@ -36,12 +36,12 @@ class EducationRepositoryImpl(
 
     override fun findDetailById(id: Long): Education? {
         val educationEntity = educationJpaRepository.findByIdOrNull(id)
-        educationEntity?.educationAddresses?.value?.forEach {
+        educationEntity?.educationPlaces?.value?.forEach {
             Hibernate.initialize(it)
         }
         Hibernate.initialize(educationEntity?.targetTypes)
         return educationEntity?.toModel()?.apply {
-            update(educationEntity.educationAddresses.toModel())
+            update(educationEntity.educationPlaces.toModel())
         }
     }
 
@@ -52,26 +52,26 @@ class EducationRepositoryImpl(
     override fun findAllByStoreId(storeId: Long): List<Education> {
         val educations = educationJpaRepository.findAllByStoreId(storeId)
         educations.forEach { educationEntity ->
-            educationEntity.educationAddresses.value.forEach {
+            educationEntity.educationPlaces.value.forEach {
                 Hibernate.initialize(it)
             }
             Hibernate.initialize(educationEntity.targetTypes)
         }
-        return educations.map { it.toModel().apply { update(it.educationAddresses.toModel()) } }
+        return educations.map { it.toModel().apply { update(it.educationPlaces.toModel()) } }
     }
 
     override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education> {
-        val (educations, userEducationAddresses) = educationJpaRepository.findAllByStoreIdAndUserId(storeId, userId)
+        val (educations, userEducationPlaces) = educationJpaRepository.findAllByStoreIdAndUserId(storeId, userId)
         return educations.map { educationEntity ->
             educationEntity.toModel().apply {
-                val result = educationEntity.educationAddresses.toModel().filterByContainedIds(userEducationAddresses.map { it.id!! })
-                update(EducationAddresses(result.toMutableList()))
+                val result = educationEntity.educationPlaces.toModel().filterByContainedIds(userEducationPlaces.map { it.id!! })
+                update(EducationPlaces(result.toMutableList()))
             }
         }
     }
 
-    override fun findEducationAddressAllByUserId(userId: Long): List<EducationAddress> {
-        return educationJpaRepository.findEducationAddressAllByUserId(userId).map { it.toModel() }
+    override fun findEducationPlaceAllByUserId(userId: Long): List<EducationPlace> {
+        return educationJpaRepository.findEducationPlaceAllByUserId(userId).map { it.toModel() }
     }
 
     override fun existsByName(name: Name): Boolean {

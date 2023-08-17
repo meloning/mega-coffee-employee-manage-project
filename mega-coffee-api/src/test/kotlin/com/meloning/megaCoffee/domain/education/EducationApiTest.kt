@@ -97,10 +97,10 @@ class EducationApiTest : ApiTest() {
         val createRequest = EducationSteps.생성()
         val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
 
-        val createAddressRequest = EducationSteps.교육장소_생성()
-        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+        val createPlaceRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createPlaceRequest)
 
-        val educationAddressRequest = createAddressRequest.addresses[0]
+        val educationPlaceRequest = createPlaceRequest.places[0]
 
         // when
         val response = EducationSteps.상세_요청(educationId)
@@ -115,14 +115,14 @@ class EducationApiTest : ApiTest() {
                 assertThat(response.jsonPath().getString("content")).isEqualTo(createRequest.content)
                 assertThat(response.jsonPath().getList<String>("targetTypes")).isNotNull
                 assertThat(response.jsonPath().getList<String>("targetTypes")).contains(*createRequest.targetTypes.map { type -> type.name }.toTypedArray())
-                assertThat(response.jsonPath().getLong("educationAddresses[0].id")).isEqualTo(1)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.city")).isEqualTo(educationAddressRequest.address.city)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.street")).isEqualTo(educationAddressRequest.address.street)
-                assertThat(response.jsonPath().getString("educationAddresses[0].address.zipCode")).isEqualTo(educationAddressRequest.address.zipCode)
-                assertThat(response.jsonPath().getInt("educationAddresses[0].maxParticipant")).isEqualTo(educationAddressRequest.maxParticipant)
-                assertThat(response.jsonPath().getString("educationAddresses[0].date")).isEqualTo(educationAddressRequest.date)
-                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.startTime")).isEqualTo(educationAddressRequest.timeRange.startTime)
-                assertThat(response.jsonPath().getString("educationAddresses[0].timeRange.endTime")).isEqualTo(educationAddressRequest.timeRange.endTime)
+                assertThat(response.jsonPath().getLong("educationPlaces[0].id")).isEqualTo(1)
+                assertThat(response.jsonPath().getString("educationPlaces[0].address.city")).isEqualTo(educationPlaceRequest.address.city)
+                assertThat(response.jsonPath().getString("educationPlaces[0].address.street")).isEqualTo(educationPlaceRequest.address.street)
+                assertThat(response.jsonPath().getString("educationPlaces[0].address.zipCode")).isEqualTo(educationPlaceRequest.address.zipCode)
+                assertThat(response.jsonPath().getInt("educationPlaces[0].maxParticipant")).isEqualTo(educationPlaceRequest.maxParticipant)
+                assertThat(response.jsonPath().getString("educationPlaces[0].date")).isEqualTo(educationPlaceRequest.date)
+                assertThat(response.jsonPath().getString("educationPlaces[0].timeRange.startTime")).isEqualTo(educationPlaceRequest.timeRange.startTime)
+                assertThat(response.jsonPath().getString("educationPlaces[0].timeRange.endTime")).isEqualTo(educationPlaceRequest.timeRange.endTime)
                 assertThat(response.jsonPath().getString("createdAt")).isNotNull
                 assertThat(response.jsonPath().getString("updatedAt")).isNotNull
             }

@@ -6,7 +6,7 @@ import com.meloning.megaCoffee.core.exception.AlreadyFullException
 import java.time.Instant
 import java.time.LocalDate
 
-data class EducationAddress(
+data class EducationPlace(
     val id: Long? = null,
     var education: Education,
     var address: Address,
@@ -18,11 +18,11 @@ data class EducationAddress(
     var updatedAt: Instant? = null
 ) {
 
-    fun isSameDateTimeSlots(other: EducationAddress): Boolean {
+    fun isSameDateTimeSlots(other: EducationPlace): Boolean {
         return this.timeRange.overlapsWith(other.timeRange) && this.date == date
     }
 
-    fun isSameDatePlaceTimeSlots(other: EducationAddress): Boolean {
+    fun isSameDatePlaceTimeSlots(other: EducationPlace): Boolean {
         return this.address == other.address &&
             isSameDateTimeSlots(other)
     }
@@ -45,7 +45,7 @@ data class EducationAddress(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as EducationAddress
+        other as EducationPlace
 
         return id == other.id
     }

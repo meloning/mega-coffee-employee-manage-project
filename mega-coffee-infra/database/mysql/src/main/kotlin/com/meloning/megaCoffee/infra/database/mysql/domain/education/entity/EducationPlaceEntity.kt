@@ -1,6 +1,6 @@
 package com.meloning.megaCoffee.infra.database.mysql.domain.education.entity
 
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.AddressVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.BaseTimeEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.TimeRangeVO
@@ -22,10 +22,10 @@ import javax.persistence.Table
 import javax.persistence.Version
 
 @Entity
-@Table(name = "education_address")
+@Table(name = "education_place")
 @DynamicInsert
 @DynamicUpdate
-class EducationAddressEntity : BaseTimeEntity {
+class EducationPlaceEntity : BaseTimeEntity {
 
     constructor(id: Long?, education: EducationEntity, address: AddressVO, currentParticipant: Int, maxParticipant: Int, date: LocalDate, timeRange: TimeRangeVO) : super() {
         this.id = id
@@ -71,7 +71,7 @@ class EducationAddressEntity : BaseTimeEntity {
     @ColumnDefault("0")
     var version: Long = 0
 
-    fun toModel() = EducationAddress(
+    fun toModel() = EducationPlace(
         id = id,
         education = education.toModel(),
         address = address.toModel(),
@@ -85,8 +85,8 @@ class EducationAddressEntity : BaseTimeEntity {
 
     companion object {
         @JvmStatic
-        fun from(model: EducationAddress) = with(model) {
-            EducationAddressEntity(
+        fun from(model: EducationPlace) = with(model) {
+            EducationPlaceEntity(
                 id = id,
                 education = EducationEntity.from(education),
                 address = AddressVO.from(address),
@@ -104,7 +104,7 @@ class EducationAddressEntity : BaseTimeEntity {
         val oEffectiveClass = if (other is HibernateProxy) other.hibernateLazyInitializer.persistentClass else other.javaClass
         val thisEffectiveClass = if (this is HibernateProxy) this.hibernateLazyInitializer.persistentClass else this.javaClass
         if (thisEffectiveClass != oEffectiveClass) return false
-        other as EducationAddressEntity
+        other as EducationPlaceEntity
 
         return id != null && id == other.id
     }

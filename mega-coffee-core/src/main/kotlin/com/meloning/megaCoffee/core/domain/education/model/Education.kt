@@ -11,21 +11,21 @@ data class Education(
     val name: Name,
     var content: String,
     var targetTypes: MutableList<EmployeeType> = mutableListOf(),
-    var educationAddresses: EducationAddresses = EducationAddresses(mutableListOf()),
+    var educationPlaces: EducationPlaces = EducationPlaces(mutableListOf()),
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
 
-    fun update(educationAddresses: EducationAddresses) {
-        this.educationAddresses = educationAddresses
+    fun update(educationPlaces: EducationPlaces) {
+        this.educationPlaces = educationPlaces
     }
 
-    fun addAddress(educationAddress: EducationAddress) {
-        this.educationAddresses.add(educationAddress)
+    fun addAddress(educationPlace: EducationPlace) {
+        this.educationPlaces.add(educationPlace)
     }
 
-    fun removeAddress(educationAddress: EducationAddress) {
-        this.educationAddresses.remove(educationAddress)
+    fun removeAddress(educationPlace: EducationPlace) {
+        this.educationPlaces.remove(educationPlace)
     }
 
     fun validateUserEligibility(userEmployeeType: EmployeeType) {

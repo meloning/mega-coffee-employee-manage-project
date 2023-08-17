@@ -1,8 +1,8 @@
 package com.meloning.megaCoffee.domain.common.dto
 
-import com.meloning.megaCoffee.core.domain.education.model.EducationAddress
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 
-data class EducationAddressRow(
+data class EducationPlaceRow(
     val id: Long,
     val address: AddressResponse,
     val maxParticipant: Int,
@@ -11,8 +11,8 @@ data class EducationAddressRow(
 ) {
     companion object {
         @JvmStatic
-        fun from(model: EducationAddress) = with(model) {
-            EducationAddressRow(
+        fun from(model: EducationPlace) = with(model) {
+            EducationPlaceRow(
                 id = id!!,
                 address = AddressResponse.from(address),
                 maxParticipant = maxParticipant,

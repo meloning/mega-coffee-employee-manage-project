@@ -7,10 +7,10 @@ import com.meloning.megaCoffee.core.exception.NotFoundException
 import java.time.LocalDate
 import java.time.LocalTime
 
-class EducationAddresses(
-    private val _value: MutableList<EducationAddress>
+class EducationPlaces(
+    private val _value: MutableList<EducationPlace>
 ) {
-    val value: List<EducationAddress>
+    val value: List<EducationPlace>
         get() = _value.toList()
 
     init {
@@ -22,30 +22,30 @@ class EducationAddresses(
         return _value.size
     }
 
-    fun add(model: EducationAddress) {
+    fun add(model: EducationPlace) {
         validateDuplicatePlaceTimeSlots(model)
         if (isMaxEducationPlaceCountExceeded()) throw AlreadyFullException("이미 교육장소들이 가득찼습니다.")
         _value.add(model)
     }
 
-    fun remove(model: EducationAddress) {
+    fun remove(model: EducationPlace) {
         _value.remove(model)
     }
 
-    fun validateExisting(educationAddressIds: List<Long>) {
-        if (!_value.mapNotNull { it.id }.containsAll(educationAddressIds)) {
+    fun validateExisting(educationPlaceIds: List<Long>) {
+        if (!_value.mapNotNull { it.id }.containsAll(educationPlaceIds)) {
             throw NotFoundException("존재하지 않는 교육 장소들이 있습니다.")
         }
     }
 
-    fun validateExpired(educationAddressIds: List<Long>) {
+    fun validateExpired(educationPlaceIds: List<Long>) {
         val currentDate = LocalDate.now()
         val currentTime = LocalTime.now()
-        val selectedEducationAddresses = filterByContainedIds(educationAddressIds)
-        val isExpiredEducationAddress = selectedEducationAddresses.any {
+        val selectedEducationPlaces = filterByContainedIds(educationPlaceIds)
+        val isExpiredEducationPlace = selectedEducationPlaces.any {
             it.date < currentDate || (it.date == currentDate && it.timeRange.endTime <= currentTime)
         }
-        if (isExpiredEducationAddress) {
+        if (isExpiredEducationPlace) {
             throw ExpiredFieldException("선택한 교육장소는 이미 만료되었습니다.")
         }
     }
@@ -54,29 +54,29 @@ class EducationAddresses(
         _value.find { it.id!! == id }?.increaseCurrentParticipant()
     }
 
-    fun filterByContainedIds(educationAddressIds: List<Long>): List<EducationAddress> {
-        return _value.filter { educationAddressIds.contains(it.id) }
+    fun filterByContainedIds(educationPlaceIds: List<Long>): List<EducationPlace> {
+        return _value.filter { educationPlaceIds.contains(it.id) }
     }
 
     private fun isMaxEducationPlaceCountExceeded(): Boolean {
         return size() <= MAX_EDUCATION_PLACE_COUNT
     }
 
-    private fun validateDuplicatePlaceTimeSlots(educationAddress: EducationAddress? = null) {
-        val targets = educationAddress?.let { value.plus(educationAddress) } ?: _value
+    private fun validateDuplicatePlaceTimeSlots(educationPlace: EducationPlace? = null) {
+        val targets = educationPlace?.let { value.plus(educationPlace) } ?: _value
         if (hasDuplicatePlaceTimeSlots(targets)) {
             throw ConflictFieldException("장소, 날짜, 시간대가 겹쳐 등록할 수 없습니다.")
         }
     }
 
-    private fun hasDuplicatePlaceTimeSlots(value: List<EducationAddress>): Boolean {
+    private fun hasDuplicatePlaceTimeSlots(value: List<EducationPlace>): Boolean {
         for (i in 0 until value.size - 1) {
             for (j in value.indices) {
                 if (i == j) continue
-                val educationAddress1 = value[i]
-                val educationAddress2 = value[j]
+                val educationPlace1 = value[i]
+                val educationPlace2 = value[j]
 
-                if (!educationAddress1.isSameDatePlaceTimeSlots(educationAddress2)) continue
+                if (!educationPlace1.isSameDatePlaceTimeSlots(educationPlace2)) continue
                 else return true
             }
         }

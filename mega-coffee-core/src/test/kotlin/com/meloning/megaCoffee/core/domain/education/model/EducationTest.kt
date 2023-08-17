@@ -19,7 +19,7 @@ class EducationTest {
             name = Name("테스트"),
             content = "테스트라구 테스트",
             targetTypes = mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME),
-            educationAddresses = EducationAddresses(mutableListOf()),
+            educationPlaces = EducationPlaces(mutableListOf()),
         )
 
         // when, then
@@ -38,7 +38,7 @@ class EducationTest {
             name = Name("테스트"),
             content = "테스트라구 테스트",
             targetTypes = mutableListOf(EmployeeType.MANAGER, EmployeeType.PART_TIME),
-            educationAddresses = EducationAddresses(mutableListOf()),
+            educationPlaces = EducationPlaces(mutableListOf()),
         )
 
         val storeName = "메가커피 서대문점"

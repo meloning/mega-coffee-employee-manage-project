@@ -1,8 +1,8 @@
 package com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity
 
-import com.meloning.megaCoffee.core.domain.relation.model.UserEducationAddressRelation
+import com.meloning.megaCoffee.core.domain.relation.model.UserEducationPlaceRelation
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.CreatedAtEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationAddressEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationPlaceEntity
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
@@ -13,13 +13,13 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "user_education_address_relation")
-class UserEducationAddressRelationEntity : CreatedAtEntity {
+@Table(name = "user_education_place_relation")
+class UserEducationPlaceRelationEntity : CreatedAtEntity {
 
-    constructor(id: Long?, userId: Long, educationAddress: EducationAddressEntity) : super() {
+    constructor(id: Long?, userId: Long, educationPlace: EducationPlaceEntity) : super() {
         this.id = id
         this.userId = userId
-        this.educationAddress = educationAddress
+        this.educationPlace = educationPlace
     }
 
     @Id
@@ -29,23 +29,23 @@ class UserEducationAddressRelationEntity : CreatedAtEntity {
     val userId: Long
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "education_address_id", nullable = false)
-    val educationAddress: EducationAddressEntity
+    @JoinColumn(name = "education_place_id", nullable = false)
+    val educationPlace: EducationPlaceEntity
 
-    fun toModel() = UserEducationAddressRelation(
+    fun toModel() = UserEducationPlaceRelation(
         id = id!!,
         userId = userId,
-        educationAddress = educationAddress.toModel(),
+        educationPlace = educationPlace.toModel(),
         createdAt = createdAt
     )
 
     companion object {
         @JvmStatic
-        fun from(model: UserEducationAddressRelation) = with(model) {
-            UserEducationAddressRelationEntity(
+        fun from(model: UserEducationPlaceRelation) = with(model) {
+            UserEducationPlaceRelationEntity(
                 id = id,
                 userId = userId,
-                educationAddress = EducationAddressEntity.from(educationAddress)
+                educationPlace = EducationPlaceEntity.from(educationPlace)
             )
         }
     }
@@ -54,17 +54,17 @@ class UserEducationAddressRelationEntity : CreatedAtEntity {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as UserEducationAddressRelationEntity
+        other as UserEducationPlaceRelationEntity
 
         if (userId != other.userId) return false
-        if (educationAddress != other.educationAddress) return false
+        if (educationPlace != other.educationPlace) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = userId.hashCode()
-        result = 31 * result + educationAddress.hashCode()
+        result = 31 * result + educationPlace.hashCode()
         return result
     }
 }
