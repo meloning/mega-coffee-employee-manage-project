@@ -1,6 +1,7 @@
 package com.meloning.megaCoffee.core.domain.education.usecase
 
 import com.meloning.megaCoffee.core.domain.education.model.Education
+import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.education.repository.findDetailByIdOrThrow
@@ -20,6 +21,7 @@ import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Service
 @Transactional
@@ -133,12 +135,17 @@ class EducationService(
                     "email" to currentUser.email,
                     "username" to currentUser.name.value,
                     "educationName" to education.name.value,
-                    "educationPlaceAddress" to "${it.address.city} ${it.address.street}",
+                    "educationPlaceAddress" to it.address.getAddress(),
                     "date" to it.date.toString(),
-                    "time" to "${it.timeRange.startTime} ~ ${it.timeRange.endTime}",
+                    "time" to it.timeRange.toString(),
                     "type" to "complete_user_education"
                 )
             )
         }
+    }
+
+    @Transactional(readOnly = true)
+    fun getEducationPlace(date: LocalDate): List<EducationPlace> {
+        return educationRepository.findEducationPlaceAllByDate(date)
     }
 }

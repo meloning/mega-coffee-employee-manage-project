@@ -4,6 +4,7 @@ import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 import com.meloning.megaCoffee.core.exception.NotFoundException
+import java.time.LocalDate
 
 interface IEducationRepository {
     fun save(education: Education): Education
@@ -15,6 +16,7 @@ interface IEducationRepository {
     fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): List<Education>
     fun findAllByStoreId(storeId: Long): List<Education>
     fun findEducationPlaceAllByUserId(userId: Long): List<EducationPlace>
+    fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlace>
 
     fun existsByName(name: Name): Boolean
 

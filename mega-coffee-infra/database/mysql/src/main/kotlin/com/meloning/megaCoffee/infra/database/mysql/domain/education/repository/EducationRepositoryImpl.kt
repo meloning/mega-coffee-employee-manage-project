@@ -11,6 +11,7 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.Educ
 import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
 @Repository
 class EducationRepositoryImpl(
@@ -72,6 +73,10 @@ class EducationRepositoryImpl(
 
     override fun findEducationPlaceAllByUserId(userId: Long): List<EducationPlace> {
         return educationJpaRepository.findEducationPlaceAllByUserId(userId).map { it.toModel() }
+    }
+
+    override fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlace> {
+        return educationJpaRepository.findEducationPlaceAllByDate(date).map { it.toModel() }
     }
 
     override fun existsByName(name: Name): Boolean {

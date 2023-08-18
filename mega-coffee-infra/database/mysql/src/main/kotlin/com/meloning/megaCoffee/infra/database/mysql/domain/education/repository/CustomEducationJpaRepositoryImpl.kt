@@ -9,6 +9,7 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity.QUser
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalDate
 
 class CustomEducationJpaRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
@@ -61,6 +62,12 @@ class CustomEducationJpaRepositoryImpl(
             .where(
                 qUserEducationPlaceRelationEntity.userId.eq(userId)
             )
+            .fetch()
+    }
+
+    override fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlaceEntity> {
+        return jpaQueryFactory.selectFrom(qEducationPlaceEntity)
+            .where(qEducationPlaceEntity.date.eq(date))
             .fetch()
     }
 }
