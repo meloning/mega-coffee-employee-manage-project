@@ -13,6 +13,7 @@ import com.meloning.megaCoffee.core.domain.relation.repository.IStoreEducationRe
 import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationPlaceRelationRepository
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.store.repository.findNotDeletedByIdOrThrow
+import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.usecase.UserEducationPlaceValidator
@@ -147,5 +148,10 @@ class EducationService(
     @Transactional(readOnly = true)
     fun getEducationPlace(date: LocalDate): List<EducationPlace> {
         return educationRepository.findEducationPlaceAllByDate(date)
+    }
+
+    @Transactional(readOnly = true)
+    fun getParticipantsByPlaceId(educationPlaceId: Long): List<User> {
+        return educationRepository.findParticipantAllByEducationPlaceId(educationPlaceId)
     }
 }

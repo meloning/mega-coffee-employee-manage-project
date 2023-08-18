@@ -8,6 +8,7 @@ import com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity.QStor
 import com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity.QUserEducationPlaceRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
 import java.time.LocalDate
 
@@ -68,6 +69,21 @@ class CustomEducationJpaRepositoryImpl(
     override fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlaceEntity> {
         return jpaQueryFactory.selectFrom(qEducationPlaceEntity)
             .where(qEducationPlaceEntity.date.eq(date))
+            .fetch()
+    }
+
+    override fun findParticipantAllByEducationPlaceId(id: Long): List<UserEntity> {
+        return jpaQueryFactory.select(qUserEntity)
+            .from(qUserEducationPlaceRelationEntity)
+            .innerJoin(qUserEducationPlaceRelationEntity.educationPlace, qEducationPlaceEntity)
+            .join(qUserEntity)
+            .on(
+                qUserEducationPlaceRelationEntity.userId.eq(qUserEntity.id)
+            )
+            .where(
+                qUserEducationPlaceRelationEntity.educationPlace.id.eq(id),
+                qUserEntity.deleted.isFalse
+            )
             .fetch()
     }
 }

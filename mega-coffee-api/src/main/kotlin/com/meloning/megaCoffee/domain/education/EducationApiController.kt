@@ -6,6 +6,7 @@ import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationResponse
 import com.meloning.megaCoffee.domain.education.dto.EducationDetailResponse
 import com.meloning.megaCoffee.domain.education.dto.EducationPlaceSimpleResponse
+import com.meloning.megaCoffee.domain.education.dto.ParticipantResponse
 import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlaceParticipantRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
@@ -35,6 +36,14 @@ class EducationApiController(
     ): ResponseEntity<List<EducationPlaceSimpleResponse>> {
         val educationPlaces = educationService.getEducationPlace(date)
         return ResponseEntity.ok(educationPlaces.map { EducationPlaceSimpleResponse.from(it) })
+    }
+
+    @GetMapping("/educations/places/{id}/participants")
+    fun getParticipants(
+        @PathVariable id: Long
+    ): ResponseEntity<List<ParticipantResponse>> {
+        val participants = educationService.getParticipantsByPlaceId(id)
+        return ResponseEntity.ok(participants.map { ParticipantResponse.from(it) })
     }
 
     @PostMapping("/educations")

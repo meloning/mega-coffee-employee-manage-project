@@ -98,4 +98,13 @@ object EducationSteps {
             .then()
             .log().all().extract()
     }
+
+    fun 교육장소의_현재_참여자_리스트_요청(educationPlaceId: Long): ExtractableResponse<Response> {
+        return RestAssured.given().log().all()
+            .pathParam("id", educationPlaceId)
+            .`when`()
+            .get("/api/v1/educations/places/{id}/participants")
+            .then()
+            .log().all().extract()
+    }
 }
