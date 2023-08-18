@@ -1,0 +1,80 @@
+# [공통]
+spring:
+  quartz:
+    wait-for-jobs-to-complete-on-shutdown: true
+    jdbc:
+      initialize-schema: never
+    auto-startup: true
+    overwrite-existing-jobs: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: quartz-local
+  quartz:
+    job-store-type: jdbc
+    wait-for-jobs-to-complete-on-shutdown: true
+    properties:
+      org:
+        quartz:
+          dataSource:
+            quartzDataSource:
+              driver: com.mysql.cj.jdbc.Driver
+              url: jdbc:mysql://localhost:3306/employee_manage_schedule
+              user: root
+              password: wnstn0601
+              provider: hikaricp
+          scheduler:
+            instanceId: SCHEDULE_
+          threadPool:
+            threadCount: 20
+          jobStore:
+            tablePrefix: QRTZ_
+            isClustered: true
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            dataSource: quartzDataSource
+            useProperties: false
+            misfireThreshold: 20000
+    jdbc:
+      initialize-schema: always
+    auto-startup: true
+    overwrite-existing-jobs: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: quartz-dev
+  quartz:
+    job-store-type: jdbc
+    wait-for-jobs-to-complete-on-shutdown: true
+    properties:
+      org:
+        quartz:
+          dataSource:
+            quartzDataSource:
+              driver: com.mysql.cj.jdbc.Driver
+              url: jdbc:mysql://localhost:3306/employee_manage_schedule
+              user: root
+              password: wnstn0601
+              provider: hikaricp
+          scheduler:
+            instanceId: SCHEDULE_
+          threadPool:
+            threadCount: 20
+          jobStore:
+            tablePrefix: QRTZ_
+            isClustered: true
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            dataSource: quartzDataSource
+            useProperties: false
+            misfireThreshold: 20000
+    jdbc:
+      initialize-schema: never
+    auto-startup: true
+    overwrite-existing-jobs: true

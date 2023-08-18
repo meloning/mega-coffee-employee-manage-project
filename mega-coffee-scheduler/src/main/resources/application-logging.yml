@@ -1,0 +1,29 @@
+# 공통
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.boot.autoconfigure: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: logging-local
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.boot.autoconfigure: INFO
+    # [JPA:SQL]
+    org.hibernate.sql: INFO
+    org.hibernate.type.descriptor.sql: TRACE
+    # [JPA:Transaction]
+    org.springframework.transaction: DEBUG
+    org.hibernate.engine.transaction: TRACE
+    # [JPA:DBCP]
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    # [Retry]
+    org.springframework.retry.support.RetryTemplate: DEBUG
