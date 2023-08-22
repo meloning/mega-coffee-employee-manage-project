@@ -11,8 +11,8 @@ import com.meloning.megaCoffee.core.domain.relation.repository.IUserEducationPla
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
-import com.meloning.megaCoffee.core.event.EventSender
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
+import com.meloning.megaCoffee.core.infra.event.EventSender
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.DisplayName

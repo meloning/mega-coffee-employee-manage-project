@@ -17,9 +17,9 @@ import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.repository.IUserRepository
 import com.meloning.megaCoffee.core.domain.user.repository.findByIdOrThrow
 import com.meloning.megaCoffee.core.domain.user.usecase.UserEducationPlaceValidator
-import com.meloning.megaCoffee.core.event.EventSender
-import com.meloning.megaCoffee.core.event.EventType
 import com.meloning.megaCoffee.core.exception.AlreadyExistException
+import com.meloning.megaCoffee.core.infra.event.EventSender
+import com.meloning.megaCoffee.core.infra.event.EventType
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate

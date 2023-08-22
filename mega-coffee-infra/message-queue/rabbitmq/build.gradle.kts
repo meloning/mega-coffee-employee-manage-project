@@ -7,7 +7,7 @@ tasks {
 
 dependencies {
     implementation(project(":mega-coffee-common"))
-    compileOnly(project(":mega-coffee-core"))
+    compileOnly(project(":mega-coffee-core-infra"))
 
     api("org.springframework.boot:spring-boot-starter-amqp")
 

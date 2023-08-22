@@ -5,6 +5,8 @@ dependencies {
 
     implementation(project(":mega-coffee-common"))
     implementation(project(":mega-coffee-core"))
+    implementation(project(":mega-coffee-core-infra"))
+
     runtimeOnly(project(":mega-coffee-infra:database:mysql"))
     runtimeOnly(project(":mega-coffee-infra:message-queue:rabbitmq"))
 

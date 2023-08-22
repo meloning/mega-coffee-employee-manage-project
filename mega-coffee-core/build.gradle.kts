@@ -7,6 +7,8 @@ tasks {
 
 dependencies {
     implementation(project(":mega-coffee-common"))
+    implementation(project(":mega-coffee-core-infra"))
+
     compileOnly("org.springframework:spring-context")
     compileOnly("org.springframework:spring-tx")
 }
