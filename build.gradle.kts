@@ -61,8 +61,10 @@ allprojects {
 }
 
 val kopringProjects = listOf(
+    project(":mega-coffee-scheduler"),
     project(":mega-coffee-api"),
     project(":mega-coffee-core"),
+    project(":mega-coffee-core-infra"),
     project(":mega-coffee-common"),
     project(":mega-coffee-infra:database:mysql"),
     project(":mega-coffee-infra:message-queue:rabbitmq"),

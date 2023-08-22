@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: employee-manage-scheduler
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  profiles:
+    include:
+      - quartz
+      - logging
+      - rabbitmq
+    group:
+      local: db-dev, logging-local, quartz-local
+      dev: db-dev, logging-dev, quartz-dev
+    active: local
+
+server:
+  port: 8090
+  shutdown: graceful

@@ -1,14 +1,16 @@
 package com.meloning.megaCoffee.infra.database.mysql.domain.education.repository
 
-import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationAddressEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationAddressEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationPlaceEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEducationRelationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.QEducationPlaceEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity.QStoreEducationRelationEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.relation.entity.QUserEducationPlaceRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.QStoreEntity
-import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEducationAddressRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.QUserEntity
+import com.meloning.megaCoffee.infra.database.mysql.domain.user.entity.UserEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
+import java.time.LocalDate
 
 class CustomEducationJpaRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
@@ -16,57 +18,71 @@ class CustomEducationJpaRepositoryImpl(
     private val qUserEntity = QUserEntity.userEntity
     private val qStoreEntity = QStoreEntity.storeEntity
     private val qEducationEntity = QEducationEntity.educationEntity
-    private val qEducationAddressEntity = QEducationAddressEntity.educationAddressEntity
+    private val qEducationPlaceEntity = QEducationPlaceEntity.educationPlaceEntity
     private val qStoreEducationRelationEntity = QStoreEducationRelationEntity.storeEducationRelationEntity
-    private val qUserEducationAddressRelationEntity = QUserEducationAddressRelationEntity.userEducationAddressRelationEntity
+    private val qUserEducationPlaceRelationEntity = QUserEducationPlaceRelationEntity.userEducationPlaceRelationEntity
 
-    override fun countByEducationAddressId(educationAddressId: Long): Int {
-        return jpaQueryFactory.selectFrom(qUserEducationAddressRelationEntity)
-            .where(qUserEducationAddressRelationEntity.educationAddressId.eq(educationAddressId))
-            .fetch()
-            .size
-    }
-
-    override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): Pair<List<EducationEntity>, List<EducationAddressEntity>> {
-        val educations = jpaQueryFactory.selectFrom(qEducationEntity)
-            .join(qStoreEducationRelationEntity)
+    override fun findAllByStoreIdAndUserId(storeId: Long, userId: Long): Pair<List<EducationEntity>, List<EducationPlaceEntity>> {
+        val educations = jpaQueryFactory.select(qEducationEntity)
+            .from(qStoreEducationRelationEntity)
+            .innerJoin(qStoreEducationRelationEntity.education, qEducationEntity)
+            .join(qStoreEntity)
             .on(
-                qEducationEntity.id.eq(qStoreEducationRelationEntity.educationId)
-                    .and(qStoreEducationRelationEntity.store.id.eq(storeId))
+                qStoreEducationRelationEntity.storeId.eq(qStoreEntity.id)
+                    .and(qStoreEducationRelationEntity.storeId.eq(storeId)).and(qStoreEntity.deleted.isFalse)
             )
-            .innerJoin(qStoreEducationRelationEntity.store, qStoreEntity)
-            .leftJoin(qEducationEntity.educationAddresses.value, qEducationAddressEntity)
-            .join(qUserEducationAddressRelationEntity)
+            .fetch()
+
+        val userEducationPlaces = jpaQueryFactory.select(qEducationPlaceEntity)
+            .from(qUserEducationPlaceRelationEntity)
+            .innerJoin(qUserEducationPlaceRelationEntity.educationPlace, qEducationPlaceEntity)
+            .join(qUserEntity)
             .on(
-                qEducationAddressEntity.id.eq(qUserEducationAddressRelationEntity.educationAddressId)
-            )
-            .innerJoin(qUserEducationAddressRelationEntity.user, qUserEntity)
-            .where(
-                qStoreEntity.deleted.isFalse,
-                qUserEntity.deleted.isFalse,
-                qUserEducationAddressRelationEntity.user.id.eq(userId)
+                qUserEducationPlaceRelationEntity.userId.eq(qUserEntity.id)
+                    .and(qUserEducationPlaceRelationEntity.userId.eq(userId)).and(qUserEntity.deleted.isFalse)
             )
             .fetch()
 
-        val userEducationAddresses = jpaQueryFactory.selectFrom(qEducationAddressEntity)
-            .join(qUserEducationAddressRelationEntity)
-            .on(qEducationAddressEntity.id.eq(qUserEducationAddressRelationEntity.educationAddressId))
-            .innerJoin(qUserEducationAddressRelationEntity.user, qUserEntity)
-            .where(
-                qUserEntity.deleted.isFalse,
-                qUserEducationAddressRelationEntity.user.id.eq(userId)
-            )
-            .fetch()
-
-        return educations to userEducationAddresses
+        return educations to userEducationPlaces
     }
 
     override fun findAllByStoreId(storeId: Long): List<EducationEntity> {
-        return jpaQueryFactory.selectFrom(qEducationEntity)
-            .join(qStoreEducationRelationEntity)
+        return jpaQueryFactory.select(qEducationEntity)
+            .from(qStoreEducationRelationEntity)
+            .innerJoin(qStoreEducationRelationEntity.education, qEducationEntity)
+            .where(
+                qStoreEducationRelationEntity.storeId.eq(storeId)
+            )
+            .fetch()
+    }
+
+    override fun findEducationPlaceAllByUserId(userId: Long): List<EducationPlaceEntity> {
+        return jpaQueryFactory.select(qEducationPlaceEntity)
+            .from(qUserEducationPlaceRelationEntity)
+            .innerJoin(qUserEducationPlaceRelationEntity.educationPlace, qEducationPlaceEntity)
+            .where(
+                qUserEducationPlaceRelationEntity.userId.eq(userId)
+            )
+            .fetch()
+    }
+
+    override fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlaceEntity> {
+        return jpaQueryFactory.selectFrom(qEducationPlaceEntity)
+            .where(qEducationPlaceEntity.date.eq(date))
+            .fetch()
+    }
+
+    override fun findParticipantAllByEducationPlaceId(id: Long): List<UserEntity> {
+        return jpaQueryFactory.select(qUserEntity)
+            .from(qUserEducationPlaceRelationEntity)
+            .innerJoin(qUserEducationPlaceRelationEntity.educationPlace, qEducationPlaceEntity)
+            .join(qUserEntity)
             .on(
-                qEducationEntity.id.eq(qStoreEducationRelationEntity.educationId)
-                    .and(qStoreEducationRelationEntity.store.id.eq(storeId))
+                qUserEducationPlaceRelationEntity.userId.eq(qUserEntity.id)
+            )
+            .where(
+                qUserEducationPlaceRelationEntity.educationPlace.id.eq(id),
+                qUserEntity.deleted.isFalse
             )
             .fetch()
     }

@@ -1,7 +1,7 @@
 package com.meloning.megaCoffee.infra.messageQueue.rabbitmq.domain.producer
 
-import com.meloning.megaCoffee.core.event.EventSender
-import com.meloning.megaCoffee.core.event.EventType
+import com.meloning.megaCoffee.core.infra.event.EventSender
+import com.meloning.megaCoffee.core.infra.event.EventType
 import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.TopicExchange
 import org.springframework.amqp.rabbit.core.RabbitTemplate

@@ -11,7 +11,7 @@ enum class EmailFormType(
             val file = ResourceUtils.getFile("classpath:template/complete_user_education.html")
             val html = file.readText().replace("#{user.name}", payload["username"]!!)
                 .replace("#{education.name}", payload["educationName"]!!)
-                .replace("#{address}", payload["educationAddress"]!!)
+                .replace("#{address}", payload["educationPlaceAddress"]!!)
                 .replace("#{date}", payload["date"]!!)
                 .replace("#{time}", payload["time"]!!)
 

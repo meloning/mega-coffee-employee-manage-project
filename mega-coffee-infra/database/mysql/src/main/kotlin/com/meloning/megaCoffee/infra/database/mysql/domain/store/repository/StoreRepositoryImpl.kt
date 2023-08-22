@@ -5,7 +5,6 @@ import com.meloning.megaCoffee.core.domain.store.model.Store
 import com.meloning.megaCoffee.core.domain.store.repository.IStoreRepository
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
-import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEducationRelationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.store.entity.StoreEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
@@ -23,13 +22,7 @@ class StoreRepositoryImpl(
     }
 
     override fun update(store: Store) {
-        storeJpaRepository.save(
-            StoreEntity.from(store).apply {
-                update(
-                    store.educations.map { StoreEducationRelationEntity.from(it) }.toMutableList()
-                )
-            }
-        )
+        storeJpaRepository.save(StoreEntity.from(store))
     }
 
     override fun findAll(storeId: Long?, page: Int, size: Int): InfiniteScrollType<Store> {
@@ -39,6 +32,10 @@ class StoreRepositoryImpl(
 
     override fun findNotDeletedById(id: Long): Store? {
         return storeJpaRepository.findByIdAndDeletedIsFalse(id)?.toModel()
+    }
+
+    override fun findAllById(ids: List<Long>): List<Store> {
+        return storeJpaRepository.findAllById(ids).map { it.toModel() }
     }
 
     override fun findById(id: Long): Store? {

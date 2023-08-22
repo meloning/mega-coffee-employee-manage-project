@@ -11,6 +11,14 @@ data class Address(
         require(zipCode.isNotBlank()) { "우편번호는 비어있거나 공백일 수 없습니다." }
     }
 
+    fun getFullAddress(): String {
+        return "$zipCode, $city $street"
+    }
+
+    fun getAddress(): String {
+        return "$city $street"
+    }
+
     companion object {
         @JvmField
         val DUMMY = Address("도시", "거리", "12345")

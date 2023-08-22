@@ -3,7 +3,6 @@ package com.meloning.megaCoffee.core.domain.store.model
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.common.TimeRange
-import com.meloning.megaCoffee.core.exception.NotRegisterException
 import java.time.Instant
 
 data class Store(
@@ -14,7 +13,6 @@ data class Store(
     var address: Address,
     var timeRange: TimeRange,
     var deleted: Boolean = false,
-    var educations: MutableList<StoreEducationRelation> = mutableListOf(),
     var createdAt: Instant? = null,
     var updatedAt: Instant? = null
 ) {
@@ -31,27 +29,6 @@ data class Store(
         this.ownerId = ownerId
         address?.let { this.address = it }
         timeRange?.let { this.timeRange = it }
-    }
-
-    fun update(educations: List<StoreEducationRelation>) {
-        this.educations = educations.toMutableList()
-    }
-
-    fun addEducation(educationId: Long) {
-        educations.add(StoreEducationRelation(store = this, educationId = educationId))
-    }
-
-    fun removeEducation(educationId: Long) {
-        educations.removeIf { it.educationId == educationId }
-    }
-
-    fun validateEligibility(educationId: Long, educationName: String) {
-        val educationIds = educations.map { it.educationId }
-        val storeName = name.value
-
-        if (!educationIds.contains(educationId)) {
-            throw NotRegisterException("$storeName 매장의 직원은 $educationName 교육 프로그램을 들을 수 없습니다.")
-        }
     }
 
     override fun equals(other: Any?): Boolean {

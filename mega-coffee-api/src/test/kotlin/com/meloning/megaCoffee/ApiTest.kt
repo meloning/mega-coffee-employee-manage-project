@@ -1,6 +1,7 @@
 package com.meloning.megaCoffee
 
 import com.meloning.megaCoffee.infra.database.mysql.config.DatabaseCleanup
+import com.meloning.megaCoffee.infra.database.mysql.config.MysqlContainerExtension
 import com.meloning.megaCoffee.infra.messageQueue.rabbitmq.config.RabbitMQContainerExtension
 import io.restassured.RestAssured
 import org.junit.jupiter.api.BeforeEach
@@ -11,7 +12,12 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @Testcontainers
-@ExtendWith(RabbitMQContainerExtension::class)
+@ExtendWith(
+    value = [
+        RabbitMQContainerExtension::class,
+        MysqlContainerExtension::class
+    ]
+)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApiTest {
     @Autowired
