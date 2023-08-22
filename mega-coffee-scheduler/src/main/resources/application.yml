@@ -14,5 +14,5 @@ spring:
     active: local
 
 server:
-  port: 9090
+  port: 8090
   shutdown: graceful

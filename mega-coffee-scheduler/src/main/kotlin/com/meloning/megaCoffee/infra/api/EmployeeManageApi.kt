@@ -1,26 +1,46 @@
 package com.meloning.megaCoffee.infra.api
 
+import com.meloning.megaCoffee.config.RestTemplateConfig
+import com.meloning.megaCoffee.core.api.EmployeeManageExternalApi
+import com.meloning.megaCoffee.infra.api.dto.EducationPlaceSimpleResponse
+import com.meloning.megaCoffee.infra.api.dto.ParticipantResponse
+import org.springframework.core.ParameterizedTypeReference
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDate
 
 @Component
-class EmployeeManageApi {
+class EmployeeManageApi(
+    private val restTemplate: RestTemplate
+) : EmployeeManageExternalApi {
 
-    /**
-     * 특정 날짜의 교육장소 리스트 API
-     * @param LocalDate
-     * @return List<EducationPlace>
-     */
-    fun getEducationPlacesByDate(date: LocalDate): List<Void> {
-        TODO("Not yet implemented")
+    private fun defaultHttpHeaders(): HttpHeaders {
+        return HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_JSON
+        }
     }
 
-    /**
-     * 특정 교육 장소의 현재 참여자 리스트 API
-     * @param Long
-     * @return List<User>
-     */
-    fun getParticipantsByEducationPlace(educationPlaceId: Long): List<Void> {
-        TODO("Not yet implemented")
+    override fun getEducationPlacesByDate(date: LocalDate): List<EducationPlaceSimpleResponse> {
+        val uri = UriComponentsBuilder.fromUriString(RestTemplateConfig.EMPLOYEE_MANAGE_API_URL)
+            .path("/api/v1/educations/places")
+            .queryParam("date", date)
+            .toUriString()
+
+        val responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, object : ParameterizedTypeReference<List<EducationPlaceSimpleResponse>>() {})
+
+        return responseEntity.body!!
+    }
+
+    override fun getParticipantsByEducationPlace(educationPlaceId: Long): List<ParticipantResponse> {
+        val uri = UriComponentsBuilder.fromUriString(RestTemplateConfig.EMPLOYEE_MANAGE_API_URL)
+            .path("/api/v1/educations/places/$educationPlaceId/participants")
+            .toUriString()
+        val responseEntity = restTemplate.exchange(uri, HttpMethod.GET, null, object : ParameterizedTypeReference<List<ParticipantResponse>>() {})
+
+        return responseEntity.body!!
     }
 }

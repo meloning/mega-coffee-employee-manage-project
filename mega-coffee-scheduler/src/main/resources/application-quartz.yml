@@ -22,16 +22,16 @@ spring:
           dataSource:
             quartzDataSource:
               driver: com.mysql.cj.jdbc.Driver
-              url: jdbc:mysql://localhost:3306/employee_manage_schedule
+              URL: jdbc:mysql://localhost:3306/employee_manage_schedule?serverTimezone=UTC&useSSL=false&useUnicode=true$characterEncoding=utf8
               user: root
               password: wnstn0601
               provider: hikaricp
           scheduler:
-            instanceId: SCHEDULE_
+            instanceId: AUTO
           threadPool:
             threadCount: 20
           jobStore:
-            tablePrefix: QRTZ_
+            tablePrefix: qrtz_
             isClustered: true
             class: org.quartz.impl.jdbcjobstore.JobStoreTX
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
@@ -40,6 +40,7 @@ spring:
             misfireThreshold: 20000
     jdbc:
       initialize-schema: always
+      platform: mysql_innodb
     auto-startup: true
     overwrite-existing-jobs: true
 
@@ -58,16 +59,16 @@ spring:
           dataSource:
             quartzDataSource:
               driver: com.mysql.cj.jdbc.Driver
-              url: jdbc:mysql://localhost:3306/employee_manage_schedule
+              URL: jdbc:mysql://localhost:3306/employee_manage_schedule?serverTimezone=UTC&useSSL=false&useUnicode=true$characterEncoding=utf8
               user: root
               password: wnstn0601
               provider: hikaricp
           scheduler:
-            instanceId: SCHEDULE_
+            instanceId: AUTO
           threadPool:
             threadCount: 20
           jobStore:
-            tablePrefix: QRTZ_
+            tablePrefix: qrtz_
             isClustered: true
             class: org.quartz.impl.jdbcjobstore.JobStoreTX
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
@@ -76,5 +77,6 @@ spring:
             misfireThreshold: 20000
     jdbc:
       initialize-schema: never
+      platform: mysql_innodb
     auto-startup: true
     overwrite-existing-jobs: true
