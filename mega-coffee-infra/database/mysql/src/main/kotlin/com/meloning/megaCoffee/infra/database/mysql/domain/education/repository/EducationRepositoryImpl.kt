@@ -5,12 +5,14 @@ import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 import com.meloning.megaCoffee.core.domain.education.model.EducationPlaces
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
+import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.infra.database.mysql.domain.common.NameVO
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationEntity
 import com.meloning.megaCoffee.infra.database.mysql.domain.education.entity.EducationPlacesVO
 import org.hibernate.Hibernate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
 @Repository
 class EducationRepositoryImpl(
@@ -72,6 +74,14 @@ class EducationRepositoryImpl(
 
     override fun findEducationPlaceAllByUserId(userId: Long): List<EducationPlace> {
         return educationJpaRepository.findEducationPlaceAllByUserId(userId).map { it.toModel() }
+    }
+
+    override fun findEducationPlaceAllByDate(date: LocalDate): List<EducationPlace> {
+        return educationJpaRepository.findEducationPlaceAllByDate(date).map { it.toModel() }
+    }
+
+    override fun findParticipantAllByEducationPlaceId(id: Long): List<User> {
+        return educationJpaRepository.findParticipantAllByEducationPlaceId(id).map { it.toModel() }
     }
 
     override fun existsByName(name: Name): Boolean {

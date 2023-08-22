@@ -1,4 +1,4 @@
-package com.meloning.megaCoffee.core.event
+package com.meloning.megaCoffee.core.infra.event
 
 enum class EventType(val value: String) {
     EMAIL("email.notification"),

@@ -14,6 +14,10 @@ data class TimeRange(
         return startTime <= other.endTime && other.startTime <= endTime
     }
 
+    override fun toString(): String {
+        return "$startTime ~ $endTime"
+    }
+
     companion object {
         @JvmField
         val DUMMY = TimeRange(LocalTime.MIN, LocalTime.MAX)

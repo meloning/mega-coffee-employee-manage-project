@@ -1,6 +1,7 @@
 package com.meloning.megaCoffee.domain.education
 
 import com.meloning.megaCoffee.ApiTest
+import com.meloning.megaCoffee.common.constant.Constant
 import com.meloning.megaCoffee.core.domain.common.Name
 import com.meloning.megaCoffee.core.domain.education.repository.IEducationRepository
 import com.meloning.megaCoffee.core.domain.education.repository.findByIdOrThrow
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import java.time.LocalDate
 
 class EducationApiTest : ApiTest() {
 
@@ -214,6 +216,85 @@ class EducationApiTest : ApiTest() {
             it.run {
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.ACCEPTED.value())
                 assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
+            }
+        }
+    }
+
+    /**
+     * Given: 교육 프로그램 생성 및 장소를 등록한 후,
+     * When: 요청 날짜를 입력하면,
+     * Then: 해당 날짜의 교육장소들 정보를 알려준다.
+     */
+    @Test
+    @DisplayName("특정 날짜의 교육장소 리스트 API")
+    fun getEducationPlacesByDateTest() {
+        // given
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
+
+        val createAddressRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+
+        // when
+        val response = EducationSteps.특정날짜의_교육장소_리스트_요청(LocalDate.now())
+
+        // then
+        val requestPlaces = createAddressRequest.places.first()
+        val educationPlaceAddress = requestPlaces.address.toModel()
+        val educationPlaceTimeRange = requestPlaces.timeRange.toModel()
+
+        SoftAssertions.assertSoftly {
+            it.run {
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+                assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
+                assertThat(response.jsonPath().getList("id", Long::class.java)).contains(1)
+                assertThat(response.jsonPath().getList("educationName", String::class.java)).contains(createRequest.name)
+                assertThat(response.jsonPath().getList("address", String::class.java)).contains(educationPlaceAddress.getAddress())
+                assertThat(response.jsonPath().getList("date", String::class.java)).contains(LocalDate.now().toString())
+                assertThat(response.jsonPath().getList("time", String::class.java)).contains(educationPlaceTimeRange.toString())
+                assertThat(response.jsonPath().getList("maxParticipant", Int::class.java)).contains(requestPlaces.maxParticipant)
+                assertThat(response.jsonPath().getList("currentParticipant", Int::class.java)).contains(0)
+                assertThat(response.jsonPath().getList("createdAt", String::class.java)).isNotNull
+                assertThat(response.jsonPath().getList("updatedAt", String::class.java)).isNotNull
+            }
+        }
+    }
+
+    /**
+     * Given:
+     *   1. 교육 프로그램 생성 및 장소 등록
+     *   2. 매장이 이수해야할 교육 프로그램 등록
+     *   3. 교육 장소 참여자 등록
+     * When: 해당 교육장소의 참여자들 정보를 요청하면
+     * Then: 현재 참여자들의 정보를 알 수 있다.
+     */
+    @Test
+    @DisplayName("특정 교육장소의 참여자 리스트 API")
+    fun getParticipantsByEducationPlaceTest() {
+        // given
+        val createRequest = EducationSteps.생성()
+        val educationId = EducationSteps.생성_요청(createRequest).jsonPath().getLong("id")
+
+        val createAddressRequest = EducationSteps.교육장소_생성()
+        EducationSteps.교육장소_생성_요청(educationId, createAddressRequest)
+
+        val createEducationStoreRequest = EducationSteps.매장_등록()
+        EducationSteps.매장_등록_요청(educationId, createEducationStoreRequest)
+
+        val creatPlaceUserRequest = EducationSteps.유저_교육장소_등록()
+        EducationSteps.유저_교육장소_등록_요청(educationId, 1, creatPlaceUserRequest)
+
+        // when
+        val response = EducationSteps.교육장소의_현재_참여자_리스트_요청(1)
+
+        // then
+        SoftAssertions.assertSoftly {
+            it.run {
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+                assertThat(response.header(MDCFilter.RESPONSE_TRACE_NAME)).isNotNull
+                assertThat(response.jsonPath().getList("id", Long::class.java)).contains(1)
+                assertThat(response.jsonPath().getList("name", String::class.java)).contains("메로닝1")
+                assertThat(response.jsonPath().getList("email", String::class.java)).contains(Constant.EMPTY)
             }
         }
     }
