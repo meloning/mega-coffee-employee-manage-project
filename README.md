@@ -31,6 +31,8 @@ project
  ├── mega-coffee-api
  ├── mega-coffee-common
  ├── mega-coffee-core
+ ├── mega-coffee-core-infra
+ ├── mega-coffee-scheduler
  └── mega-coffee-infra
       └── database
           └── mysql
@@ -42,13 +44,13 @@ project
 
 **[Application 영역]**
 - 실제 실행을 담당하는 모듈
-- mega-coffee-api
+- mega-coffee-api, mega-coffee-scheduler
 - controller를 통한 입출력/검증 역할을 수행합니다.
 
 
 **[Core 영역]**
 - 도메인, 비즈니스 로직을 담당하는 모듈
-- mega-coffee-core
+- mega-coffee-core, mega-coffee-core-infra
 - 변할 수 있는 Repository부분을 인터페이스로 정의하여 db가 바뀌거나 내부적으로 캐싱처리등 구체적인 구현을
   알필요 없도록 하였습니다.
 
@@ -64,6 +66,12 @@ project
 - 외부 API 연동등 외부 App에 의존도가 높은 모듈
 - clients/java-email
 - 실제 외부 API연동과 관련한 로직을 구현하는 곳입니다.
+
+## 테스트
+도메인별 유닛 테스트와 RestAssured + TestContainer를 조합한 API 통합 테스트를 중심으로 테스트 코드가 작성되어 있습니다.
+
+TestContainer는 MySQL, RabbitMQ 모듈 각각에서 관리되도록 하여 응집력있는 테스트 설정을 구성하였고,
+TestFixture를 통해 의존하는 타 모듈의 테스트 영역에 TestContainer를 적용할 수 있도록 구성하였습니다.
 
 ## API 문서
 REST Docs + epages 조합으로 OAS를 만들어 API 문서 링크를 공유할 예정입니다.
