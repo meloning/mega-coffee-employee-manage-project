@@ -3,9 +3,11 @@ package com.meloning.megaCoffee.domain.user
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.meloning.megaCoffee.common.util.ObjectMapperUtils
 import com.meloning.megaCoffee.config.document.ApiRestDocsTest
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
+import com.meloning.megaCoffee.core.domain.common.PhoneNumber
 import com.meloning.megaCoffee.core.domain.common.TimeRange
 import com.meloning.megaCoffee.core.domain.education.model.Education
 import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
@@ -16,6 +18,8 @@ import com.meloning.megaCoffee.core.domain.user.model.User
 import com.meloning.megaCoffee.core.domain.user.model.WorkTimeType
 import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
+import com.meloning.megaCoffee.domain.common.dto.AddressRequest
+import com.meloning.megaCoffee.domain.user.dto.CreateUserRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -27,8 +31,11 @@ import org.mockito.kotlin.whenever
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.format.support.DefaultFormattingConversionService
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
@@ -193,7 +200,7 @@ class UserApiDocsTest {
             fieldWithPath("workTimeType").type(JsonFieldType.STRING)
                 .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
                 .description("업무 요일 타입"),
-            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("휴대폰 번호"),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
             fieldWithPath("store").type(JsonFieldType.OBJECT).description("매장 데이터"),
             fieldWithPath("store.id").type(JsonFieldType.NUMBER).description("매장 PK"),
             fieldWithPath("store.name").type(JsonFieldType.STRING).description("매장 이름"),
@@ -256,6 +263,114 @@ class UserApiDocsTest {
                     pathParameters(
                         parameterWithName("id").description("유저 PK")
                     ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("유저 생성 API 문서")
+    fun createTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        val mockUser = User(1, Name("메로닝1"), EmployeeType.MANAGER, WorkTimeType.WEEKDAY, 1)
+        val mockStore = Store(1, Name("메가커피 서대문역점"), StoreType.FRANCHISE, false)
+
+        whenever(userService.create(any())).thenReturn(Pair(mockUser, mockStore))
+
+        val createUserRequest = CreateUserRequest(
+            email = "melon8372@gmail.com",
+            name = "메로닝",
+            address = AddressRequest("어느 도시", "어느 거리", "우편번호"),
+            employeeType = EmployeeType.MANAGER,
+            phoneNumber = PhoneNumber.DUMMY.phone,
+            workTimeType = WorkTimeType.WEEKDAY,
+            storeId = 1
+        )
+        val jsonCreateUserRequest = ObjectMapperUtils.toPrettyJson(createUserRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+            fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+            fieldWithPath("employeeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(EmployeeType::class.java, EmployeeType::value))
+                .description("직원 타입"),
+            fieldWithPath("workTimeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
+                .description("업무 요일 타입"),
+            fieldWithPath("storeId").type(JsonFieldType.NUMBER).description("유저 PK"),
+        )
+
+        val responseFields = listOf(
+            fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 PK"),
+            fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+            fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("employeeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(EmployeeType::class.java, EmployeeType::value))
+                .description("직원 타입"),
+            fieldWithPath("workTimeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
+                .description("업무 요일 타입"),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+            fieldWithPath("store").type(JsonFieldType.OBJECT).description("매장 데이터"),
+            fieldWithPath("store.id").type(JsonFieldType.NUMBER).description("매장 PK"),
+            fieldWithPath("store.name").type(JsonFieldType.STRING).description("매장 이름"),
+            fieldWithPath("store.type").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(StoreType::class.java, StoreType::value))
+                .description("매장 타입"),
+            fieldWithPath("store.address").type(JsonFieldType.OBJECT).description("매장 주소"),
+            fieldWithPath("store.address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("store.address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("store.address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("store.timeRange").type(JsonFieldType.OBJECT).description("매장 운영시간"),
+            fieldWithPath("store.timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간"),
+            fieldWithPath("store.timeRange.endTime").type(JsonFieldType.STRING).description("마감시간"),
+            fieldWithPath("store.deleted").type(JsonFieldType.BOOLEAN).description("매장 삭제여부"),
+            fieldWithPath("createdAt").type(JsonFieldType.STRING).optional().description("생성일"),
+            fieldWithPath("updatedAt").type(JsonFieldType.STRING).optional().description("변경일"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(userApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.post("/api/v1/users")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonCreateUserRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "post-users",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("Redirect할 유저 상세 API Url Path")
+                            )
+                            .responseFields(
+                                responseFields
+                            )
+                            .build()
+                    ),
+
                 )
             )
     }
