@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
@@ -433,6 +434,43 @@ class UserApiDocsTest {
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
                             .requestFields(requestFields)
+                            .build()
+                    ),
+                    pathParameters(
+                        parameterWithName("id").description("유저 PK")
+                    ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("유저 삭제 API 문서")
+    fun deleteTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        doNothing().`when`(userService).delete(any())
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(userApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.delete("/api/v1/users/{id}", 1)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isNoContent)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "delete-users",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
                             .build()
                     ),
                     pathParameters(
