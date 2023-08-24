@@ -13,7 +13,10 @@ import com.meloning.megaCoffee.core.domain.education.model.EducationPlace
 import com.meloning.megaCoffee.core.domain.education.usecase.EducationService
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.domain.user.usecase.RegisterParticipantFacadeService
+import com.meloning.megaCoffee.domain.common.dto.AddressRequest
+import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -21,6 +24,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.kotlin.any
+import org.mockito.kotlin.description
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.format.support.DefaultFormattingConversionService
@@ -39,6 +44,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import java.time.LocalDate
+import java.time.LocalTime
 
 @ApiRestDocsTest
 class EducationApiDocsTest {
@@ -183,6 +189,71 @@ class EducationApiDocsTest {
                             .responseFields(
                                 responseFields
                             )
+                            .build()
+                    ),
+                    RequestDocumentation.pathParameters(
+                        RequestDocumentation.parameterWithName("id").description("교육 PK")
+                    ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("교육 장소 등록 API 문서")
+    fun registerPlaceTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        doNothing().`when`(educationService).registerAddress(any(), any())
+
+        val registerEducationPlaceRequest = RegisterEducationPlacesRequest(
+            places = listOf(
+                RegisterEducationPlacesRequest.EducationPlaceRequest(
+                    address = AddressRequest("어느 도시", "어느 거리", "12345"),
+                    maxParticipant = 3,
+                    date = LocalDate.now().toString(),
+                    timeRange = TimeRangeRequest(LocalTime.MIN.toString(), LocalTime.MAX.withNano(0).toString())
+                )
+            )
+        )
+        val jsonRegisterEducationPlaceRequest = ObjectMapperUtils.toPrettyJson(registerEducationPlaceRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("places").type(JsonFieldType.ARRAY).description("교육장소 요청 데이터"),
+            fieldWithPath("places[].address").type(JsonFieldType.OBJECT).description("교육 장소 주소"),
+            fieldWithPath("places[].address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("places[].address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("places[].address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("places[].maxParticipant").type(JsonFieldType.NUMBER).description("최대 참여자 수"),
+            fieldWithPath("places[].date").type(JsonFieldType.STRING).description("날짜"),
+            fieldWithPath("places[].timeRange").type(JsonFieldType.OBJECT).description("운영시간"),
+            fieldWithPath("places[].timeRange.startTime").type(JsonFieldType.STRING).description("시작시간"),
+            fieldWithPath("places[].timeRange.endTime").type(JsonFieldType.STRING).description("종료시간"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(educationApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.post("/api/v1/educations/{id}/place/register", 1)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonRegisterEducationPlaceRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isAccepted)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "post-educations-places-register",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
                             .build()
                     ),
                     RequestDocumentation.pathParameters(
