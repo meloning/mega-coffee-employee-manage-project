@@ -203,6 +203,7 @@ class UserApiDocsTest {
                 .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
                 .description("업무 요일 타입"),
             fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+
             fieldWithPath("store").type(JsonFieldType.OBJECT).description("매장 데이터"),
             fieldWithPath("store.id").type(JsonFieldType.NUMBER).description("매장 PK"),
             fieldWithPath("store.name").type(JsonFieldType.STRING).description("매장 이름"),
@@ -217,9 +218,11 @@ class UserApiDocsTest {
             fieldWithPath("store.timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간"),
             fieldWithPath("store.timeRange.endTime").type(JsonFieldType.STRING).description("마감시간"),
             fieldWithPath("store.deleted").type(JsonFieldType.BOOLEAN).description("매장 삭제여부"),
+
             fieldWithPath("educations").type(JsonFieldType.ARRAY).description("교육 프로그램 데이터"),
             fieldWithPath("educations[].id").type(JsonFieldType.NUMBER).description("교육 프로그램 PK"),
             fieldWithPath("educations[].name").type(JsonFieldType.STRING).description("교육 프로그램 이름"),
+
             fieldWithPath("educations[].educationPlaces").type(JsonFieldType.ARRAY).description("교육 장소 데이터"),
             fieldWithPath("educations[].educationPlaces[].id").type(JsonFieldType.NUMBER).description("교육 장소 PK"),
             fieldWithPath("educations[].educationPlaces[].address").type(JsonFieldType.OBJECT).description("교육 장소 주소"),
@@ -231,6 +234,7 @@ class UserApiDocsTest {
             fieldWithPath("educations[].educationPlaces[].timeRange").type(JsonFieldType.OBJECT).description("운영시간"),
             fieldWithPath("educations[].educationPlaces[].timeRange.startTime").type(JsonFieldType.STRING).description("시작시간"),
             fieldWithPath("educations[].educationPlaces[].timeRange.endTime").type(JsonFieldType.STRING).description("종료시간"),
+
             fieldWithPath("createdAt").type(JsonFieldType.STRING).optional().description("생성일"),
             fieldWithPath("updatedAt").type(JsonFieldType.STRING).optional().description("변경일"),
         )
