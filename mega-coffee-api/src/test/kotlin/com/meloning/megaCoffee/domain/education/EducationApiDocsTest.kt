@@ -16,6 +16,7 @@ import com.meloning.megaCoffee.core.domain.user.usecase.RegisterParticipantFacad
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlaceParticipantRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
@@ -308,6 +309,56 @@ class EducationApiDocsTest {
                     ),
                     RequestDocumentation.pathParameters(
                         RequestDocumentation.parameterWithName("id").description("교육 PK")
+                    ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("교육 장소 참여자 등록 API 문서")
+    fun registerParticipantTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        doNothing().`when`(registerParticipantFacadeService).execute(any(), any(), any())
+
+        val registerEducationPlaceParticipantRequest = RegisterEducationPlaceParticipantRequest(
+            educationPlaceIds = listOf(1)
+        )
+        val jsonRegisterParticipantRequest = ObjectMapperUtils.toPrettyJson(registerEducationPlaceParticipantRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("educationPlaceIds").type(JsonFieldType.ARRAY).description("등록할 교육장소 PK들"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(educationApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.post("/api/v1/educations/{id}/places/participant/{userId}/register", 1, 1)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonRegisterParticipantRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isAccepted)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "post-educations-places-participant-register",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .build()
+                    ),
+                    RequestDocumentation.pathParameters(
+                        RequestDocumentation.parameterWithName("id").description("교육 PK"),
+                        RequestDocumentation.parameterWithName("userId").description("유저 PK"),
                     ),
                 )
             )
