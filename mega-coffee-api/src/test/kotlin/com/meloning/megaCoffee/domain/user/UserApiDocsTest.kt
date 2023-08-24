@@ -20,6 +20,7 @@ import com.meloning.megaCoffee.core.domain.user.usecase.UserService
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.user.dto.CreateUserRequest
+import com.meloning.megaCoffee.domain.user.dto.UpdateUserRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -371,6 +372,72 @@ class UserApiDocsTest {
                             .build()
                     ),
 
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("유저 수정 API 문서")
+    fun updateTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        val mockUser = User(1, Name("메로닝1"), EmployeeType.MANAGER, WorkTimeType.WEEKDAY, 1)
+
+        whenever(userService.update(any(), any())).thenReturn(mockUser)
+
+        val updateUserRequest = UpdateUserRequest(
+            address = AddressRequest("어느 도시", "어느 거리", "우편번호"),
+            employeeType = EmployeeType.MANAGER,
+            phoneNumber = PhoneNumber.DUMMY.phone,
+            workTimeType = WorkTimeType.WEEKDAY,
+            storeId = 1
+        )
+        val jsonUpdateUserRequest = ObjectMapperUtils.toPrettyJson(updateUserRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+            fieldWithPath("employeeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(EmployeeType::class.java, EmployeeType::value))
+                .description("직원 타입"),
+            fieldWithPath("workTimeType").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
+                .description("업무 요일 타입"),
+            fieldWithPath("storeId").type(JsonFieldType.NUMBER).description("유저 PK"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(userApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.put("/api/v1/users/{id}", 1)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonUpdateUserRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "put-users",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .build()
+                    ),
+                    pathParameters(
+                        parameterWithName("id").description("유저 PK")
+                    ),
                 )
             )
     }
