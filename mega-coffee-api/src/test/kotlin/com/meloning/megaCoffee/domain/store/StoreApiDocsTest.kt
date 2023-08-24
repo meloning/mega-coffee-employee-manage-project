@@ -311,7 +311,7 @@ class StoreApiDocsTest {
                         ResourceSnippetParameters.builder()
                             .requestFields(requestFields)
                             .responseHeaders(
-                                headerWithName(HttpHeaders.LOCATION).description("Redirect할 유저 상세 API Url Path")
+                                headerWithName(HttpHeaders.LOCATION).description("Redirect할 매장 상세 API Url Path")
                             )
                             .responseFields(
                                 responseFields
