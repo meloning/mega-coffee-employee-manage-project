@@ -3,6 +3,7 @@ package com.meloning.megaCoffee.domain.store
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper
 import com.epages.restdocs.apispec.ResourceDocumentation
 import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.meloning.megaCoffee.common.util.ObjectMapperUtils
 import com.meloning.megaCoffee.config.document.ApiRestDocsTest
 import com.meloning.megaCoffee.core.domain.common.Address
 import com.meloning.megaCoffee.core.domain.common.Name
@@ -14,6 +15,9 @@ import com.meloning.megaCoffee.core.domain.store.model.StoreType
 import com.meloning.megaCoffee.core.domain.store.usecase.StoreService
 import com.meloning.megaCoffee.core.domain.user.model.EmployeeType
 import com.meloning.megaCoffee.core.util.InfiniteScrollType
+import com.meloning.megaCoffee.domain.common.dto.AddressRequest
+import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
+import com.meloning.megaCoffee.domain.store.dto.CreateStoreRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -26,8 +30,11 @@ import org.mockito.kotlin.whenever
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
 import org.springframework.format.support.DefaultFormattingConversionService
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.RestDocumentationContextProvider
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
@@ -41,6 +48,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import java.time.LocalDate
+import java.time.LocalTime
 
 @ApiRestDocsTest
 class StoreApiDocsTest {
@@ -221,6 +229,94 @@ class StoreApiDocsTest {
                     pathParameters(
                         parameterWithName("id").description("매장 PK")
                     ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("매장 생성 API 문서")
+    fun createTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        val mockStore = Store(1, Name("메가커피 서대문역점"), StoreType.FRANCHISE, false)
+
+        whenever(storeService.create(any())).thenReturn(mockStore)
+
+        val createStoreRequest = CreateStoreRequest(
+            name = "메가커피 서대문역점",
+            type = StoreType.FRANCHISE,
+            address = AddressRequest("어느 도시", "어느 거리", "12345"),
+            timeRange = TimeRangeRequest(LocalTime.MIN.toString(), LocalTime.MAX.withNano(0).toString())
+        )
+        val jsonCreateStoreRequest = ObjectMapperUtils.toPrettyJson(createStoreRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+            fieldWithPath("type").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(StoreType::class.java, StoreType::value))
+                .description("매장 타입"),
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+            fieldWithPath("timeRange").type(JsonFieldType.OBJECT).description("매장 운영시간"),
+            fieldWithPath("timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간"),
+            fieldWithPath("timeRange.endTime").type(JsonFieldType.STRING).description("마감시간"),
+        )
+
+        val responseFields = listOf(
+            fieldWithPath("id").type(JsonFieldType.NUMBER).description("매장 PK"),
+            fieldWithPath("name").type(JsonFieldType.STRING).description("매장 이름"),
+            fieldWithPath("type").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(StoreType::class.java, StoreType::value))
+                .description("매장 타입"),
+
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("매장 주소"),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+
+            fieldWithPath("timeRange").type(JsonFieldType.OBJECT).description("매장 운영시간"),
+            fieldWithPath("timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간"),
+            fieldWithPath("timeRange.endTime").type(JsonFieldType.STRING).description("마감시간"),
+
+            fieldWithPath("createdAt").type(JsonFieldType.STRING).optional().description("생성일"),
+            fieldWithPath("updatedAt").type(JsonFieldType.STRING).optional().description("변경일"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(storeApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.post("/api/v1/stores")
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonCreateStoreRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isCreated)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "post-stores",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("Redirect할 유저 상세 API Url Path")
+                            )
+                            .responseFields(
+                                responseFields
+                            )
+                            .build()
+                    ),
+
                 )
             )
     }

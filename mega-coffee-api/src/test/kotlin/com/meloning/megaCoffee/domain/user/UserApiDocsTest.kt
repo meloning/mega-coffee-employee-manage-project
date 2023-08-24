@@ -285,7 +285,7 @@ class UserApiDocsTest {
         val createUserRequest = CreateUserRequest(
             email = "melon8372@gmail.com",
             name = "메로닝",
-            address = AddressRequest("어느 도시", "어느 거리", "우편번호"),
+            address = AddressRequest("어느 도시", "어느 거리", "12345"),
             employeeType = EmployeeType.MANAGER,
             phoneNumber = PhoneNumber.DUMMY.phone,
             workTimeType = WorkTimeType.WEEKDAY,
@@ -314,10 +314,12 @@ class UserApiDocsTest {
             fieldWithPath("id").type(JsonFieldType.NUMBER).description("유저 PK"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
             fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+
             fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
             fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
             fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
             fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+
             fieldWithPath("employeeType").type(JsonFieldType.STRING)
                 .attributes(RestDocumentUtils.generatedEnumAttrs(EmployeeType::class.java, EmployeeType::value))
                 .description("직원 타입"),
@@ -325,6 +327,7 @@ class UserApiDocsTest {
                 .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
                 .description("업무 요일 타입"),
             fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+
             fieldWithPath("store").type(JsonFieldType.OBJECT).description("매장 데이터"),
             fieldWithPath("store.id").type(JsonFieldType.NUMBER).description("매장 PK"),
             fieldWithPath("store.name").type(JsonFieldType.STRING).description("매장 이름"),
@@ -335,10 +338,13 @@ class UserApiDocsTest {
             fieldWithPath("store.address.city").type(JsonFieldType.STRING).description("도시"),
             fieldWithPath("store.address.street").type(JsonFieldType.STRING).description("거리"),
             fieldWithPath("store.address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
+
             fieldWithPath("store.timeRange").type(JsonFieldType.OBJECT).description("매장 운영시간"),
             fieldWithPath("store.timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간"),
             fieldWithPath("store.timeRange.endTime").type(JsonFieldType.STRING).description("마감시간"),
+
             fieldWithPath("store.deleted").type(JsonFieldType.BOOLEAN).description("매장 삭제여부"),
+
             fieldWithPath("createdAt").type(JsonFieldType.STRING).optional().description("생성일"),
             fieldWithPath("updatedAt").type(JsonFieldType.STRING).optional().description("변경일"),
         )
