@@ -17,6 +17,7 @@ import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.education.dto.CreateEducationRequest
 import com.meloning.megaCoffee.domain.education.dto.RegisterEducationPlacesRequest
+import com.meloning.megaCoffee.domain.education.dto.RegisterStoresRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -249,6 +250,55 @@ class EducationApiDocsTest {
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
                     "post-educations-places-register",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .build()
+                    ),
+                    RequestDocumentation.pathParameters(
+                        RequestDocumentation.parameterWithName("id").description("교육 PK")
+                    ),
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("교육 프로그램 이수할 매장 등록 API 문서")
+    fun registerStoreTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        doNothing().`when`(educationService).registerStore(any(), any())
+
+        val registerStoreRequest = RegisterStoresRequest(
+            stores = listOf(1)
+        )
+        val jsonRegisterStoresRequest = ObjectMapperUtils.toPrettyJson(registerStoreRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("stores").type(JsonFieldType.ARRAY).description("이수할 매장 PK들"),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(educationApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.post("/api/v1/educations/{id}/stores/register", 1)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonRegisterStoresRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isAccepted)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "post-educations-stores-register",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
