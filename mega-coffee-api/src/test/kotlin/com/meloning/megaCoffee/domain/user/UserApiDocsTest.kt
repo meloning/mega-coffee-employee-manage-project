@@ -396,7 +396,7 @@ class UserApiDocsTest {
         whenever(userService.update(any(), any())).thenReturn(mockUser)
 
         val updateUserRequest = UpdateUserRequest(
-            address = AddressRequest("어느 도시", "어느 거리", "우편번호"),
+            address = AddressRequest("어느 도시", "어느 거리", "12345"),
             employeeType = EmployeeType.MANAGER,
             phoneNumber = PhoneNumber.DUMMY.phone,
             workTimeType = WorkTimeType.WEEKDAY,
@@ -405,18 +405,18 @@ class UserApiDocsTest {
         val jsonUpdateUserRequest = ObjectMapperUtils.toPrettyJson(updateUserRequest)
 
         val requestFields = listOf(
-            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소"),
-            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시"),
-            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리"),
-            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호"),
-            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처"),
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소").optional(),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시").optional(),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리").optional(),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호").optional(),
+            fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("연락처").optional(),
             fieldWithPath("employeeType").type(JsonFieldType.STRING)
                 .attributes(RestDocumentUtils.generatedEnumAttrs(EmployeeType::class.java, EmployeeType::value))
-                .description("직원 타입"),
+                .description("직원 타입").optional(),
             fieldWithPath("workTimeType").type(JsonFieldType.STRING)
                 .attributes(RestDocumentUtils.generatedEnumAttrs(WorkTimeType::class.java, WorkTimeType::value))
-                .description("업무 요일 타입"),
-            fieldWithPath("storeId").type(JsonFieldType.NUMBER).description("유저 PK"),
+                .description("업무 요일 타입").optional(),
+            fieldWithPath("storeId").type(JsonFieldType.NUMBER).description("유저 PK").optional(),
         )
 
         // when, then

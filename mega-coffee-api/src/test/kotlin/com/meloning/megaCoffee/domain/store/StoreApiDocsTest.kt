@@ -18,6 +18,7 @@ import com.meloning.megaCoffee.core.util.InfiniteScrollType
 import com.meloning.megaCoffee.domain.common.dto.AddressRequest
 import com.meloning.megaCoffee.domain.common.dto.TimeRangeRequest
 import com.meloning.megaCoffee.domain.store.dto.CreateStoreRequest
+import com.meloning.megaCoffee.domain.store.dto.UpdateStoreRequest
 import com.meloning.megaCoffee.error.ExceptionHandler
 import com.meloning.megaCoffee.util.document.RestDocumentUtils
 import org.junit.jupiter.api.DisplayName
@@ -317,6 +318,71 @@ class StoreApiDocsTest {
                             .build()
                     ),
 
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("매장 수정 API 문서")
+    fun updateTest(contextProvider: RestDocumentationContextProvider) {
+        // given
+        val mockStore = Store(1, Name("메가커피 서대문역점"), StoreType.FRANCHISE, false)
+        whenever(storeService.update(any(), any())).thenReturn(mockStore)
+
+        val updateStoreRequest = UpdateStoreRequest(
+            type = StoreType.COMPANY_OWNED,
+            ownerId = 1,
+            address = null,
+            timeRange = null
+        )
+        val jsonUpdateStoreRequest = ObjectMapperUtils.toPrettyJson(updateStoreRequest)
+
+        val requestFields = listOf(
+            fieldWithPath("type").type(JsonFieldType.STRING)
+                .attributes(RestDocumentUtils.generatedEnumAttrs(StoreType::class.java, StoreType::value))
+                .description("매장 타입").optional(),
+            fieldWithPath("ownerId").type(JsonFieldType.NUMBER).description("점주 PK").optional(),
+
+            fieldWithPath("address").type(JsonFieldType.OBJECT).description("주소").optional(),
+            fieldWithPath("address.city").type(JsonFieldType.STRING).description("도시").optional(),
+            fieldWithPath("address.street").type(JsonFieldType.STRING).description("거리").optional(),
+            fieldWithPath("address.zipCode").type(JsonFieldType.STRING).description("우편번호").optional(),
+
+            fieldWithPath("timeRange").type(JsonFieldType.OBJECT).description("매장 운영시간").optional(),
+            fieldWithPath("timeRange.startTime").type(JsonFieldType.STRING).description("오픈시간").optional(),
+            fieldWithPath("timeRange.endTime").type(JsonFieldType.STRING).description("마감시간").optional(),
+        )
+
+        // when, then
+        val mockMvc = MockMvcBuilders.standaloneSetup(storeApiController)
+            .setControllerAdvice(ExceptionHandler())
+            .setConversionService(DefaultFormattingConversionService())
+            .setMessageConverters(MappingJackson2HttpMessageConverter())
+            .setCustomArgumentResolvers(PageableHandlerMethodArgumentResolver())
+            .apply<StandaloneMockMvcBuilder>(MockMvcRestDocumentation.documentationConfiguration(contextProvider))
+            .build()
+
+        mockMvc
+            .perform(
+                RestDocumentationRequestBuilders.put("/api/v1/stores/{id}", 1)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(jsonUpdateStoreRequest)
+            )
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(
+                MockMvcRestDocumentationWrapper.document(
+                    "put-stores",
+                    RestDocumentUtils.getDocumentRequest(),
+                    RestDocumentUtils.getDocumentResponse(),
+                    ResourceDocumentation.resource(
+                        ResourceSnippetParameters.builder()
+                            .requestFields(requestFields)
+                            .build()
+                    ),
+                    pathParameters(
+                        parameterWithName("id").description("매장 PK")
+                    ),
                 )
             )
     }
