@@ -1,4 +1,5 @@
 import com.epages.restdocs.apispec.gradle.OpenApi3Extension
+import com.epages.restdocs.apispec.gradle.OpenApi3Task
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -125,7 +126,10 @@ val restDocsProjects = listOf(
 configure(restDocsProjects) {
     apply(plugin = "com.epages.restdocs-api-spec")
 
-    extensions.extraProperties["snippetsDir"] = file("build/generated-snippets")
+    extra["snippetsDir"] = file("build/generated-snippets")
+
+    val snippetsDir = extra["snippetsDir"] as File
+    val initialDocsFile = File("${project.file("src/test/resources")}/docs/initial-overview.md")
 
     val epagesApiDocsVersion: String by project
 
@@ -141,25 +145,28 @@ configure(restDocsProjects) {
      */
     configure<OpenApi3Extension> {
         setServer("http://localhost:9000")
-        title = "MGC Employee Manage OpenApi Specification"
+        title = "MGC Employee Manage OAS"
         version = "1.0.0"
+        description = initialDocsFile.readText()
         format = "yaml"
+        outputFileNamePrefix = "incomplete_openapi3"
     }
 
-    tasks.named("bootJar") {
-        doLast {
-            val sourceDir = project.file("swagger-ui")
-            val yamlFile = project.file("${project.buildDir}/api-spec/openapi3.yaml")
-            val targetDir = project.file("BOOT-INF/classes/static/swagger-ui")
+    tasks.withType(OpenApi3Task::class) {
+        finalizedBy("removeBlockScalarsFromYaml")
+    }
 
-            copy {
-                from(sourceDir) {
-                    into(targetDir)
-                }
-                from(yamlFile) {
-                    into(targetDir)
-                }
-            }
+    tasks.register("removeBlockScalarsFromYaml") {
+        dependsOn("openapi3")
+        doLast {
+            val inputFile = File("${project.buildDir}/api-spec/incomplete_openapi3.yaml")
+            val outputFile = File("${project.buildDir}/api-spec/openapi3.yaml")
+
+            val yamlData = inputFile.readText()
+
+            val cleanedYamlData = yamlData.replace(Regex("value: \\|-"), "value:")
+
+            outputFile.writeText(cleanedYamlData)
         }
     }
 }

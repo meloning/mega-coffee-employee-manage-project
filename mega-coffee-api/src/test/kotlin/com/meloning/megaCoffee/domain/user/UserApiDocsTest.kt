@@ -158,11 +158,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "get-users-scroll",
+                    "유저 스크롤 리스트 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("user")
                             .requestParameters(
                                 *requestParameters
                             )
@@ -256,11 +257,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "get-users-detail",
+                    "유저 상세 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("user")
                             .responseFields(
                                 responseFields
                             )
@@ -368,11 +370,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "post-users",
+                    "유저 생성 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("user")
                             .requestFields(requestFields)
                             .responseHeaders(
                                 headerWithName(HttpHeaders.LOCATION).description("Redirect할 유저 상세 API Url Path")
@@ -438,11 +441,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "put-users",
+                    "유저 수정 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("user")
                             .requestFields(requestFields)
                             .build()
                     ),
@@ -476,11 +480,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isNoContent)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "delete-users",
+                    "유저 삭제 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("user")
                             .build()
                     ),
                     pathParameters(

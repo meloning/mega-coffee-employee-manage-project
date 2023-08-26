@@ -133,11 +133,12 @@ class StoreApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "get-stores-scroll",
+                    "매장 스크롤 리스트 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("store")
                             .requestParameters(
                                 *requestParameters
                             )
@@ -217,11 +218,12 @@ class StoreApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "get-stores-detail",
+                    "매장 상세 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("store")
                             .responseFields(
                                 responseFields
                             )
@@ -303,11 +305,12 @@ class StoreApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "post-stores",
+                    "매장 생성 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("store")
                             .requestFields(requestFields)
                             .responseHeaders(
                                 headerWithName(HttpHeaders.LOCATION).description("Redirect할 매장 상세 API Url Path")
@@ -372,11 +375,12 @@ class StoreApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "put-stores",
+                    "매장 수정 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("store")
                             .requestFields(requestFields)
                             .build()
                     ),
@@ -410,11 +414,12 @@ class StoreApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isNoContent)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "delete-stores",
+                    "매장 삭제 API",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .tag("store")
                             .build()
                     ),
                     pathParameters(

@@ -1,6 +1,5 @@
 package com.meloning.megaCoffee.config.document
 
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -12,7 +11,6 @@ import java.lang.annotation.Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Inherited
-@Tag("docs")
 @ExtendWith(
     value = [
         MockitoExtension::class,
