@@ -3,6 +3,7 @@ pluginManagement {
     val kotlinterVersion: String by settings
     val springBootVersion: String by settings
     val springDependencyManagementVersion: String by settings
+    val epagesApiDocsVersion: String by settings
 
     plugins {
         id("org.springframework.boot") version springBootVersion
@@ -10,6 +11,7 @@ pluginManagement {
 
         // https://github.com/jeremymailen/kotlinter-gradle/releases
         id("org.jmailen.kotlinter") version kotlinterVersion
+        id("com.epages.restdocs-api-spec") version epagesApiDocsVersion
 
         kotlin("jvm") version kotlinVersion
         kotlin("kapt") version kotlinVersion

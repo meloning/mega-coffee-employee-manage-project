@@ -15,7 +15,7 @@ class EducationPlaces(
 
     init {
         validateDuplicatePlaceTimeSlots()
-        require(isMaxEducationPlaceCountExceeded()) { "교육 장소는 최대 ${MAX_EDUCATION_PLACE_COUNT}개까지 등록할 수 있습니다." }
+        require(!isMaxEducationPlaceCountExceeded()) { "교육 장소는 최대 ${MAX_EDUCATION_PLACE_COUNT}개까지 등록할 수 있습니다." }
     }
 
     fun size(): Int {
@@ -24,7 +24,7 @@ class EducationPlaces(
 
     fun add(model: EducationPlace) {
         validateDuplicatePlaceTimeSlots(model)
-        if (isMaxEducationPlaceCountExceeded()) throw AlreadyFullException("이미 교육장소들이 가득찼습니다.")
+        if (hasReachedMaxEducationPlaceCapacity()) throw AlreadyFullException("이미 교육장소들이 가득찼습니다.")
         _value.add(model)
     }
 
@@ -59,7 +59,11 @@ class EducationPlaces(
     }
 
     private fun isMaxEducationPlaceCountExceeded(): Boolean {
-        return size() <= MAX_EDUCATION_PLACE_COUNT
+        return size() > MAX_EDUCATION_PLACE_COUNT
+    }
+
+    private fun hasReachedMaxEducationPlaceCapacity(): Boolean {
+        return size() == MAX_EDUCATION_PLACE_COUNT
     }
 
     private fun validateDuplicatePlaceTimeSlots(educationPlace: EducationPlace? = null) {
