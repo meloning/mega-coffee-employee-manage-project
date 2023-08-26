@@ -41,7 +41,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.restdocs.snippet.Attributes
@@ -75,10 +74,10 @@ class StoreApiDocsTest {
         whenever(storeService.scroll(anyOrNull(), any(), any())).thenReturn(scrollResponse)
 
         val requestParameters = listOf(
-            RequestDocumentation.parameterWithName("page").attributes(Attributes.key("format").value("NUMBER")).description("페이지 번호").optional(),
-            RequestDocumentation.parameterWithName("size").attributes(Attributes.key("format").value("NUMBER")).description("출력될 요소 개수").optional(),
+            parameterWithName("page").attributes(Attributes.key("format").value("NUMBER")).description("페이지 번호").optional(),
+            parameterWithName("size").attributes(Attributes.key("format").value("NUMBER")).description("출력될 요소 개수").optional(),
 
-            RequestDocumentation.parameterWithName("storeId").attributes(Attributes.key("format").value("STRING")).description("마지막 매장 ID").optional(),
+            parameterWithName("storeId").attributes(Attributes.key("format").value("STRING")).description("마지막 매장 ID").optional(),
         ).toTypedArray()
 
         val responseFields = listOf(

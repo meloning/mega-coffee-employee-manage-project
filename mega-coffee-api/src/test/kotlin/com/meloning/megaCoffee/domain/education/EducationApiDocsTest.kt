@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.kotlin.any
-import org.mockito.kotlin.description
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
