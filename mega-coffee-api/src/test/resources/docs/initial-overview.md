@@ -94,3 +94,5 @@ Http 상태코드는 400 Bad Request로 동일하게 응답됩니다.
 |---------------------|----------------|
 | header              | 설명             |
 | x-meloning-trace-id | API 요청을 추적할 ID |
+
+<SecurityDefinitions />

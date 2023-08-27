@@ -158,11 +158,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "유저 스크롤 리스트 API",
+                    "get-users-scroll",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("유저 스크롤 리스트 API")
                             .tag("user")
                             .requestParameters(
                                 *requestParameters
@@ -257,11 +258,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "유저 상세 API",
+                    "get-users-detail",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("유저 상세 API")
                             .tag("user")
                             .responseFields(
                                 responseFields
@@ -370,11 +372,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "유저 생성 API",
+                    "post-users",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("유저 생성 API")
                             .tag("user")
                             .requestFields(requestFields)
                             .responseHeaders(
@@ -441,11 +444,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "유저 수정 API",
+                    "put-users",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("유저 수정 API")
                             .tag("user")
                             .requestFields(requestFields)
                             .build()
@@ -480,11 +484,12 @@ class UserApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isNoContent)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "유저 삭제 API",
+                    "delete-users",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("유저 삭제 API")
                             .tag("user")
                             .build()
                     ),

@@ -112,11 +112,12 @@ class EducationApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isCreated)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "교육프로그램 생성 API",
+                    "post-educations",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("교육 프로그램 생성 API")
                             .tag("education")
                             .requestFields(requestFields)
                             .responseHeaders(
@@ -183,11 +184,12 @@ class EducationApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "교육 프로그램 상세 API",
+                    "get-educations-detail",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("교육 프로그램 상세 API")
                             .tag("education")
                             .responseFields(
                                 responseFields
@@ -251,11 +253,12 @@ class EducationApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isAccepted)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "교육 장소 등록 API",
+                    "post-educations-places-register",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("교육 장소 등록 API")
                             .tag("education")
                             .requestFields(requestFields)
                             .build()
@@ -301,11 +304,12 @@ class EducationApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isAccepted)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "교육 이수할 매장 등록 API",
+                    "post-educations-stores-register",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("교육 이수할 매장 등록 API")
                             .tag("education")
                             .requestFields(requestFields)
                             .build()
@@ -351,11 +355,12 @@ class EducationApiDocsTest {
             .andExpect(MockMvcResultMatchers.status().isAccepted)
             .andDo(
                 MockMvcRestDocumentationWrapper.document(
-                    "교육 장소 참여자 등록 API",
+                    "post-educations-places-participant-register",
                     RestDocumentUtils.getDocumentRequest(),
                     RestDocumentUtils.getDocumentResponse(),
                     ResourceDocumentation.resource(
                         ResourceSnippetParameters.builder()
+                            .summary("교육 장소 참여자 등록 API")
                             .tag("education")
                             .requestFields(requestFields)
                             .build()
