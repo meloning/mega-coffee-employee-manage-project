@@ -10,17 +10,17 @@ import org.testcontainers.junit.jupiter.Container
 
 object MysqlContainerExtension : Extension, BeforeAllCallback, AfterAllCallback {
     private val logger = LoggerFactory.getLogger(this::class.java)
-    private const val MYSQL8_IMAGE_NAME = "mysql:8"
+    private const val MYSQL8_IMAGE_NAME = "mysql:8.0.37"
 
     @Container
     val mysql = MySQLContainer(MYSQL8_IMAGE_NAME)
 
     override fun beforeAll(context: ExtensionContext?) {
-        if (mysql.isRunning()) return
+        if (mysql.isRunning) return
         mysql.start()
     }
 
     override fun afterAll(context: ExtensionContext?) {
-        if (mysql.isRunning()) mysql.stop()
+        if (mysql.isRunning) mysql.stop()
     }
 }
