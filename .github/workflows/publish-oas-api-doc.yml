@@ -15,13 +15,13 @@ jobs:
         run: echo "::set-output name=branch::$(echo $GITHUB_REF | awk -F'/' '{print $NF}')"
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run Gradle task to generate OpenAPI specification
         run: ./gradlew openapi3
 
-      - name: Clone B repository
-        uses: actions/checkout@v2
+      - name: Clone redoc-meloning-api repository
+        uses: actions/checkout@v3
         with:
             repository: meloning/redoc-meloning-api
             ref: master
@@ -29,7 +29,7 @@ jobs:
 
         # TODO: 추후 실행 모듈별 API Spec 공통화하여 copy하는 작업 처리할 것.
       - name: Copy OpenAPI specification to redoc-meloning-api repository
-        run: cp build/api-spec/openapi3.yaml meloning/redoc-meloning-api/
+        run: cp ./mega-coffee-api/build/api-spec/openapi3.yaml meloning/redoc-meloning-api/
 
       - name: Configure Git user
         run: |
