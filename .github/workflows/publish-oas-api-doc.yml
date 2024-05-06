@@ -1,0 +1,46 @@
+name: Update OpenAPI Specification
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  update_openapi_spec:
+    name: Update OpenAPI Specification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch name
+        id: get_branch
+        run: echo "::set-output name=branch::$(echo $GITHUB_REF | awk -F'/' '{print $NF}')"
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Gradle task to generate OpenAPI specification
+        run: ./gradlew openapi3
+
+      - name: Clone B repository
+        uses: actions/checkout@v2
+        with:
+            repository: meloning/redoc-meloning-api
+            ref: master
+            token: ${{ secrets.REDOC_MELONING_GITHUB_TOKEN }}
+
+        # TODO: 추후 실행 모듈별 API Spec 공통화하여 copy하는 작업 처리할 것.
+      - name: Copy OpenAPI specification to redoc-meloning-api repository
+        run: cp build/api-spec/openapi3.yaml meloning/redoc-meloning-api/
+
+      - name: Configure Git user
+        run: |
+            git config --local user.email 'meloning@users.noreply.github.com'  
+            git config --local user.name 'Junsu Jang'
+
+      - name: Commit and push changes
+        run: |
+            cd meloning/redoc-meloning-api/
+            git add openapi3.yaml
+            git commit -m '[${{ steps.get_branch.outputs.branch }}] Update openAPI specification document'
+            git push origin master
+        env:
+            GITHUB_TOKEN: ${{ secrets.REDOC_MELONING_GITHUB_TOKEN }}
