@@ -4,7 +4,7 @@ spring:
       on-profile: db-local
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mysql:8.0.23:///
+    url: jdbc:tc:mysql:8.0.37:///
     username: sa
     password:
   jpa:
